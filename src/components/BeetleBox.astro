@@ -1,0 +1,89 @@
+---
+import InteractiveContainer from './InteractiveContainer.astro'
+---
+
+<InteractiveContainer
+  title="盒子裡的甲蟲 (The Beetle in the Box)"
+  description="每個人都有一個盒子，裡面裝著只有自己能看到的「甲蟲」（感質/意識）。我們能談論它嗎？"
+>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
+    <!-- User's Box -->
+    <div class="box-container group cursor-pointer" id="user-box">
+      <div class="text-center mb-4 font-bold text-stone-500 uppercase tracking-widest text-xs">
+        Your Box (Consciousness)
+      </div>
+      <div
+        class="relative w-full aspect-square bg-stone-800 rounded-xl overflow-hidden shadow-2xl border-4 border-stone-700 transition-all duration-500 group-hover:border-stone-500 group-hover:shadow-stone-500/20"
+      >
+        <!-- Lid -->
+        <div
+          class="lid absolute inset-0 bg-stone-900 flex items-center justify-center z-20 transition-transform duration-700 origin-top group-hover:-rotate-x-110"
+        >
+          <span class="text-4xl opacity-50">🔒</span>
+        </div>
+        <!-- Content (The Beetle) -->
+        <div class="absolute inset-0 flex items-center justify-center bg-black z-10">
+          <div
+            class="absolute w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 blur-md animate-pulse"
+          >
+          </div>
+          <span class="relative z-10 text-4xl">🪲</span>
+        </div>
+      </div>
+      <div class="mt-4 text-center">
+        <p class="text-sm text-stone-600 dark:text-stone-400">
+          你說：「這是一隻<span class="font-bold text-purple-600">甲蟲</span>。」
+        </p>
+      </div>
+    </div>
+
+    <!-- AI's Box -->
+    <div class="box-container group cursor-pointer" id="ai-box">
+      <div class="text-center mb-4 font-bold text-stone-500 uppercase tracking-widest text-xs">
+        AI's Box (Algorithm)
+      </div>
+      <div
+        class="relative w-full aspect-square bg-stone-800 rounded-xl overflow-hidden shadow-2xl border-4 border-stone-700 transition-all duration-500 group-hover:border-blue-500 group-hover:shadow-blue-500/20"
+      >
+        <!-- Lid -->
+        <div
+          class="lid absolute inset-0 bg-stone-900 flex items-center justify-center z-20 transition-transform duration-700 origin-top group-hover:-rotate-x-110"
+        >
+          <span class="text-4xl opacity-50">🤖</span>
+        </div>
+        <!-- Content (The Void) -->
+        <div class="absolute inset-0 flex items-center justify-center bg-black">
+          <!-- Empty or Different? -->
+          <div
+            class="text-stone-400 font-mono text-xs tracking-widest opacity-0 group-hover:opacity-100 transition-opacity delay-300"
+          >
+            [0x9asdfji-02894j]
+          </div>
+        </div>
+      </div>
+      <div class="mt-4 text-center">
+        <p class="text-sm text-stone-600 dark:text-stone-400">
+          AI 說：「是的，這是一隻<span class="font-bold text-purple-600">甲蟲</span>。」
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="mt-8 p-4 bg-stone-100 dark:bg-stone-900 rounded border-l-4 border-purple-500 text-sm text-stone-600 dark:text-stone-400 italic"
+  >
+    「盒子裡的東西在語言遊戲中根本不是一個東西，甚至不是一個『某種東西』：因為盒子可能是空的。」—— 維根斯坦
+  </div>
+</InteractiveContainer>
+
+<style>
+  .rotate-x-110 {
+    transform: rotateX(110deg);
+  }
+  .-rotate-x-110 {
+    transform: rotateX(-110deg);
+  }
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+</style>

@@ -1,0 +1,69 @@
+---
+import { themeConfig } from '~/.config'
+import SiteSeo from '~/components/SiteSeo.astro'
+import LaTeX from '~/components/LaTeX.astro'
+import Analytics from '~/components/Analytics.astro'
+import ThemeScript from '~/components/ThemeScript.astro'
+import FloatingBackButton from '~/components/FloatingBackButton.astro'
+import '~/styles/global.css'
+
+const lang = themeConfig.appearance.locale ?? 'en-us'
+const dark = themeConfig.appearance.theme === 'dark'
+---
+
+<html lang={lang} class:list={['animation-prepared', { dark }]}>
+  <head>
+    <slot name="seo"> <SiteSeo /> </slot>
+    <LaTeX />
+    <Analytics />
+    <ThemeScript />
+  </head>
+
+  <body class="h-100vh max-w-1200px min-w-390px mx-a" p="7.5 lg:(y-0 x-20)">
+    <FloatingBackButton />
+    <main class="transition-swup-main overflow-y-scroll scrollbar-hide outline-none py-20">
+      <slot />
+    </main>
+
+    <script>
+      document.addEventListener('animationend', removeAnimation, false)
+      function removeAnimation() {
+        document.documentElement.classList.remove('animation-prepared')
+        document.removeEventListener('animationend', removeAnimation, false)
+      }
+    </script>
+    <style>
+      /* 页面首次加载动画 */
+      html.animation-prepared .transition-swup-main {
+        animation: fade-in-down 1s linear 1;
+      }
+
+      @keyframes fade-in-down {
+        0% {
+          transform: translateY(-1rem);
+          opacity: 0;
+        }
+        100% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      /* 页面过渡动画 */
+      html.is-animating .transition-swup-main {
+        opacity: 0;
+        transform: translateY(-1rem);
+      }
+      html.is-leaving .transition-swup-main {
+        opacity: 0;
+        transform: translateY(1rem);
+      }
+      .transition-swup-main {
+        transition-duration: 0.5s;
+        transition-timing-function: linear;
+        transform: translateY(0);
+        opacity: 1;
+      }
+    </style>
+  </body>
+</html>

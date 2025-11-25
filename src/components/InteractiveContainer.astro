@@ -1,0 +1,59 @@
+---
+interface Props {
+  title: string
+  description?: string
+  id?: string
+}
+
+const { title, description, id } = Astro.props
+---
+
+<div class="interactive-container mx-4 my-12 relative group" id={id}>
+  <!-- Decorative Background -->
+  <div
+    class="absolute -inset-1 bg-gradient-to-br from-stone-200 to-stone-300 dark:from-stone-700 dark:to-stone-800 rounded-xl blur-[2px] opacity-70 transition-opacity duration-500 group-hover:opacity-100"
+  >
+  </div>
+
+  <!-- Main Card -->
+  <div
+    class="relative bg-stone-50 dark:bg-[#151515] rounded-lg border border-stone-200 dark:border-stone-700 p-1 overflow-hidden shadow-xl"
+  >
+    <!-- Texture Overlay -->
+    <div
+      class="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"
+    >
+    </div>
+
+    <!-- Inner Content Area -->
+    <div
+      class="bg-white/50 dark:bg-[#1a1a1a]/80 rounded border border-stone-100 dark:border-stone-800 p-6 md:p-8 backdrop-blur-sm"
+    >
+      <!-- Header -->
+      <div
+        class="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4 border-b border-stone-200 dark:border-stone-700 pb-4"
+      >
+        <div class="flex items-center gap-3">
+          <div class="w-1 h-6 bg-primary rounded-full"></div>
+          <h3 class="mt-0 mb-0 text-xl font-serif font-bold text-stone-800 dark:text-stone-100 tracking-wide">
+            {title}
+          </h3>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-mono text-stone-400 uppercase tracking-widest">
+          <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+        </div>
+      </div>
+
+      {
+        description && (
+          <p class="text-sm text-stone-600 dark:text-stone-400 mb-8 leading-relaxed font-serif italic">{description}</p>
+        )
+      }
+
+      <!-- Slot for specific component content -->
+      <div class="component-content">
+        <slot />
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,90 @@
+---
+import InteractiveContainer from './InteractiveContainer.astro'
+---
+
+<InteractiveContainer
+  title="加法還是夸法?"
+  description="你教 AI 算數學,它好像都答對了!但真的學會加法了嗎?"
+>
+  <div class="flex flex-col gap-6">
+    <!-- Training Phase -->
+    <div class="bg-stone-50 dark:bg-stone-900 rounded-lg p-6 border border-stone-200 dark:border-stone-700">
+      <p class="text-sm text-stone-600 dark:text-stone-400 mb-4">訓練資料</p>
+
+      <div class="flex flex-wrap gap-3 mb-6">
+        <div class="p-3 bg-white dark:bg-stone-800 rounded border border-stone-200 dark:border-stone-700 text-center">
+          <span class="font-mono text-sm">2 + 2 = 4</span>
+          <span class="block text-xs text-green-600 dark:text-green-400 mt-1">正確</span>
+        </div>
+        <div class="p-3 bg-white dark:bg-stone-800 rounded border border-stone-200 dark:border-stone-700 text-center">
+          <span class="font-mono text-sm">68 + 57 = 125</span>
+          <span class="block text-xs text-green-600 dark:text-green-400 mt-1">正確</span>
+        </div>
+        <div class="p-3 bg-white dark:bg-stone-800 rounded border border-dashed border-stone-300 dark:border-stone-600 text-center opacity-60">
+          <span class="text-sm">...</span>
+        </div>
+      </div>
+
+      <div>
+        <p class="text-sm text-stone-600 dark:text-stone-400 mb-2">測試:用一個沒見過的大數字</p>
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2 bg-white dark:bg-stone-800 p-3 rounded border border-stone-200 dark:border-stone-700">
+            <span class="font-mono">1000 + 2 =</span>
+            <span id="result-display" class="font-mono font-semibold min-w-[40px]">?</span>
+          </div>
+          <button
+            id="run-btn"
+            class="px-4 py-2 bg-stone-800 dark:bg-stone-200 text-white dark:text-stone-900 rounded text-sm hover:bg-stone-700 dark:hover:bg-stone-300 transition-colors"
+          >
+            計算
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Explanation -->
+    <div
+      id="paradox-explanation"
+      class="hidden bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-700 p-6 rounded-lg"
+    >
+      <h4 class="font-semibold mb-3">它學的不是加法</h4>
+      <p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed mb-4">
+        AI 學的是「夸法」(Quus)——一種看起來像加法,但完全不同的規則:
+      </p>
+      <div class="bg-white dark:bg-stone-800 p-4 rounded border border-stone-200 dark:border-stone-700 mb-4 font-mono text-sm space-y-2">
+        <div>
+          <span class="text-stone-500">當 x, y &lt; 57:</span>
+          <span class="ml-2">x ⊕ y = x + y</span>
+        </div>
+        <div>
+          <span class="text-stone-500">否則:</span>
+          <span class="ml-2">x ⊕ y = 5</span>
+        </div>
+      </div>
+      <p class="text-sm text-stone-600 dark:text-stone-400">
+        因為訓練資料都是小數字,兩種規則的答案完全一樣。你要怎麼證明它學的是「加法」而不是「夸法」?
+      </p>
+    </div>
+  </div>
+</InteractiveContainer>
+
+<script>
+  const runBtn = document.getElementById('run-btn')
+  const resultDisplay = document.getElementById('result-display')
+  const explanation = document.getElementById('paradox-explanation')
+
+  if (runBtn && resultDisplay && explanation) {
+    runBtn.addEventListener('click', () => {
+      resultDisplay.textContent = '...'
+      explanation.classList.add('hidden')
+      ;(runBtn as HTMLButtonElement).disabled = true
+
+      setTimeout(() => {
+        resultDisplay.textContent = '5'
+        resultDisplay.classList.add('text-red-600', 'dark:text-red-400')
+        explanation.classList.remove('hidden')
+        ;(runBtn as HTMLButtonElement).disabled = false
+      }, 500)
+    })
+  }
+</script>

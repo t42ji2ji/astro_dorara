@@ -1,0 +1,42 @@
+---
+---
+
+<a
+  href="/"
+  id="floating-back-btn"
+  class="fixed bottom-10 right-10 z-50 flex items-center justify-center w-14 h-14 rounded-full bg-white/70 dark:bg-[#1a1a1a]/70 backdrop-blur-md border border-stone-200 dark:border-stone-700 shadow-lg transition-all duration-300 hover:scale-110 hover:shadow-xl hover:bg-white/90 dark:hover:bg-[#1a1a1a]/90 text-stone-600 dark:text-stone-300 group"
+  aria-label="Back to previous page"
+>
+  <div class="i-mdi-arrow-left text-2xl transition-transform duration-300 group-hover:-translate-x-1"></div>
+</a>
+
+<script>
+  const btn = document.getElementById('floating-back-btn') as HTMLAnchorElement
+  if (btn) {
+    btn.addEventListener('click', (e) => {
+      // Only prevent default if we have history to go back to
+      if (window.history.length > 1) {
+        e.preventDefault()
+        window.history.back()
+      }
+    })
+  }
+</script>
+
+<style>
+  #floating-back-btn {
+    /* Initial animation */
+    animation: fade-in-up 0.5s ease-out 0.5s both;
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

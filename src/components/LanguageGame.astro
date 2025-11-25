@@ -1,0 +1,146 @@
+---
+import InteractiveContainer from './InteractiveContainer.astro'
+---
+
+<InteractiveContainer
+  title="建築師遊戲 (The Builder's Game)"
+  description="你是指揮官，向助手發出指令。請觀察：助手是真的「理解」了板石，還是只是執行了「聲音 -> 動作」的映射？"
+>
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+    <!-- Controls -->
+    <div class="md:col-span-4 flex flex-col gap-3">
+      <p class="text-xs font-bold uppercase tracking-wider text-stone-400 mb-2">Command Module</p>
+
+      <button
+        class="game-btn group relative px-4 py-3 rounded bg-white dark:bg-stone-800 border-b-4 border-stone-300 dark:border-stone-600 active:border-b-0 active:translate-y-1 transition-all text-left flex items-center justify-between hover:bg-stone-50 dark:hover:bg-stone-700"
+        data-cmd="slab"
+      >
+        <span class="font-bold text-stone-700 dark:text-stone-200">"板石!" (Slab)</span>
+        <div class="w-2 h-2 rounded-full bg-stone-300 group-hover:bg-green-400 transition-colors"></div>
+      </button>
+
+      <button
+        class="game-btn group relative px-4 py-3 rounded bg-white dark:bg-stone-800 border-b-4 border-stone-300 dark:border-stone-600 active:border-b-0 active:translate-y-1 transition-all text-left flex items-center justify-between hover:bg-stone-50 dark:hover:bg-stone-700"
+        data-cmd="block"
+      >
+        <span class="font-bold text-stone-700 dark:text-stone-200">"方塊!" (Block)</span>
+        <div class="w-2 h-2 rounded-full bg-stone-300 group-hover:bg-green-400 transition-colors"></div>
+      </button>
+
+      <button
+        class="game-btn group relative px-4 py-3 rounded bg-white dark:bg-stone-800 border-b-4 border-stone-300 dark:border-stone-600 active:border-b-0 active:translate-y-1 transition-all text-left flex items-center justify-between hover:bg-stone-50 dark:hover:bg-stone-700"
+        data-cmd="pillar"
+      >
+        <span class="font-bold text-stone-700 dark:text-stone-200">"柱石!" (Pillar)</span>
+        <div class="w-2 h-2 rounded-full bg-stone-300 group-hover:bg-green-400 transition-colors"></div>
+      </button>
+
+      <button
+        class="game-btn group relative px-4 py-3 rounded bg-white dark:bg-stone-800 border-b-4 border-stone-300 dark:border-stone-600 active:border-b-0 active:translate-y-1 transition-all text-left flex items-center justify-between hover:bg-stone-50 dark:hover:bg-stone-700"
+        data-cmd="beam"
+      >
+        <span class="font-bold text-stone-700 dark:text-stone-200">"橫樑!" (Beam)</span>
+        <div class="w-2 h-2 rounded-full bg-stone-300 group-hover:bg-green-400 transition-colors"></div>
+      </button>
+    </div>
+
+    <!-- Simulation Area -->
+    <div
+      class="md:col-span-8 bg-stone-200 dark:bg-black rounded-lg border-2 border-stone-300 dark:border-stone-800 p-1 relative min-h-[240px] shadow-inner"
+    >
+      <!-- Grid Background -->
+      <div
+        class="absolute inset-0 opacity-20 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:20px_20px]"
+      >
+      </div>
+
+      <div
+        id="assistant-status"
+        class="absolute top-4 left-4 text-xs font-mono text-stone-500 z-10 bg-stone-200/80 dark:bg-black/80 px-2 py-1 rounded backdrop-blur-sm"
+      >
+        STATUS: IDLE
+      </div>
+    </div>
+
+    <div id="delivery-zone" class="flex items-center justify-center w-full h-full relative z-0 overflow-hidden">
+      <div class="text-stone-400 dark:text-stone-600 text-sm font-mono animate-pulse">Waiting for command...</div>
+    </div>
+  </div>
+</InteractiveContainer>
+
+<script>
+  const items = {
+    slab: { shape: 'w-48 h-8', color: 'bg-stone-400', label: '板石 SLAB' },
+    block: { shape: 'w-24 h-24', color: 'bg-amber-700', label: '方塊 BLOCK' },
+    pillar: { shape: 'w-12 h-48', color: 'bg-gray-500', label: '柱石 PILLAR' },
+    beam: { shape: 'w-48 h-6', color: 'bg-orange-800', label: '橫樑 BEAM' },
+  }
+
+  const statusEl = document.getElementById('assistant-status')
+  const zone = document.getElementById('delivery-zone')
+  const gameBtns = document.querySelectorAll('.game-btn')
+
+  if (statusEl && zone && gameBtns.length > 0) {
+    gameBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const cmd = btn.getAttribute('data-cmd') as keyof typeof items
+        if (!cmd)
+return
+
+        const item = items[cmd]
+        if (!item)
+return
+
+        // Disable buttons
+        gameBtns.forEach((b) => ((b as HTMLButtonElement).disabled = true))
+
+        // Update status
+        statusEl.innerHTML = `STATUS: <span class="text-blue-500">PROCESSING "${cmd.toUpperCase()}"</span>`
+
+        // Clear zone
+        zone.innerHTML = ''
+
+        setTimeout(() => {
+          statusEl.innerHTML = `STATUS: <span class="text-amber-500">RETRIEVING OBJECT...</span>`
+
+          setTimeout(() => {
+            // Deliver item with physics-like animation
+            zone.innerHTML = `
+              <div class="${item.shape} ${item.color} shadow-2xl rounded-sm flex items-center justify-center text-white/90 text-xs font-bold font-mono border border-white/20 animate-drop relative">
+                <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-black/10"></div>
+                <span class="relative z-10 drop-shadow-md">${item.label}</span>
+              </div>
+            `
+
+            statusEl.innerHTML = `STATUS: <span class="text-green-500">DELIVERY COMPLETE</span>`
+
+            // Re-enable buttons
+            gameBtns.forEach((b) => ((b as HTMLButtonElement).disabled = false))
+          }, 500)
+        }, 300)
+      })
+    })
+  }
+</script>
+
+<style>
+  @keyframes drop {
+    0% {
+      transform: translateY(-200px) rotate(-5deg);
+      opacity: 0;
+    }
+    70% {
+      transform: translateY(0) rotate(0);
+      opacity: 1;
+    }
+    85% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+  .animate-drop {
+    animation: drop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+</style>

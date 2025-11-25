@@ -3,7 +3,7 @@ import type { GetStaticPaths, InferGetStaticPropsType } from 'astro'
 import Comments from '~/components/Comments.astro'
 import Pagination from '~/components/Pagination.astro'
 import SiteSeo from '~/components/SiteSeo.astro'
-import LayoutDefault from '~/layouts/LayoutDefault.astro'
+import LayoutPostDetail from '~/layouts/LayoutPostDetail.astro'
 import LayoutPost from '~/layouts/LayoutPost.astro'
 import { getPosts } from '~/utils'
 import { render } from 'astro:content'
@@ -32,7 +32,7 @@ function getUrl(id: string) {
 }
 ---
 
-<LayoutDefault>
+<LayoutPostDetail>
   <SiteSeo slot="seo" title={entry.data.title} desc={entry.data.description} banner={entry.data.banner} />
 
   <LayoutPost post={entry}>
@@ -50,7 +50,7 @@ function getUrl(id: string) {
   />
   <!-- BUG 这里使用 client:visible 会导致构建失败。ref: https://github.com/withastro/astro/issues/7329 -->
   <Comments post={entry} />
-</LayoutDefault>
+</LayoutPostDetail>
 
 <script>
   import '@github/clipboard-copy-element'

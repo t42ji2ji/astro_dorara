@@ -1,0 +1,244 @@
+---
+
+---
+
+<aside class="reading-progress-sidebar">
+  <!-- Reading Progress Bar -->
+  <div class="progress-container">
+    <div class="text-xs font-bold text-stone-500 dark:text-stone-400 mb-2 uppercase tracking-wider">
+      閱讀進度 <span id="progress-text" class="progress-text">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div id="progress-bar" class="progress-bar-fill"></div>
+    </div>
+  </div>
+
+  <!-- Table of Contents -->
+  <div class="toc-container">
+    <div class="text-xs font-bold text-stone-500 dark:text-stone-400 mb-3 uppercase tracking-wider">目錄</div>
+    <nav id="toc-nav" class="toc-nav">
+      <!-- TOC will be populated by JavaScript -->
+    </nav>
+  </div>
+</aside>
+
+<script>
+  function initReadingProgress() {
+    const progressBar = document.getElementById('progress-bar')
+    const progressText = document.getElementById('progress-text')
+    const tocNav = document.getElementById('toc-nav')
+    const article = document.querySelector('article.prose')
+
+    if (!progressBar || !progressText || !tocNav || !article) return
+
+    // Generate Table of Contents
+    const headings = article.querySelectorAll('h1, h2, h3')
+    const tocItems: { element: Element; link: HTMLAnchorElement }[] = []
+
+    headings.forEach((heading, index) => {
+      // Add ID to heading if not present
+      if (!heading.id) {
+        heading.id = `heading-${index}`
+      }
+
+      const level = Number.parseInt(heading.tagName.substring(1))
+      const link = document.createElement('a')
+      link.href = `#${heading.id}`
+      link.textContent = heading.textContent || ''
+      link.className = `toc-link toc-level-${level}`
+      link.dataset.target = heading.id
+
+      tocNav.appendChild(link)
+      tocItems.push({ element: heading, link })
+
+      // Smooth scroll on click
+      link.addEventListener('click', (e) => {
+        e.preventDefault()
+        heading.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
+    })
+
+    // Update progress on scroll
+    function updateProgress() {
+      const main = document.querySelector('main')
+      if (!main) return
+
+      const scrollTop = main.scrollTop
+      const scrollHeight = main.scrollHeight - main.clientHeight
+      const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0
+
+      if (progressBar) 
+progressBar.style.width = `${progress}%`
+      if (progressText) 
+progressText.textContent = `${Math.round(progress)}%`
+
+      // Update active TOC item
+      let activeIndex = -1
+      for (let i = headings.length - 1; i >= 0; i--) {
+        const heading = headings[i] as HTMLElement
+        if (heading.offsetTop <= scrollTop + 100) {
+          activeIndex = i
+          break
+        }
+      }
+
+      tocItems.forEach((item, index) => {
+        if (index === activeIndex) {
+          item.link.classList.add('active')
+        } else {
+          item.link.classList.remove('active')
+        }
+      })
+    }
+
+    const main = document.querySelector('main')
+    if (main) {
+      main.addEventListener('scroll', updateProgress)
+      updateProgress() // Initial call
+    }
+  }
+
+  // Initialize on page load
+  initReadingProgress()
+
+  // Re-initialize after page transitions (if using Swup or similar)
+  document.addEventListener('astro:page-load', initReadingProgress)
+</script>
+
+<style>
+  .reading-progress-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    position: sticky;
+    top: 5rem;
+    max-height: calc(100vh - 6rem);
+    overflow-y: auto;
+  }
+
+  .progress-container {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--uno-colors-stone-200);
+  }
+
+  :global(.dark) .progress-container {
+    border-bottom-color: var(--uno-colors-stone-700);
+  }
+
+  .progress-bar-bg {
+    width: 100%;
+    height: 8px;
+    background-color: var(--uno-colors-stone-200);
+    border-radius: 9999px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+  }
+
+  :global(.dark) .progress-bar-bg {
+    background-color: var(--uno-colors-stone-700);
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--uno-colors-primary);
+    width: 0%;
+    transition: width 0.2s ease-out;
+    border-radius: 9999px;
+  }
+
+  .progress-text {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--uno-colors-stone-600);
+  }
+
+  :global(.dark) .progress-text {
+    color: var(--uno-colors-stone-400);
+  }
+
+  .toc-container {
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .toc-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  :global(.toc-link) {
+    font-size: 0.875rem;
+    color: var(--uno-colors-stone-600);
+    text-decoration: none;
+    padding: 0.375rem 0.75rem;
+    border-left: 2px solid var(--uno-colors-stone-200);
+    transition: all 0.2s;
+    display: block;
+  }
+
+  :global(.dark .toc-link) {
+    color: var(--uno-colors-stone-400);
+    border-left-color: var(--uno-colors-stone-700);
+  }
+
+  :global(.toc-link:hover) {
+    color: var(--uno-colors-purple-600);
+    border-left-color: var(--uno-colors-purple-500);
+    background-color: var(--uno-colors-purple-50);
+  }
+
+  :global(.dark .toc-link:hover) {
+    color: var(--uno-colors-purple-400);
+    background-color: rgba(139, 92, 246, 0.1);
+  }
+
+  :global(.toc-link.active) {
+    color: var(--uno-colors-purple-600);
+    border-left-color: var(--uno-colors-purple-500);
+    font-weight: 600;
+    background-color: var(--uno-colors-purple-50);
+  }
+
+  :global(.dark .toc-link.active) {
+    color: var(--uno-colors-purple-400);
+    background-color: rgba(139, 92, 246, 0.1);
+  }
+
+  :global(.toc-level-2) {
+    padding-left: 1rem;
+  }
+
+  :global(.toc-level-3) {
+    padding-left: 1.5rem;
+    font-size: 0.8125rem;
+  }
+
+  /* Custom scrollbar for TOC */
+  .toc-container {
+    scrollbar-width: thin;
+    scrollbar-color: var(--uno-colors-stone-300) transparent;
+  }
+
+  :global(.dark) .toc-container {
+    scrollbar-color: var(--uno-colors-stone-600) transparent;
+  }
+
+  .toc-container::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .toc-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .toc-container::-webkit-scrollbar-thumb {
+    background-color: var(--uno-colors-stone-300);
+    border-radius: 9999px;
+  }
+
+  :global(.dark) .toc-container::-webkit-scrollbar-thumb {
+    background-color: var(--uno-colors-stone-600);
+  }
+</style>

@@ -5,16 +5,16 @@ import type { ThemeConfig } from '~/types'
 
 export const defaultConfig: ThemeConfig = {
   site: {
-    title: '活版印字',
+    title: '謝哆啦',
     subtitle: 'Typography',
-    author: 'Moeyua',
+    author: '謝哆啦',
     description: 'Rediscory the beauty of typography',
-    website: 'https://astro-theme-typography.vercel.app/',
+    website: 'https://dorara.app/',
     pageSize: 5,
     socialLinks: [
       {
         name: 'github',
-        href: 'https://github.com/moeyua/astro-theme-typography',
+        href: 'https://github.com/t42ji2ji',
       },
       {
         name: 'rss',
@@ -22,12 +22,12 @@ export const defaultConfig: ThemeConfig = {
       },
       {
         name: 'twitter',
-        href: 'https://github.com/moeyua/astro-theme-typography',
+        href: 'https://x.com/DoraraHsieh',
       },
-      {
-        name: 'mastodon',
-        href: 'https://github.com/moeyua/astro-theme-typography',
-      },
+      // {
+      //   name: 'mastodon',
+      //   href: 'https://github.com/moeyua/astro-theme-typography',
+      // },
     ],
     navLinks: [
       {
@@ -50,19 +50,19 @@ export const defaultConfig: ThemeConfig = {
     categoryMap: [{ name: '胡适', path: 'hu-shi' }],
     footer: [
       '© %year <a target="_blank" href="%website">%author</a>',
-      'Theme <a target="_blank" href="https://github.com/Moeyua/astro-theme-typography">Typography</a> by <a target="_blank" href="https://moeyua.com">Moeyua</a>',
+      'Theme <a target="_blank" href="https://github.com/t42ji2ji">Typography</a> by <a target="_blank" href="https://moeyua.com">Moeyua</a>',
       'Proudly published with <a target="_blank" href="https://astro.build/">Astro</a>',
     ],
   },
   appearance: {
     theme: 'system',
-    locale: 'zh-cn',
+    locale: 'zh-tw',
     colorsLight: {
-      primary: '#2e405b',
+      primary: '#3F4348FF',
       background: '#ffffff',
     },
     colorsDark: {
-      primary: '#FFFFFF',
+      primary: '#F3F3F3FF',
       background: '#232222',
     },
     fonts: {

@@ -1,0 +1,144 @@
+---
+import InteractiveContainer from './InteractiveContainer.astro'
+---
+
+<InteractiveContainer
+  title="概率與意圖 (Probability vs Intent)"
+  description="AI 並不「思考」，它計算。它在語言的海洋中尋找下一個最可能的浪花。"
+>
+  <div class="flex flex-col lg:flex-row gap-8">
+    <!-- Input Area -->
+    <div class="flex-1 flex flex-col justify-between">
+      <div
+        class="bg-slate-50 dark:bg-slate-950 p-6 rounded-lg border border-slate-200 dark:border-slate-800 shadow-inner h-full"
+      >
+        <p class="text-lg font-serif text-slate-600 dark:text-slate-400 leading-relaxed">
+          "維根斯坦認為，語言的意義不在於定義，而在於它的<span
+            id="prediction-slot"
+            class="inline-block border-b-2 border-blue-500 min-w-[60px] text-center text-blue-600 dark:text-blue-400 font-bold animate-pulse"
+            >?</span
+          >"
+        </p>
+      </div>
+      <button
+        id="predict-btn"
+        class="mt-4 group relative px-6 py-3 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-lg font-bold overflow-hidden transition-transform active:scale-95"
+      >
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+        </div>
+        <span class="relative z-10 flex items-center justify-center gap-2">
+          <span>計算概率分佈</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            ><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"
+            ></path></svg
+          >
+        </span>
+      </button>
+    </div>
+
+    <!-- Probabilities Visualization -->
+    <div class="flex-1 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-lg border border-slate-200 dark:border-slate-700">
+      <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
+        <span class="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+        Real-time Probability
+      </h4>
+
+      <div class="space-y-4">
+        <!-- Item 1 -->
+        <div class="prob-row group">
+          <div class="flex justify-between text-sm mb-1">
+            <span class="font-mono font-bold text-slate-700 dark:text-slate-300">"使用" (Use)</span>
+            <span class="font-mono text-blue-500">85.4%</span>
+          </div>
+          <div class="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+            <div
+              class="h-full bg-gradient-to-r from-blue-500 to-blue-400 w-0 transition-all duration-1000 ease-out group-hover:brightness-110"
+              data-width="85.4%"
+            >
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="prob-row group">
+          <div class="flex justify-between text-sm mb-1">
+            <span class="font-mono text-slate-600 dark:text-slate-400">"定義" (Definition)</span>
+            <span class="font-mono text-slate-400">9.2%</span>
+          </div>
+          <div class="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+            <div class="h-full bg-slate-400 w-0 transition-all duration-1000 delay-100 ease-out" data-width="9.2%">
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="prob-row group">
+          <div class="flex justify-between text-sm mb-1">
+            <span class="font-mono text-slate-600 dark:text-slate-400">"結構" (Structure)</span>
+            <span class="font-mono text-slate-400">3.1%</span>
+          </div>
+          <div class="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+            <div
+              class="h-full bg-slate-300 dark:bg-slate-600 w-0 transition-all duration-1000 delay-200 ease-out"
+              data-width="3.1%"
+            >
+            </div>
+          </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="prob-row group">
+          <div class="flex justify-between text-sm mb-1">
+            <span class="font-mono text-slate-600 dark:text-slate-400">"邏輯" (Logic)</span>
+            <span class="font-mono text-slate-400">1.5%</span>
+          </div>
+          <div class="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+            <div
+              class="h-full bg-slate-300 dark:bg-slate-600 w-0 transition-all duration-1000 delay-300 ease-out"
+              data-width="1.5%"
+            >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const predictBtn = document.getElementById('predict-btn')
+    const slot = document.getElementById('prediction-slot')
+    const bars = document.querySelectorAll('.prob-row div[data-width]')
+
+    if (predictBtn && slot) {
+      predictBtn.addEventListener('click', () => {
+        // Reset
+        slot.textContent = '?'
+        slot.classList.add('animate-pulse')
+        bars.forEach((bar) => ((bar as HTMLElement).style.width = '0'))
+
+        // Animate
+        setTimeout(() => {
+          // Fill bars
+          bars.forEach((bar) => {
+            const width = bar.getAttribute('data-width')
+            if (width) {
+              ;(bar as HTMLElement).style.width = width
+            }
+          })
+
+          // Reveal word
+          setTimeout(() => {
+            slot.textContent = '使用'
+            slot.classList.remove('animate-pulse')
+
+            // Add highlight effect
+            slot.classList.add('bg-blue-100', 'dark:bg-blue-900', 'px-1', 'rounded')
+            setTimeout(() => slot.classList.remove('bg-blue-100', 'dark:bg-blue-900', 'px-1', 'rounded'), 1000)
+          }, 800)
+        }, 100)
+      })
+    }
+  </script>
+</InteractiveContainer>
