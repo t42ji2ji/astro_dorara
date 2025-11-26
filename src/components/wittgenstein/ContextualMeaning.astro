@@ -1,5 +1,5 @@
 ---
-import InteractiveContainer from './InteractiveContainer.astro'
+import InteractiveContainer from '../InteractiveContainer.astro'
 ---
 
 <InteractiveContainer
@@ -17,11 +17,9 @@ import InteractiveContainer from './InteractiveContainer.astro'
         >
         </div>
         <span class="relative z-10 font-medium text-stone-700 dark:text-stone-200"
-          >這本書很有<span class="font-bold text-primary-600 dark:text-primary-400">意思</span></span
-        >
-        <span
-          class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0"
-          >👉</span
+          >這本書很有<span class="underline decoration-2 decoration-primary-500 underline-offset-4 font-bold"
+            >意思</span
+          ></span
         >
       </button>
 
@@ -34,11 +32,9 @@ import InteractiveContainer from './InteractiveContainer.astro'
         >
         </div>
         <span class="relative z-10 font-medium text-stone-700 dark:text-stone-200"
-          >真不好<span class="font-bold text-primary-600 dark:text-primary-400">意思</span>，我遲到了</span
-        >
-        <span
-          class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0"
-          >👉</span
+          >真不好<span class="underline decoration-2 decoration-primary-500 underline-offset-4 font-bold"
+            >意思</span
+          >，我遲到了</span
         >
       </button>
 
@@ -51,11 +47,9 @@ import InteractiveContainer from './InteractiveContainer.astro'
         >
         </div>
         <span class="relative z-10 font-medium text-stone-700 dark:text-stone-200"
-          >這是一點小<span class="font-bold text-primary-600 dark:text-primary-400">意思</span>，請收下</span
-        >
-        <span
-          class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0"
-          >👉</span
+          >這是一點小<span class="underline decoration-2 decoration-primary-500 underline-offset-4 font-bold"
+            >意思</span
+          >，請收下</span
         >
       </button>
 
@@ -68,11 +62,9 @@ import InteractiveContainer from './InteractiveContainer.astro'
         >
         </div>
         <span class="relative z-10 font-medium text-stone-700 dark:text-stone-200"
-          >你這是什麼<span class="font-bold text-primary-600 dark:text-primary-400">意思</span>？</span
-        >
-        <span
-          class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0"
-          >👉</span
+          >你這是什麼<span class="underline decoration-2 decoration-primary-500 underline-offset-4 font-bold"
+            >意思</span
+          >？</span
         >
       </button>
     </div>
@@ -129,11 +121,11 @@ import InteractiveContainer from './InteractiveContainer.astro'
     buttons.forEach((btn) => {
       btn.addEventListener('click', () => {
         const key = btn.getAttribute('data-context') as keyof typeof contexts
-        if (!key)
+        if (!key) 
 return
 
         const data = contexts[key]
-        if (!data)
+        if (!data) 
 return
 
         // Reset styles

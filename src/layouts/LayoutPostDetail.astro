@@ -4,6 +4,7 @@ import SiteSeo from '~/components/SiteSeo.astro'
 import LaTeX from '~/components/LaTeX.astro'
 import Analytics from '~/components/Analytics.astro'
 import ThemeScript from '~/components/ThemeScript.astro'
+import ThemeToggle from '~/components/ThemeToggle.astro'
 import ReadingProgress from '~/components/ReadingProgress.astro'
 import '~/styles/global.css'
 
@@ -20,10 +21,14 @@ const dark = themeConfig.appearance.theme === 'dark'
   </head>
 
   <body
-    class="h-100vh max-w-1200px min-w-390px mx-a"
+    class="h-100vh max-w-1200px min-w-390px mx-a relative"
     p="7.5 lg:(y-0 x-20)"
     lg="grid gap-x-6 cols-[3fr_1fr] rows-[1fr_9rem]"
   >
+    <div class="fixed top-2.5 right-2.5 z-50 p-2.5">
+      <ThemeToggle />
+    </div>
+
     <!-- Empty header and footer containers to match LayoutDefault structure for proper Swup transitions -->
     <header class="transition-swup-header" style="display: none;"></header>
 
@@ -31,7 +36,7 @@ const dark = themeConfig.appearance.theme === 'dark'
       <slot />
     </main>
 
-    <aside class="transition-swup-aside hidden" lg="block row-1-3 col-2-3 py-20">
+    <aside class="transition-swup-aside" lg="block row-1-3 col-2-3 py-20">
       <ReadingProgress />
     </aside>
 

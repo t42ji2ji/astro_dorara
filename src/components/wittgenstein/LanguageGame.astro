@@ -1,5 +1,5 @@
 ---
-import InteractiveContainer from './InteractiveContainer.astro'
+import InteractiveContainer from '../InteractiveContainer.astro'
 ---
 
 <InteractiveContainer
@@ -84,12 +84,10 @@ import InteractiveContainer from './InteractiveContainer.astro'
     gameBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
         const cmd = btn.getAttribute('data-cmd') as keyof typeof items
-        if (!cmd)
-return
+        if (!cmd) return
 
         const item = items[cmd]
-        if (!item)
-return
+        if (!item) return
 
         // Disable buttons
         gameBtns.forEach((b) => ((b as HTMLButtonElement).disabled = true))

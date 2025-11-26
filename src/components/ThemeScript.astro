@@ -5,24 +5,34 @@ const theme = themeConfig.appearance.theme
 ---
 
 <script is:inline define:vars={{ theme }}>
-  function updateTheme(theme) {
-    // Check if theme is system
-    if (theme === 'system') {
+  function updateTheme(configTheme) {
+    // Check sessionStorage for user preference
+    const storedTheme = sessionStorage.getItem('theme')
+
+    if (storedTheme) {
+      // User has manually selected a theme
+      document.documentElement.classList.toggle('dark', storedTheme === 'dark')
+      return
+    }
+
+    // No stored preference, use config or system
+    if (configTheme === 'system') {
       // Check OS preference
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
       document.documentElement.classList.toggle('dark', prefersDark)
       return
     }
-    // Set theme directly
-    document.documentElement.classList.toggle('dark', theme === 'dark')
+    // Set theme directly from config
+    document.documentElement.classList.toggle('dark', configTheme === 'dark')
   }
 
   // Initial theme setup
   updateTheme(theme)
 
-  // Listen for OS theme changes
+  // Listen for OS theme changes (only when no manual selection)
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-    if (theme === 'system') {
+    const storedTheme = sessionStorage.getItem('theme')
+    if (!storedTheme && theme === 'system') {
       document.documentElement.classList.toggle('dark', e.matches)
     }
   })

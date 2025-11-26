@@ -4,7 +4,7 @@ import SiteSeo from '~/components/SiteSeo.astro'
 import LaTeX from '~/components/LaTeX.astro'
 import Analytics from '~/components/Analytics.astro'
 import ThemeScript from '~/components/ThemeScript.astro'
-import FloatingBackButton from '~/components/FloatingBackButton.astro'
+import ThemeToggle from '~/components/ThemeToggle.astro'
 import '~/styles/global.css'
 
 const lang = themeConfig.appearance.locale ?? 'en-us'
@@ -19,8 +19,11 @@ const dark = themeConfig.appearance.theme === 'dark'
     <ThemeScript />
   </head>
 
-  <body class="h-100vh max-w-1200px min-w-390px mx-a" p="7.5 lg:(y-0 x-20)">
-    <FloatingBackButton />
+  <body class="h-100vh max-w-1200px min-w-390px mx-a relative" p="7.5 lg:(y-0 x-20)">
+    <div class="fixed top-2.5 right-2.5 z-50 p-2.5">
+      <ThemeToggle />
+    </div>
+
     <main class="transition-swup-main overflow-y-scroll scrollbar-hide outline-none py-20">
       <slot />
     </main>

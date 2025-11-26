@@ -1,0 +1,71 @@
+---
+// Theme toggle button component
+---
+
+<button
+  id="theme-toggle"
+  class="theme-toggle-btn p-2 rounded-lg hover:bg-primary/10 transition-colors cursor-pointer border-none bg-primary/5"
+  aria-label="Toggle theme"
+  type="button"
+>
+  <div class="i-mdi-weather-night text-xl" id="theme-icon"></div>
+</button>
+
+<script>
+  function setupThemeToggle() {
+    const toggle = document.getElementById('theme-toggle')
+    const icon = document.getElementById('theme-icon')
+
+    if (!toggle || !icon) return
+
+    function updateIcon() {
+      if (!icon) return
+
+      const isDark = document.documentElement.classList.contains('dark')
+      // Show the icon for what it will become on click
+      // Dark mode -> show sun (will become light)
+      // Light mode -> show moon (will become dark)
+      if (isDark) {
+        icon.className = 'i-mdi-white-balance-sunny text-xl'
+      } else {
+        icon.className = 'i-mdi-weather-night text-xl'
+      }
+    }
+
+    function toggleTheme() {
+      const currentTheme = sessionStorage.getItem('theme')
+      const isDark = document.documentElement.classList.contains('dark')
+
+      if (currentTheme === null) {
+        // First click: switch to opposite of system
+        const newTheme = isDark ? 'light' : 'dark'
+        sessionStorage.setItem('theme', newTheme)
+        document.documentElement.classList.toggle('dark', newTheme === 'dark')
+      } else {
+        // Subsequent clicks: toggle between light and dark
+        const newTheme = isDark ? 'light' : 'dark'
+        sessionStorage.setItem('theme', newTheme)
+        document.documentElement.classList.toggle('dark', newTheme === 'dark')
+      }
+
+      updateIcon()
+    }
+
+    toggle.addEventListener('click', toggleTheme)
+    updateIcon()
+  }
+
+  // Run on initial load
+  setupThemeToggle()
+
+  // Re-run after page transitions (for Swup)
+  document.addEventListener('astro:after-swap', setupThemeToggle)
+</script>
+
+<style>
+  .theme-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
