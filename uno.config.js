@@ -15,10 +15,30 @@ const { colorsDark, colorsLight, fonts } = themeConfig.appearance
 const cssExtend = {
   ':root': {
     '--prose-borders': '#eee',
+    '--blockquote-border': colorsLight.primary,
+  },
+
+  '.dark': {
+    '--blockquote-border': colorsDark.primary,
+  },
+
+  'blockquote': {
+    'border-left': '4px solid',
+    'border-left-color': 'var(--blockquote-border)',
+    'padding-left': '1rem',
+    'margin-top': '2rem',
+  },
+
+  'blockquote p': {
+    opacity: '0.8',
   },
 
   'code::before,code::after': {
     content: 'none',
+  },
+
+  'h2': {
+    margin: '0',
   },
 
   ':where(:not(pre):not(a) > code)': {

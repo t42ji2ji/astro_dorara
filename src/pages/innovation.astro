@@ -1,0 +1,247 @@
+---
+import LayoutInnovation from '../layouts/LayoutInnovation.astro';
+import ThreeBackground from '../components/innovation/ThreeBackground.astro';
+import Section from '../components/innovation/Section.astro';
+---
+
+<LayoutInnovation title="Innovation with AI - 謝哆啦" description="在 AI 的協助下完成創新">
+  <ThreeBackground />
+
+  <main class="relative z-10">
+    <!-- Hero Section -->
+    <section class="h-screen flex flex-col justify-center items-center text-center px-6">
+      <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-500 animate-fade-in-up">
+        在 AI 的協助下<br />完成創新
+      </h1>
+      <p class="text-xl md:text-2xl text-gray-400 mb-12 max-w-2xl animate-fade-in-up delay-200">
+        Completing Innovation with the Assistance of AI
+      </p>
+      <div class="animate-fade-in-up delay-400">
+        <span class="inline-block px-4 py-2 rounded-full border border-gray-700 text-sm text-gray-300 backdrop-blur-sm">
+          講者：謝哆啦
+        </span>
+      </div>
+      
+      <div class="absolute bottom-10 animate-bounce">
+        <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Core Concept -->
+    <Section>
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">核心觀點</h2>
+          <div class="space-y-6 text-gray-300 leading-relaxed">
+            <p class="text-lg border-l-4 border-[var(--c-accent)] pl-4 italic">
+              「各位，我今天要告訴你們一件事——你們可能是第一屆『想比做更重要』的大學生了。但這不是壞消息。這是你們這個世代最大的禮物。」
+            </p>
+            <p>
+              身為工程師，超過 80% 的程式碼是由 AI 生成的。原因不是在嘗鮮，而是自己寫的話一切顯得太沒效率。
+            </p>
+          </div>
+        </div>
+        <div class="bg-gray-900/50 p-8 rounded-2xl border border-gray-800 backdrop-blur-sm hover:border-[var(--c-accent)] transition-colors duration-300">
+          <h3 class="text-xl font-bold mb-4 text-[var(--c-accent)]">軟體開發的「Excel 化」</h3>
+          <p class="text-gray-400 mb-4">
+            Excel 讓每個人都能做財務分析<br/>
+            PowerPoint 讓每個人都能做簡報<br/>
+            現在 AI 正在讓每個人都能「做軟體」
+          </p>
+          <div class="h-1 w-full bg-gradient-to-r from-[var(--c-accent)] to-transparent rounded-full"></div>
+        </div>
+      </div>
+    </Section>
+
+    <!-- Facing Replacement -->
+    <Section class="bg-gradient-to-b from-transparent to-black/50">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl font-bold mb-8">面對取代的挑戰</h2>
+        <p class="text-xl text-gray-300 mb-8">
+          母親問：「那你怎麼辦？」
+        </p>
+        <p class="text-gray-400 leading-relaxed">
+          第一線面臨被取代的挑戰，不是那些密集勞力，而是辦公室白領。<br/>
+          如何做成已經不重要，而是你要<span class="text-[var(--c-accent)] font-bold">如何問對問題</span>。
+        </p>
+      </div>
+    </Section>
+
+    <!-- How to Ask Good Questions -->
+    <Section>
+      <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">如何問出好問題</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="p-6 rounded-xl bg-gray-900/30 border border-gray-800 hover:bg-gray-900/50 transition-all duration-300 group">
+          <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">🎯</div>
+          <h3 class="text-xl font-bold mb-3">跨領域 × 專業深度</h3>
+          <p class="text-gray-400 text-sm">這是 AI 時代最重要的命題。簡單的問題可以輕鬆被 AI 回答，也做不出出彩的東西了。</p>
+        </div>
+        <div class="p-6 rounded-xl bg-gray-900/30 border border-gray-800 hover:bg-gray-900/50 transition-all duration-300 group">
+          <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">❤️</div>
+          <h3 class="text-xl font-bold mb-3">找到令你在意的事情</h3>
+          <p class="text-gray-400 text-sm">你自己就是最好的使用者。哪個步驟讓你最煩躁？那個點就是 AI 可以介入的機會。</p>
+        </div>
+        <div class="p-6 rounded-xl bg-gray-900/30 border border-gray-800 hover:bg-gray-900/50 transition-all duration-300 group">
+          <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">🌍</div>
+          <h3 class="text-xl font-bold mb-3">現實洞察</h3>
+          <p class="text-gray-400 text-sm">AI 不知道學校餐廳動線多爛、不知道偏鄉農民的痛點。這些洞察，只有你能帶給它。</p>
+        </div>
+      </div>
+    </Section>
+
+    <!-- Tools -->
+    <Section>
+      <div class="flex flex-col md:flex-row gap-12">
+        <div class="md:w-1/3">
+          <h2 class="text-3xl md:text-4xl font-bold mb-6 sticky top-24">工具推薦</h2>
+        </div>
+        <div class="md:w-2/3 space-y-8">
+          <div class="flex gap-6 items-start">
+            <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
+              G
+            </div>
+            <div>
+              <h3 class="text-xl font-bold mb-2">Gemini Deep Research</h3>
+              <p class="text-gray-400">做關於問題的調研，現在 Gemini 面對學生用戶免費 1 年。</p>
+            </div>
+          </div>
+          <div class="flex gap-6 items-start">
+            <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 shrink-0">
+              N
+            </div>
+            <div>
+              <h3 class="text-xl font-bold mb-2">NotebookLM</h3>
+              <p class="text-gray-400">讓 AI 幫助整理資料、搜索資料。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Section>
+
+    <!-- Problem Construction -->
+    <Section class="bg-gray-900/20 rounded-3xl my-12">
+      <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">問題構建：新時代的核心素養</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          { title: '具體場景', desc: '誰在什麼情況下遇到問題？' },
+          { title: '痛點洞察', desc: '為什麼現有解法不夠好？' },
+          { title: '技術約束', desc: '需要什麼資源與限制？' },
+          { title: '成功標準', desc: '怎樣算解決了問題？' }
+        ].map(item => (
+          <div class="p-4 text-center border border-gray-800 rounded-xl hover:border-[var(--c-accent)] transition-colors">
+            <h4 class="font-bold mb-2 text-[var(--c-accent)]">{item.title}</h4>
+            <p class="text-xs text-gray-400">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <!-- AI Interaction -->
+    <Section>
+      <h2 class="text-3xl md:text-4xl font-bold mb-12">優化你跟 AI 的互動</h2>
+      <div class="grid md:grid-cols-2 gap-12">
+        <div>
+          <h3 class="text-2xl font-bold mb-4">RLHF 的關鍵價值</h3>
+          <ul class="space-y-4 text-gray-400">
+            <li class="flex items-center gap-3">
+              <span class="w-2 h-2 bg-[var(--c-accent)] rounded-full"></span>
+              <span><strong>對齊 (Alignment)</strong>：符合人類價值觀</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="w-2 h-2 bg-[var(--c-accent)] rounded-full"></span>
+              <span><strong>安全性</strong>：降低有害內容風險</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="w-2 h-2 bg-[var(--c-accent)] rounded-full"></span>
+              <span><strong>有用性</strong>：提升回答實用性</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="w-2 h-2 bg-[var(--c-accent)] rounded-full"></span>
+              <span><strong>禮貌與語氣</strong>：更自然擬人</span>
+            </li>
+          </ul>
+          <p class="mt-6 text-sm text-gray-500 italic">結論：所以 AI 天然的喜歡拍你馬屁。</p>
+        </div>
+        <div class="space-y-6">
+          <div class="bg-gray-800/30 p-6 rounded-xl border-l-4 border-yellow-500">
+            <h4 class="font-bold mb-2 text-yellow-500">設定「挑戰者」角色</h4>
+            <p class="text-sm text-gray-400">扮演一個嚴格的審稿人/導師，你的工作是找出我論點的漏洞。</p>
+          </div>
+          <div class="bg-gray-800/30 p-6 rounded-xl border-l-4 border-red-500">
+            <h4 class="font-bold mb-2 text-red-500">結構化要求缺點</h4>
+            <p class="text-sm text-gray-400">請列出這個方案的三個最大風險或弱點，再討論優點。</p>
+          </div>
+        </div>
+      </div>
+    </Section>
+
+    <!-- Understanding AI -->
+    <Section>
+      <div class="text-center max-w-3xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold mb-8">真正認識 AI 是什麼</h2>
+        <p class="text-2xl font-serif italic text-gray-300 mb-12">
+          「AI 像一個讀過所有書但從沒走出過圖書館的人。」
+        </p>
+        <div class="grid grid-cols-2 gap-8 text-left">
+          <div>
+            <h4 class="font-bold text-green-400 mb-4">擅長</h4>
+            <ul class="text-sm text-gray-400 space-y-2">
+              <li>Pattern matching</li>
+              <li>語言轉換</li>
+              <li>結構化整理</li>
+              <li>在已知知識內做推理</li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="font-bold text-red-400 mb-4">不擅長</h4>
+            <ul class="text-sm text-gray-400 space-y-2">
+              <li>真正的新發現</li>
+              <li>持續記憶與學習</li>
+              <li>穩定的價值判斷</li>
+              <li>理解物理世界的因果</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </Section>
+
+    <!-- Conclusion -->
+    <Section class="mb-24">
+      <div class="relative p-12 rounded-3xl overflow-hidden text-center">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-900/20 to-purple-900/20 backdrop-blur-md z-0"></div>
+        <div class="relative z-10">
+          <h2 class="text-3xl md:text-4xl font-bold mb-8">結語</h2>
+          <p class="text-xl md:text-2xl leading-relaxed text-gray-200 font-serif">
+            「未來的創新者，不是最會背語法的人，而是最會提問的人、最有同理心的人、最能把洞察現實的人。<br/><br/>
+            往好的方面想，也許我們會迎來哲人的時代。」
+          </p>
+        </div>
+      </div>
+    </Section>
+  </main>
+</LayoutInnovation>
+
+<style>
+  .animate-fade-in-up {
+    animation: fadeInUp 1s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+
+  .delay-400 {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

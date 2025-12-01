@@ -1,0 +1,223 @@
+---
+interface Props {
+  src: string
+  alt: string
+  class?: string
+}
+
+const { src, alt, class: className } = Astro.props
+---
+
+<figure class:list={['figure-container', className]} data-src={src} data-alt={alt}>
+  <canvas class="figure-canvas"></canvas>
+  <noscript>
+    <img src={src} alt={alt} />
+  </noscript>
+</figure>
+
+<style>
+  .figure-container {
+    position: relative;
+    width: 100%;
+    margin: 2rem 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  .figure-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .figure-container {
+      transform: none !important;
+    }
+  }
+</style>
+
+<script>
+  import * as THREE from 'three'
+  import { vertexShader, fragmentShader } from './figure/shaders'
+
+  class FigureEffect {
+    container: HTMLElement
+    canvas: HTMLCanvasElement
+    src: string
+    renderer!: THREE.WebGLRenderer
+    scene!: THREE.Scene
+    camera!: THREE.OrthographicCamera
+    mesh!: THREE.Mesh
+    material!: THREE.ShaderMaterial
+    mouse = { x: 0.5, y: 0.5, targetX: 0.5, targetY: 0.5 }
+    hover = { current: 0, target: 0 }
+    tilt = { x: 0, y: 0, targetX: 0, targetY: 0 }
+    raf: number | null = null
+    isInView = false
+
+    constructor(container: HTMLElement) {
+      this.container = container
+      this.canvas = container.querySelector('.figure-canvas')!
+      this.src = container.dataset.src || ''
+
+      this.init()
+    }
+
+    async init() {
+      // Setup renderer
+      this.renderer = new THREE.WebGLRenderer({
+        canvas: this.canvas,
+        alpha: true,
+        antialias: true,
+      })
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+      // Setup scene
+      this.scene = new THREE.Scene()
+
+      // Setup camera (orthographic for 2D)
+      this.camera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, 0.1, 10)
+      this.camera.position.z = 1
+
+      // Load texture
+      const loader = new THREE.TextureLoader()
+      const texture = await new Promise<THREE.Texture>((resolve) => {
+        loader.load(this.src, resolve)
+      })
+
+      // Get image aspect ratio
+      const img = texture.image as HTMLImageElement
+      const imgAspect = img.width / img.height
+
+      // Setup material with shaders
+      this.material = new THREE.ShaderMaterial({
+        vertexShader,
+        fragmentShader,
+        uniforms: {
+          uTexture: { value: texture },
+          uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+          uHover: { value: 0 },
+          uTime: { value: 0 },
+        },
+        transparent: true,
+      })
+
+      // Setup geometry
+      const geometry = new THREE.PlaneGeometry(1, 1)
+      this.mesh = new THREE.Mesh(geometry, this.material)
+      this.scene.add(this.mesh)
+
+      // Set canvas size based on image aspect ratio
+      this.resize(imgAspect)
+
+      // Setup events
+      this.setupEvents()
+
+      // Setup intersection observer
+      this.setupObserver()
+    }
+
+    resize(aspect: number) {
+      const width = this.container.clientWidth
+      const height = width / aspect
+
+      this.canvas.style.aspectRatio = `${aspect}`
+      this.renderer.setSize(width, height)
+    }
+
+    setupEvents() {
+      this.container.addEventListener('mouseenter', () => {
+        this.hover.target = 1
+      })
+
+      this.container.addEventListener('mouseleave', () => {
+        this.hover.target = 0
+        this.tilt.targetX = 0
+        this.tilt.targetY = 0
+        this.mouse.targetX = 0.5
+        this.mouse.targetY = 0.5
+      })
+
+      this.container.addEventListener('mousemove', (e) => {
+        const rect = this.container.getBoundingClientRect()
+        this.mouse.targetX = (e.clientX - rect.left) / rect.width
+        this.mouse.targetY = 1 - (e.clientY - rect.top) / rect.height
+
+        // Calculate tilt (±15 degrees)
+        this.tilt.targetX = (this.mouse.targetY - 0.5) * 15
+        this.tilt.targetY = (this.mouse.targetX - 0.5) * -15
+      })
+
+      window.addEventListener('resize', () => {
+        if (this.material?.uniforms.uTexture.value) {
+          const texture = this.material.uniforms.uTexture.value as THREE.Texture
+          const img = texture.image as HTMLImageElement
+          const aspect = img.width / img.height
+          this.resize(aspect)
+        }
+      })
+    }
+
+    setupObserver() {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            this.isInView = entry.isIntersecting
+            if (this.isInView && !this.raf) {
+              this.animate()
+            }
+          })
+        },
+        { threshold: 0.1 }
+      )
+      observer.observe(this.container)
+    }
+
+    animate = () => {
+      if (!this.isInView) {
+        this.raf = null
+        return
+      }
+
+      // Lerp mouse position
+      this.mouse.x += (this.mouse.targetX - this.mouse.x) * 0.1
+      this.mouse.y += (this.mouse.targetY - this.mouse.y) * 0.1
+
+      // Lerp hover
+      this.hover.current += (this.hover.target - this.hover.current) * 0.08
+
+      // Lerp tilt
+      this.tilt.x += (this.tilt.targetX - this.tilt.x) * 0.1
+      this.tilt.y += (this.tilt.targetY - this.tilt.y) * 0.1
+
+      // Update uniforms
+      this.material.uniforms.uMouse.value.set(this.mouse.x, this.mouse.y)
+      this.material.uniforms.uHover.value = this.hover.current
+      this.material.uniforms.uTime.value += 0.016
+
+      // Apply 3D tilt to container
+      this.container.style.transform = `
+        perspective(1000px)
+        rotateX(${this.tilt.x}deg)
+        rotateY(${this.tilt.y}deg)
+        scale(${1 - this.hover.current * 0.02})
+      `
+
+      // Render
+      this.renderer.render(this.scene, this.camera)
+
+      this.raf = requestAnimationFrame(this.animate)
+    }
+  }
+
+  // Initialize all figure components
+  document.querySelectorAll<HTMLElement>('.figure-container').forEach((el) => {
+    new FigureEffect(el)
+  })
+</script>

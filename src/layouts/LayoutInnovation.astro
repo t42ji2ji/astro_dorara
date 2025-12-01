@@ -1,0 +1,62 @@
+---
+import { ClientRouter } from 'astro:transitions'
+import SiteSeo from '../components/SiteSeo.astro'
+import '../styles/global.css'
+
+interface Props {
+  title?: string
+  description?: string
+}
+
+const { title = 'Innovation with AI', description = 'Completing Innovation with the Assistance of AI' } = Astro.props
+---
+
+<!doctype html>
+<html lang="zh-TW" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <SiteSeo title={title} desc={description} />
+    <ClientRouter />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Inter:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style is:global>
+      :root {
+        --c-bg: #050505;
+        --c-text: #e0e0e0;
+        --c-accent: #646cff;
+        --c-accent-glow: rgba(100, 108, 255, 0.5);
+      }
+
+      body {
+        background-color: var(--c-bg);
+        color: var(--c-text);
+        font-family: 'Inter', sans-serif;
+        overflow-x: hidden;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-family: 'Noto Serif TC', serif;
+      }
+
+      ::selection {
+        background: var(--c-accent);
+        color: white;
+      }
+    </style>
+  </head>
+  <body class="antialiased min-h-screen relative">
+    <slot />
+  </body>
+</html>
