@@ -1,0 +1,127 @@
+---
+import InteractiveContainer from '../InteractiveContainer.astro'
+
+interface DataPoint {
+  year: number
+  count: number
+  event?: string
+}
+
+const data: DataPoint[] = [
+  { year: 1999, count: 14, event: '丹恩颱風，14隻逃脫' },
+  { year: 2003, count: 50 },
+  { year: 2007, count: 150 },
+  { year: 2011, count: 400 },
+  { year: 2015, count: 800 },
+  { year: 2019, count: 1200, event: '政府開始懸賞捕捉' },
+  { year: 2023, count: 2000, event: '餐廳推出孔雀料理' },
+  { year: 2024, count: 2400, event: '繁殖仍失控中' }
+]
+
+const maxCount = Math.max(...data.map(d => d.count))
+---
+
+<InteractiveContainer
+  title="孔雀入侵金門"
+  description="從14隻到2400隻，一場失控的生態危機"
+>
+  <div class="space-y-6">
+    <!-- Horizontal Bar Chart -->
+    <div class="space-y-3">
+      {data.map((point, index) => {
+        const width = (point.count / maxCount) * 100
+        return (
+          <div
+            class="bar-row flex items-center gap-3 cursor-pointer group"
+            data-index={index}
+            data-count={point.count}
+            data-year={point.year}
+            data-event={point.event || ''}
+          >
+            <!-- Year -->
+            <div class="w-12 text-right text-sm font-mono text-stone-500 dark:text-stone-400 shrink-0">
+              {point.year}
+            </div>
+
+            <!-- Bar container -->
+            <div class="flex-1 h-8 bg-stone-100 dark:bg-stone-800 rounded-full overflow-hidden relative">
+              <!-- Bar -->
+              <div
+                class="bar h-full rounded-full transition-all duration-500 flex items-center justify-end pr-3"
+                style={`width: ${width}%; background: linear-gradient(to right, #059669, #10b981);`}
+              >
+                {point.count >= 100 && (
+                  <span class="text-white text-xs font-bold whitespace-nowrap">
+                    {point.count.toLocaleString()}
+                  </span>
+                )}
+              </div>
+
+              <!-- Count for small bars -->
+              {point.count < 100 && (
+                <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-stone-600 dark:text-stone-300">
+                  {point.count}
+                </span>
+              )}
+            </div>
+
+            <!-- Event badge -->
+            <div class="w-32 md:w-40 shrink-0">
+              {point.event ? (
+                <span class="text-xs px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 rounded-full whitespace-nowrap">
+                  {point.event}
+                </span>
+              ) : (
+                <span class="text-xs text-stone-400">—</span>
+              )}
+            </div>
+          </div>
+        )
+      })}
+    </div>
+
+    <!-- Fun Facts -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6">
+      <div class="fact-card p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-100 dark:border-red-800">
+        <div class="text-2xl mb-1">💰</div>
+        <div class="font-bold text-stone-800 dark:text-stone-200">$600/隻</div>
+        <div class="text-xs text-stone-500 dark:text-stone-400">政府懸賞獎勵</div>
+      </div>
+
+      <div class="fact-card p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-100 dark:border-amber-800">
+        <div class="text-2xl mb-1">🍽️</div>
+        <div class="font-bold text-stone-800 dark:text-stone-200">法式料理</div>
+        <div class="text-xs text-stone-500 dark:text-stone-400">高級餐廳新菜色</div>
+      </div>
+
+      <div class="fact-card p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-100 dark:border-purple-800">
+        <div class="text-2xl mb-1">📈</div>
+        <div class="font-bold text-stone-800 dark:text-stone-200">171倍</div>
+        <div class="text-xs text-stone-500 dark:text-stone-400">25年成長幅度</div>
+      </div>
+    </div>
+  </div>
+</InteractiveContainer>
+
+
+<style>
+  .bar-row {
+    transition: transform 0.2s ease;
+  }
+
+  .bar-row:hover {
+    transform: scale(1.02);
+  }
+
+  .bar-row:hover .bar {
+    filter: brightness(1.1);
+  }
+
+  .fact-card {
+    transition: transform 0.2s ease;
+  }
+
+  .fact-card:hover {
+    transform: translateY(-2px);
+  }
+</style>

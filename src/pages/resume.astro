@@ -9,10 +9,145 @@ import hanamiLogo from '~/assets/resume/hanami.png'
 ---
 
 <LayoutDefault>
-  <header class="flex flex-col gap-2 mb-8">
-    <h1 class="text-4xl font-bold">Resume</h1>
-    <p class="text-xl text-gray-500">Flutter Lead & Full Stack Developer</p>
-  </header>
+  <!-- Hero 個人介紹區塊 -->
+  <section class="hero-section mb-12">
+    <div class="hero-content">
+      <div class="hero-avatar" id="avatarContainer"></div>
+      <div class="hero-info">
+        <h1 class="text-4xl font-bold mb-2">Hi, I'm Dora 👋</h1>
+        <p class="text-xl text-gray-500 dark:text-gray-400 mb-4">Flutter Lead & Full Stack Developer</p>
+
+        <div class="value-intro">
+          <p class="mb-3">
+            我相信 <strong>好的產品來自於對細節的執著</strong>。從架構設計到使用者體驗，每一個環節都值得被認真對待。
+          </p>
+          <p class="mb-3">
+            作為一個 <strong>Builder</strong
+            >，我不只是寫程式，更喜歡從零到一打造完整的產品。在工作之餘，我持續經營個人專案，將想法變成真實可用的工具。
+          </p>
+          <p>我熱愛分享知識，透過技術文章和書籍，希望能幫助更多人在開發的路上少走一些彎路。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="my-8 bg-gray-200 dark:bg-gray-700 h-[1px]" />
+
+  <style>
+    .hero-section {
+      padding: 2rem 0;
+    }
+
+    .hero-content {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
+    .hero-avatar {
+      width: 180px;
+      height: 180px;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .hero-avatar:hover {
+      transform: scale(1.05);
+    }
+
+    .hero-info {
+      flex: 1;
+    }
+
+    .value-intro {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #555;
+    }
+
+    :global(.dark) .value-intro {
+      color: #bbb;
+    }
+
+    .value-intro strong {
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    @media (max-width: 640px) {
+      .hero-content {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hero-avatar {
+        width: 140px;
+        height: 140px;
+      }
+    }
+  </style>
+
+  <script>
+    import lottie from 'lottie-web'
+    import avatarData from '~/assets/resume/avatar.json'
+
+    let lottieInstance: ReturnType<typeof lottie.loadAnimation> | null = null
+    let isHovering = false
+
+    function destroyLottie() {
+      if (lottieInstance) {
+        lottieInstance.destroy()
+        lottieInstance = null
+        isHovering = false
+      }
+    }
+
+    function initLottie() {
+      const container = document.getElementById('avatarContainer')
+      if (!container) 
+return
+
+      // 如果已存在實例，先銷毀
+      destroyLottie()
+
+      lottieInstance = lottie.loadAnimation({
+        container,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        animationData: avatarData,
+      })
+
+      // 預設播放待機動畫
+      lottieInstance.playSegments([17, 32], true)
+
+      // Hover 互動
+      container.addEventListener('mouseenter', () => {
+        if (!isHovering && lottieInstance) {
+          isHovering = true
+          lottieInstance.playSegments([34, 56], true)
+        }
+      })
+
+      container.addEventListener('mouseleave', () => {
+        if (isHovering && lottieInstance) {
+          isHovering = false
+          lottieInstance.playSegments([17, 32], true)
+        }
+      })
+    }
+
+    // 初始化 - 多種事件確保覆蓋各種導航情況
+    initLottie()
+    document.addEventListener('DOMContentLoaded', initLottie)
+    document.addEventListener('astro:page-load', initLottie)
+    document.addEventListener('swup:contentReplaced', initLottie)
+
+    // 頁面離開時清理
+    document.addEventListener('astro:before-swap', destroyLottie)
+    document.addEventListener('swup:willReplaceContent', destroyLottie)
+  </script>
 
   <article class="prose max-w-none">
     <section class="mb-12">

@@ -44,14 +44,10 @@ export const defaultConfig: ThemeConfig = {
       },
       {
         name: 'About',
-        href: '/about',
-      },
-      {
-        name: 'Resume',
         href: '/resume',
       },
     ],
-    categoryMap: [{ name: '胡适', path: 'hu-shi' }],
+    categoryMap: [{ name: '--', path: 'dora' }],
     footer: [
       '© %year <a target="_blank" href="%website">%author</a>',
       'Theme <a target="_blank" href="https://github.com/t42ji2ji">Typography</a> by <a target="_blank" href="https://moeyua.com">Moeyua</a>',

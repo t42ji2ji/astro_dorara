@@ -1,0 +1,194 @@
+---
+import InteractiveContainer from '../InteractiveContainer.astro'
+---
+
+<InteractiveContainer
+  title="金門地理位置"
+  description="金門與廈門的距離比台北還近，搭船只要 20 分鐘"
+>
+  <div class="relative w-full" style="min-height: 320px;">
+    <!-- SVG Map -->
+    <svg viewBox="0 0 500 300" class="w-full h-auto" id="kinmen-map">
+      <!-- Sea background -->
+      <defs>
+        <linearGradient id="seaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#e0f2fe;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#bae6fd;stop-opacity:1" />
+        </linearGradient>
+        <linearGradient id="seaGradientDark" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#0c4a6e;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#075985;stop-opacity:1" />
+        </linearGradient>
+        <!-- Wave pattern -->
+        <pattern id="waves" patternUnits="userSpaceOnUse" width="40" height="20">
+          <path d="M0 10 Q10 5, 20 10 T40 10" stroke="currentColor" stroke-opacity="0.1" fill="none" stroke-width="1"/>
+        </pattern>
+      </defs>
+
+      <rect width="500" height="300" class="fill-sky-100 dark:fill-sky-900"/>
+      <rect width="500" height="300" fill="url(#waves)" class="text-sky-500"/>
+
+      <!-- China Mainland (Xiamen area) - left side -->
+      <g id="china-group" class="cursor-pointer transition-transform duration-300 hover:scale-[1.02]" style="transform-origin: 80px 150px;">
+        <path
+          d="M0 0 L120 0 L140 50 L130 100 L145 150 L120 200 L140 250 L100 300 L0 300 Z"
+          class="fill-amber-100 dark:fill-amber-900 stroke-amber-300 dark:stroke-amber-700"
+          stroke-width="2"
+        />
+        <!-- Xiamen city marker -->
+        <circle cx="100" cy="140" r="8" class="fill-red-500 animate-pulse"/>
+        <text x="70" y="175" class="fill-stone-700 dark:fill-stone-200 text-sm font-bold">廈門</text>
+        <text x="55" y="195" class="fill-stone-500 dark:fill-stone-400 text-xs">Xiamen</text>
+      </g>
+
+      <!-- Kinmen Island (main) -->
+      <g id="kinmen-group" class="cursor-pointer transition-transform duration-300 hover:scale-105" style="transform-origin: 300px 130px;">
+        <!-- Main Kinmen - bone shape -->
+        <path
+          d="M240 100
+             Q260 80, 290 85
+             Q320 75, 350 90
+             Q370 100, 375 120
+             Q380 140, 365 155
+             Q350 170, 320 165
+             Q290 175, 260 160
+             Q235 150, 235 130
+             Q235 110, 240 100Z"
+          class="fill-emerald-200 dark:fill-emerald-800 stroke-emerald-400 dark:stroke-emerald-600"
+          stroke-width="2"
+          id="kinmen-main"
+        />
+        <circle cx="300" cy="125" r="6" class="fill-emerald-600 dark:fill-emerald-400"/>
+        <text x="275" y="145" class="fill-stone-700 dark:fill-stone-200 text-sm font-bold">金門</text>
+        <text x="270" y="162" class="fill-stone-500 dark:fill-stone-400 text-xs">Kinmen</text>
+      </g>
+
+      <!-- Lieyu (Little Kinmen) -->
+      <g id="lieyu-group" class="cursor-pointer transition-transform duration-300 hover:scale-110" style="transform-origin: 200px 200px;">
+        <ellipse cx="200" cy="200" rx="35" ry="20"
+          class="fill-emerald-300 dark:fill-emerald-700 stroke-emerald-400 dark:stroke-emerald-600"
+          stroke-width="2"
+        />
+        <text x="175" y="205" class="fill-stone-700 dark:fill-stone-200 text-xs font-bold">小金門</text>
+      </g>
+
+      <!-- Taiwan indicator (right side, arrow pointing right) -->
+      <g id="taiwan-indicator">
+        <line x1="420" y1="150" x2="480" y2="150" class="stroke-stone-400 dark:stroke-stone-500" stroke-width="2" stroke-dasharray="5,5"/>
+        <polygon points="480,145 490,150 480,155" class="fill-stone-400 dark:fill-stone-500"/>
+        <text x="430" y="175" class="fill-stone-500 dark:fill-stone-400 text-xs">台灣 →</text>
+        <text x="425" y="190" class="fill-stone-400 dark:fill-stone-500 text-xs">約 270 km</text>
+      </g>
+
+      <!-- Distance line: Xiamen to Kinmen -->
+      <g id="distance-xiamen-kinmen" class="distance-line">
+        <line x1="108" y1="140" x2="235" y2="130" class="stroke-blue-500" stroke-width="2" stroke-dasharray="8,4">
+          <animate attributeName="stroke-dashoffset" from="0" to="24" dur="1s" repeatCount="indefinite"/>
+        </line>
+        <rect x="145" y="115" width="60" height="24" rx="4" class="fill-blue-500"/>
+        <text x="175" y="132" text-anchor="middle" class="fill-white text-xs font-bold">1.8 km</text>
+      </g>
+
+      <!-- Kinmen Bridge -->
+      <g id="kinmen-bridge">
+        <line x1="235" y1="165" x2="210" y2="190" class="stroke-orange-500" stroke-width="3"/>
+        <circle cx="222" cy="178" r="10" class="fill-orange-100 dark:fill-orange-900 stroke-orange-500" stroke-width="2"/>
+        <text x="222" y="182" text-anchor="middle" class="fill-orange-600 dark:fill-orange-400 text-xs font-bold">橋</text>
+      </g>
+
+      <!-- Ferry route -->
+      <g id="ferry-route" class="opacity-0 transition-opacity duration-500" data-show="ferry">
+        <path d="M108 140 Q170 100, 235 130" fill="none" class="stroke-cyan-500" stroke-width="2" stroke-dasharray="4,4">
+          <animate attributeName="stroke-dashoffset" from="0" to="16" dur="2s" repeatCount="indefinite"/>
+        </path>
+        <!-- Ferry icon -->
+        <g transform="translate(170, 110)">
+          <rect x="-12" y="-4" width="24" height="12" rx="2" class="fill-white dark:fill-stone-800 stroke-cyan-500" stroke-width="1.5"/>
+          <polygon points="12,-4 18,2 12,8" class="fill-cyan-500"/>
+          <text x="0" y="3" text-anchor="middle" class="fill-cyan-600 dark:fill-cyan-400 text-xs font-bold">⛴</text>
+        </g>
+      </g>
+    </svg>
+
+    <!-- Info Cards -->
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-3">
+      <button class="info-card group p-4 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all text-left border border-transparent hover:border-blue-300 dark:hover:border-blue-700" data-target="ferry">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-lg">⛴</span>
+          <span class="font-bold text-stone-700 dark:text-stone-200">小三通</span>
+        </div>
+        <p class="text-xs text-stone-500 dark:text-stone-400">金門→廈門 20分鐘 / $500</p>
+      </button>
+
+      <button class="info-card group p-4 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-orange-50 dark:hover:bg-orange-900/30 transition-all text-left border border-transparent hover:border-orange-300 dark:hover:border-orange-700" data-target="bridge">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-lg">🌉</span>
+          <span class="font-bold text-stone-700 dark:text-stone-200">金門大橋</span>
+        </div>
+        <p class="text-xs text-stone-500 dark:text-stone-400">2022年通車 / 5.4公里</p>
+      </button>
+
+      <button class="info-card group p-4 rounded-lg bg-stone-100 dark:bg-stone-800 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-all text-left border border-transparent hover:border-emerald-300 dark:hover:border-emerald-700" data-target="lieyu">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-lg">🐄</span>
+          <span class="font-bold text-stone-700 dark:text-stone-200">小金門</span>
+        </div>
+        <p class="text-xs text-stone-500 dark:text-stone-400">烈嶼鄉 / 島上很多牛</p>
+      </button>
+    </div>
+  </div>
+</InteractiveContainer>
+
+<script>
+  const infoCards = document.querySelectorAll('.info-card')
+  const ferryRoute = document.getElementById('ferry-route')
+  const kinmenBridge = document.getElementById('kinmen-bridge')
+  const lieyuGroup = document.getElementById('lieyu-group')
+
+  infoCards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      const target = card.getAttribute('data-target')
+
+      if (target === 'ferry' && ferryRoute) {
+        ferryRoute.classList.remove('opacity-0')
+        ferryRoute.classList.add('opacity-100')
+      }
+
+      if (target === 'bridge' && kinmenBridge) {
+        kinmenBridge.classList.add('animate-pulse')
+      }
+
+      if (target === 'lieyu' && lieyuGroup) {
+        lieyuGroup.classList.add('animate-bounce')
+      }
+    })
+
+    card.addEventListener('mouseleave', () => {
+      const target = card.getAttribute('data-target')
+
+      if (target === 'ferry' && ferryRoute) {
+        ferryRoute.classList.add('opacity-0')
+        ferryRoute.classList.remove('opacity-100')
+      }
+
+      if (target === 'bridge' && kinmenBridge) {
+        kinmenBridge.classList.remove('animate-pulse')
+      }
+
+      if (target === 'lieyu' && lieyuGroup) {
+        lieyuGroup.classList.remove('animate-bounce')
+      }
+    })
+  })
+</script>
+
+<style>
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  .animate-bounce {
+    animation: bounce 0.5s ease-in-out infinite;
+  }
+</style>

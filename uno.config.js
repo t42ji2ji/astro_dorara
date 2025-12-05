@@ -33,12 +33,23 @@ const cssExtend = {
     opacity: '0.8',
   },
 
+  'img': {
+    'max-width': '100%',
+    'height': 'auto',
+    'border-radius': '0.5rem',
+    'margin-bottom': '1rem',
+  },
+
   'code::before,code::after': {
     content: 'none',
   },
 
   'h2': {
     margin: '0',
+  },
+
+  'h3': {
+    'margin-bottom': '0rem',
   },
 
   ':where(:not(pre):not(a) > code)': {
