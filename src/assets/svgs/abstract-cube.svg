@@ -1,0 +1,6 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M50 5L95 30V70L50 95L5 70V30L50 5Z" stroke="currentColor" stroke-width="2" fill="none"/>
+  <path d="M50 5V95" stroke="currentColor" stroke-width="2"/>
+  <path d="M5 30L95 70" stroke="currentColor" stroke-width="2"/>
+  <path d="M95 30L5 70" stroke="currentColor" stroke-width="2"/>
+</svg>
