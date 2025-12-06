@@ -1,0 +1,344 @@
+---
+interface Props {
+  class?: string
+}
+
+const { class: className = '' } = Astro.props
+---
+
+<div id="svg-particles-container" class:list={["w-full h-full", className]}></div>
+
+<script>
+  import * as THREE from 'three';
+
+  // SVG paths data - will be converted to points
+  const svgPaths = {
+    // Vercel triangle
+    vercel: `M37.5274 0L75.0548 65H0L37.5274 0Z`,
+    // Framer logo
+    framer: `M0 0H48V24H24L0 0Z M0 24H24L48 48H24V72L0 48V24Z`,
+    // Abstract cube
+    cube: `M50 5L95 30V70L50 95L5 70V30L50 5Z M50 5V95 M5 30L95 70 M95 30L5 70`,
+    // Star
+    star: `M50 0L61 39L100 50L61 61L50 100L39 61L0 50L39 39L50 0Z`
+  };
+
+  // Parse SVG path and extract points
+  function parseSvgPath(pathData: string, scale: number = 0.03, offsetX: number = 0, offsetY: number = 0): THREE.Vector3[] {
+    const points: THREE.Vector3[] = [];
+    const commands = pathData.match(/[MLHVCSQTAZ][^MLHVCSQTAZ]*/gi) || [];
+
+    let currentX = 0;
+    let currentY = 0;
+    let startX = 0;
+    let startY = 0;
+
+    commands.forEach(command => {
+      const type = command[0].toUpperCase();
+      const isRelative = command[0] === command[0].toLowerCase();
+      const args = command.slice(1).trim().split(/[\s,]+/).map(Number).filter(n => !isNaN(n));
+
+      switch (type) {
+        case 'M':
+          for (let i = 0; i < args.length; i += 2) {
+            if (isRelative && i > 0) {
+              currentX += args[i];
+              currentY += args[i + 1];
+            } else if (isRelative) {
+              currentX += args[i];
+              currentY += args[i + 1];
+            } else {
+              currentX = args[i];
+              currentY = args[i + 1];
+            }
+            if (i === 0) {
+              startX = currentX;
+              startY = currentY;
+            }
+            points.push(new THREE.Vector3(
+              (currentX - offsetX) * scale,
+              -(currentY - offsetY) * scale,
+              0
+            ));
+          }
+          break;
+        case 'L':
+          for (let i = 0; i < args.length; i += 2) {
+            if (isRelative) {
+              currentX += args[i];
+              currentY += args[i + 1];
+            } else {
+              currentX = args[i];
+              currentY = args[i + 1];
+            }
+            // Add intermediate points for smoother lines
+            points.push(new THREE.Vector3(
+              (currentX - offsetX) * scale,
+              -(currentY - offsetY) * scale,
+              0
+            ));
+          }
+          break;
+        case 'H':
+          for (const arg of args) {
+            currentX = isRelative ? currentX + arg : arg;
+            points.push(new THREE.Vector3(
+              (currentX - offsetX) * scale,
+              -(currentY - offsetY) * scale,
+              0
+            ));
+          }
+          break;
+        case 'V':
+          for (const arg of args) {
+            currentY = isRelative ? currentY + arg : arg;
+            points.push(new THREE.Vector3(
+              (currentX - offsetX) * scale,
+              -(currentY - offsetY) * scale,
+              0
+            ));
+          }
+          break;
+        case 'Z':
+          currentX = startX;
+          currentY = startY;
+          points.push(new THREE.Vector3(
+            (currentX - offsetX) * scale,
+            -(currentY - offsetY) * scale,
+            0
+          ));
+          break;
+        case 'C':
+          // Cubic bezier - sample points along the curve
+          for (let i = 0; i < args.length; i += 6) {
+            const x1 = isRelative ? currentX + args[i] : args[i];
+            const y1 = isRelative ? currentY + args[i + 1] : args[i + 1];
+            const x2 = isRelative ? currentX + args[i + 2] : args[i + 2];
+            const y2 = isRelative ? currentY + args[i + 3] : args[i + 3];
+            const x = isRelative ? currentX + args[i + 4] : args[i + 4];
+            const y = isRelative ? currentY + args[i + 5] : args[i + 5];
+
+            // Sample bezier curve
+            for (let t = 0; t <= 1; t += 0.1) {
+              const px = Math.pow(1-t, 3) * currentX + 3 * Math.pow(1-t, 2) * t * x1 + 3 * (1-t) * t * t * x2 + Math.pow(t, 3) * x;
+              const py = Math.pow(1-t, 3) * currentY + 3 * Math.pow(1-t, 2) * t * y1 + 3 * (1-t) * t * t * y2 + Math.pow(t, 3) * y;
+              points.push(new THREE.Vector3(
+                (px - offsetX) * scale,
+                -(py - offsetY) * scale,
+                0
+              ));
+            }
+
+            currentX = x;
+            currentY = y;
+          }
+          break;
+      }
+    });
+
+    return points;
+  }
+
+  // Generate points along SVG shape edges with interpolation
+  function generateShapePoints(pathData: string, numPoints: number, scale: number = 0.03): Float32Array {
+    const basePoints = parseSvgPath(pathData, scale, 50, 50);
+    const positions = new Float32Array(numPoints * 3);
+
+    if (basePoints.length === 0) {
+      // Random fallback
+      for (let i = 0; i < numPoints * 3; i++) {
+        positions[i] = (Math.random() - 0.5) * 4;
+      }
+      return positions;
+    }
+
+    // Interpolate and add variation
+    for (let i = 0; i < numPoints; i++) {
+      const t = i / numPoints;
+      const idx = Math.floor(t * (basePoints.length - 1));
+      const nextIdx = Math.min(idx + 1, basePoints.length - 1);
+      const localT = (t * (basePoints.length - 1)) - idx;
+
+      const point = new THREE.Vector3().lerpVectors(basePoints[idx], basePoints[nextIdx], localT);
+
+      // Add some random depth and spread
+      const noise = 0.15;
+      positions[i * 3] = point.x + (Math.random() - 0.5) * noise;
+      positions[i * 3 + 1] = point.y + (Math.random() - 0.5) * noise;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 0.5;
+    }
+
+    return positions;
+  }
+
+  // Initialize Three.js scene
+  const container = document.getElementById('svg-particles-container');
+
+  if (container) {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    // Particle system
+    const particleCount = 5000;
+    const geometry = new THREE.BufferGeometry();
+
+    // Generate initial positions from first SVG
+    const shapes = Object.keys(svgPaths) as (keyof typeof svgPaths)[];
+    let currentShapeIndex = 0;
+
+    const positions = generateShapePoints(svgPaths[shapes[currentShapeIndex]], particleCount, 0.04);
+    const targetPositions = new Float32Array(particleCount * 3);
+    const velocities = new Float32Array(particleCount * 3);
+
+    // Copy initial positions to target
+    targetPositions.set(positions);
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    // Custom shader material for particles
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        uTime: { value: 0 },
+        uSize: { value: 2.0 },
+        uColor: { value: new THREE.Color(0xffffff) }
+      },
+      vertexShader: `
+        uniform float uTime;
+        uniform float uSize;
+        attribute vec3 velocity;
+        varying float vDistance;
+
+        void main() {
+          vec3 pos = position;
+
+          // Subtle wave animation
+          pos.x += sin(uTime * 0.5 + position.y * 2.0) * 0.02;
+          pos.y += cos(uTime * 0.3 + position.x * 2.0) * 0.02;
+          pos.z += sin(uTime * 0.4 + position.x * position.y) * 0.05;
+
+          vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+          vDistance = -mvPosition.z;
+
+          gl_PointSize = uSize * (300.0 / vDistance);
+          gl_Position = projectionMatrix * mvPosition;
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 uColor;
+        varying float vDistance;
+
+        void main() {
+          // Circular particle shape
+          vec2 center = gl_PointCoord - vec2(0.5);
+          float dist = length(center);
+
+          if (dist > 0.5) discard;
+
+          // Soft edge
+          float alpha = 1.0 - smoothstep(0.3, 0.5, dist);
+          alpha *= 0.8;
+
+          // Depth-based brightness
+          float brightness = clamp(1.0 / (vDistance * 0.2), 0.3, 1.0);
+
+          gl_FragColor = vec4(uColor * brightness, alpha);
+        }
+      `,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    });
+
+    const particles = new THREE.Points(geometry, material);
+    scene.add(particles);
+
+    camera.position.z = 5;
+
+    // Mouse interaction
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetRotationX = 0;
+    let targetRotationY = 0;
+
+    container.addEventListener('mousemove', (event) => {
+      const rect = container.getBoundingClientRect();
+      mouseX = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouseY = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    });
+
+    // Morph to next shape
+    function morphToShape(shapeName: keyof typeof svgPaths) {
+      const newPositions = generateShapePoints(svgPaths[shapeName], particleCount, 0.04);
+      targetPositions.set(newPositions);
+
+      // Add random velocities for explosion effect
+      for (let i = 0; i < particleCount * 3; i++) {
+        velocities[i] = (Math.random() - 0.5) * 0.1;
+      }
+    }
+
+    // Auto-switch shapes every 4 seconds
+    setInterval(() => {
+      currentShapeIndex = (currentShapeIndex + 1) % shapes.length;
+      morphToShape(shapes[currentShapeIndex]);
+    }, 4000);
+
+    // Animation loop
+    const clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const time = clock.getElapsedTime();
+      material.uniforms.uTime.value = time;
+
+      // Smooth mouse rotation
+      targetRotationY = mouseX * 0.3;
+      targetRotationX = mouseY * 0.3;
+
+      particles.rotation.y += (targetRotationY - particles.rotation.y) * 0.05;
+      particles.rotation.x += (targetRotationX - particles.rotation.x) * 0.05;
+
+      // Gentle auto-rotation
+      particles.rotation.y += 0.001;
+
+      // Morph positions
+      const positionAttribute = geometry.getAttribute('position') as THREE.BufferAttribute;
+      const pos = positionAttribute.array as Float32Array;
+
+      for (let i = 0; i < particleCount * 3; i++) {
+        // Lerp towards target with some velocity
+        const diff = targetPositions[i] - pos[i];
+        velocities[i] += diff * 0.02;
+        velocities[i] *= 0.92; // Damping
+        pos[i] += velocities[i];
+      }
+      positionAttribute.needsUpdate = true;
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Handle resize
+    const resizeObserver = new ResizeObserver(() => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+    resizeObserver.observe(container);
+
+    // Cleanup
+    window.addEventListener('beforeunload', () => {
+      resizeObserver.disconnect();
+      renderer.dispose();
+      geometry.dispose();
+      material.dispose();
+    });
+  }
+</script>
