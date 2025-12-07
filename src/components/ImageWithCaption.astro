@@ -1,0 +1,260 @@
+---
+import type { ImageMetadata } from 'astro'
+
+interface Props {
+  src: string | ImageMetadata
+  alt: string
+  caption?: string
+  class?: string
+}
+
+const { src, alt, caption, class: className } = Astro.props
+const displayCaption = caption ?? alt
+const imageSrc = typeof src === 'string' ? src : src.src
+---
+
+<div class:list={['image-with-caption', className]} data-src={imageSrc}>
+  <canvas class="image-canvas"></canvas>
+  <noscript>
+    <img src={imageSrc} alt={alt} />
+  </noscript>
+  <p class="caption">{displayCaption}</p>
+</div>
+
+<style>
+  .image-with-caption {
+    margin: 1.5rem 0;
+    cursor: pointer;
+  }
+
+  .image-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .caption {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-muted, #666);
+  }
+</style>
+
+<script>
+  import * as THREE from 'three'
+
+  const vertexShader = `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `
+
+  // uProgress: 0->1 顯現動畫
+  // uSeed: 每張圖不同的隨機紋理
+  const fragmentShader = `
+    uniform sampler2D uTexture;
+    uniform float uProgress;
+    uniform float uSeed;
+    varying vec2 vUv;
+
+    float random(vec2 st) {
+      return fract(sin(dot(st.xy + uSeed, vec2(12.9898, 78.233))) * 43758.5453123);
+    }
+
+    float noise(vec2 st) {
+      vec2 i = floor(st);
+      vec2 f = fract(st);
+      float a = random(i);
+      float b = random(i + vec2(1.0, 0.0));
+      float c = random(i + vec2(0.0, 1.0));
+      float d = random(i + vec2(1.0, 1.0));
+      vec2 u = f * f * (3.0 - 2.0 * f);
+      return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+    }
+
+    float fbm(vec2 st) {
+      float value = 0.0;
+      float amplitude = 0.5;
+      for (int i = 0; i < 5; i++) {
+        value += amplitude * noise(st);
+        st *= 2.0;
+        amplitude *= 0.5;
+      }
+      return value;
+    }
+
+    void main() {
+      vec2 uv = vUv;
+      vec4 texColor = texture2D(uTexture, uv);
+
+      // 建立不規則的顯現地圖（用 seed 偏移讓每張圖不同）
+      float revealMap = 0.0;
+      revealMap += fbm(uv * 4.0 + uSeed * 10.0) * 0.4;
+      revealMap += fbm(uv * 10.0 + uSeed * 50.0) * 0.3;
+      revealMap += noise(uv * 30.0 + uSeed * 100.0) * 0.2;
+
+      // 邊緣較晚顯現
+      float edgeX = min(uv.x, 1.0 - uv.x);
+      float edgeY = min(uv.y, 1.0 - uv.y);
+      float edgeDist = min(edgeX, edgeY);
+      revealMap += (1.0 - smoothstep(0.0, 0.2, edgeDist)) * 0.3;
+
+      // 刮痕紋理
+      float scratch = noise(vec2(uv.x * 50.0 + uSeed, uv.y * 5.0));
+      scratch = smoothstep(0.7, 0.75, scratch);
+      revealMap += scratch * 0.15;
+
+      // === 顯現動畫 ===
+      float threshold = uProgress * 1.2;
+      float alpha = smoothstep(revealMap - 0.08, revealMap + 0.08, threshold);
+
+      // 顯現邊緣亮光
+      float glowEdge = smoothstep(revealMap - 0.15, revealMap, threshold) *
+                       (1.0 - smoothstep(revealMap, revealMap + 0.15, threshold));
+
+      vec3 finalColor = mix(texColor.rgb, texColor.rgb * 1.2, glowEdge * 0.3);
+
+      gl_FragColor = vec4(finalColor, texColor.a * alpha);
+    }
+  `
+
+  class RevealEffect {
+    container: HTMLElement
+    canvas: HTMLCanvasElement
+    src: string
+    seed: number
+    renderer!: THREE.WebGLRenderer
+    scene!: THREE.Scene
+    camera!: THREE.OrthographicCamera
+    mesh!: THREE.Mesh
+    material!: THREE.ShaderMaterial
+    progress = { current: 0, target: 0 }
+    raf: number | null = null
+    isInView = false
+
+    constructor(container: HTMLElement) {
+      this.container = container
+      this.canvas = container.querySelector('.image-canvas')!
+      this.src = container.dataset.src || ''
+      this.seed = Math.random() * 1000
+      this.init()
+    }
+
+    async init() {
+      this.renderer = new THREE.WebGLRenderer({
+        canvas: this.canvas,
+        alpha: true,
+        antialias: true,
+      })
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+      this.scene = new THREE.Scene()
+      this.camera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, 0.1, 10)
+      this.camera.position.z = 1
+
+      const loader = new THREE.TextureLoader()
+      const texture = await new Promise<THREE.Texture>((resolve) => {
+        loader.load(this.src, resolve)
+      })
+
+      const img = texture.image as HTMLImageElement
+      const imgAspect = img.width / img.height
+
+      this.material = new THREE.ShaderMaterial({
+        vertexShader,
+        fragmentShader,
+        uniforms: {
+          uTexture: { value: texture },
+          uProgress: { value: 0 },
+          uSeed: { value: this.seed },
+        },
+        transparent: true,
+      })
+
+      const geometry = new THREE.PlaneGeometry(1, 1)
+      this.mesh = new THREE.Mesh(geometry, this.material)
+      this.scene.add(this.mesh)
+
+      this.resize(imgAspect)
+      this.setupEvents()
+      this.setupObserver()
+    }
+
+    resize(aspect: number) {
+      const width = this.container.clientWidth
+      const height = width / aspect
+      this.canvas.style.aspectRatio = `${aspect}`
+      this.renderer.setSize(width, height)
+    }
+
+    setupEvents() {
+      // 點擊重播動畫
+      this.container.addEventListener('click', () => {
+        // 重置並重播
+        this.seed = Math.random() * 1000
+        this.material.uniforms.uSeed.value = this.seed
+        this.progress.current = 0
+        this.progress.target = 1
+        this.startAnimation()
+      })
+
+      window.addEventListener('resize', () => {
+        if (this.material?.uniforms.uTexture.value) {
+          const texture = this.material.uniforms.uTexture.value as THREE.Texture
+          const img = texture.image as HTMLImageElement
+          const aspect = img.width / img.height
+          this.resize(aspect)
+        }
+      })
+    }
+
+    setupObserver() {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            this.isInView = entry.isIntersecting
+
+            if (this.isInView) {
+              this.progress.target = 1
+              this.startAnimation()
+            }
+          })
+        },
+        { threshold: 0.4 }, // 40% 可見時觸發
+      )
+      observer.observe(this.container)
+    }
+
+    startAnimation() {
+      if (!this.raf) {
+        this.animate()
+      }
+    }
+
+    animate = () => {
+      // 平滑過渡
+      this.progress.current += (this.progress.target - this.progress.current) * 0.03
+
+      this.material.uniforms.uProgress.value = this.progress.current
+
+      this.renderer.render(this.scene, this.camera)
+
+      // 檢查是否還需要繼續動畫
+      const progressDone = Math.abs(this.progress.current - this.progress.target) < 0.001
+
+      if (progressDone) {
+        this.raf = null
+      } else {
+        this.raf = requestAnimationFrame(this.animate)
+      }
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('.image-with-caption').forEach((el) => {
+    new RevealEffect(el)
+  })
+</script>

@@ -14,7 +14,7 @@ import hanamiLogo from '~/assets/resume/hanami.png'
     <div class="hero-content">
       <div class="hero-avatar" id="avatarContainer"></div>
       <div class="hero-info">
-        <h1 class="text-4xl font-bold mb-2">Hi, I'm Dora 👋</h1>
+        <h1 class="text-4xl font-bold mb-2">Hi, I'm Dorara 👋</h1>
         <p class="text-xl text-gray-500 dark:text-gray-400 mb-4">Flutter Lead & Full Stack Developer</p>
 
         <div class="value-intro">
@@ -23,9 +23,8 @@ import hanamiLogo from '~/assets/resume/hanami.png'
           </p>
           <p class="mb-3">
             作為一個 <strong>Builder</strong
-            >，我不只是寫程式，更喜歡從零到一打造完整的產品。在工作之餘，我持續經營個人專案，將想法變成真實可用的工具。
+            >，我不只是寫程式，更喜歡從零到一打造完整的產品。在工作之餘，我持續經營個人專案，將有趣的想法分享給大家。
           </p>
-          <p>我熱愛分享知識，透過技術文章和書籍，希望能幫助更多人在開發的路上少走一些彎路。</p>
         </div>
       </div>
     </div>
@@ -86,6 +85,56 @@ import hanamiLogo from '~/assets/resume/hanami.png'
         height: 140px;
       }
     }
+
+    /* Experience collapsible styles */
+    .experience-details {
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      padding: 1rem;
+      margin: -1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .experience-details:hover {
+      background: rgba(102, 126, 234, 0.05);
+    }
+
+    :global(.dark) .experience-details:hover {
+      background: rgba(102, 126, 234, 0.1);
+    }
+
+    .experience-summary {
+      padding: 0.5rem 0;
+      transition: all 0.2s ease;
+    }
+
+    .experience-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .expand-icon {
+      transition: transform 0.3s ease;
+      font-size: 0.75rem;
+    }
+
+    .experience-details[open] .expand-icon {
+      transform: rotate(180deg);
+    }
+
+    .experience-content {
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 
   <script>
@@ -105,7 +154,7 @@ import hanamiLogo from '~/assets/resume/hanami.png'
 
     function initLottie() {
       const container = document.getElementById('avatarContainer')
-      if (!container) 
+      if (!container)
 return
 
       // 如果已存在實例，先銷毀
@@ -147,169 +196,190 @@ return
     // 頁面離開時清理
     document.addEventListener('astro:before-swap', destroyLottie)
     document.addEventListener('swup:willReplaceContent', destroyLottie)
-  </script>
+</script>
 
   <article class="prose max-w-none">
     <section class="mb-12">
       <h2 class="text-2xl font-bold mb-4">Experience</h2>
 
-      <div class="mb-8">
-        <div class="flex justify-between items-center mb-2">
-          <div class="flex items-center gap-3">
-            <img src={kryptogoLogo.src} alt="KryptoGO" class="w-10 h-10 rounded-lg object-contain" />
-            <h3 class="text-xl font-semibold m-0">KryptoGO Co., Ltd.</h3>
+      <details class="experience-details">
+        <summary class="experience-summary cursor-pointer list-none">
+          <div class="flex justify-between items-center mb-2">
+            <div class="flex items-center gap-3">
+              <img src={kryptogoLogo.src} alt="KryptoGO" class="w-10 h-10 rounded-lg object-contain" />
+              <h3 class="text-xl font-semibold m-0">KryptoGO Co., Ltd.</h3>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-gray-500">2022.05 - <span class="underline">至今</span></span>
+              <span class="expand-icon text-gray-400">▼</span>
+            </div>
           </div>
-          <span class="text-sm text-gray-500">2022.05 - Present</span>
-        </div>
-        <div class="text-gray-600 mb-4">Flutter Lead</div>
-        <p class="mb-4">帶領 App 團隊，負責加密貨幣錢包產品的技術架構設計與開發。</p>
+          <div class="text-gray-600">Flutter Lead</div>
+        </summary>
+        <div class="experience-content mt-4">
+          <p class="mb-4">帶領 App 團隊，負責加密貨幣錢包產品的技術架構設計與開發。</p>
 
-        <div class="space-y-4">
-          <div>
-            <h4 class="font-bold text-lg mb-2">🏗️ 架構升級：Clean Architecture + Riverpod</h4>
-            <ul class="list-disc pl-5 space-y-1">
-              <li>
-                <strong>技術實踐：</strong>導入 Clean Architecture 分層架構，分離 Presentation / Domain / Data 層。採用
-                Riverpod 作為狀態管理方案，取代原有混亂的狀態邏輯。重構核心模組，統一 Controller
-                設計模式，建立單元測試基礎設施，針對錢包核心邏輯撰寫測試案例。
-              </li>
-              <li><strong>成效：</strong>提升程式碼可讀性，降低 Bug 發生率，新人 onboarding 時間縮短。</li>
-            </ul>
-          </div>
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-bold text-lg mb-2">🏗️ 架構升級：Clean Architecture + Riverpod</h4>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>
+                  <strong>技術實踐：</strong>導入 Clean Architecture 分層架構，分離 Presentation / Domain / Data
+                  層。採用 Riverpod 作為狀態管理方案，取代原有混亂的狀態邏輯。重構核心模組，統一 Controller
+                  設計模式，建立單元測試基礎設施，針對錢包核心邏輯撰寫測試案例。
+                </li>
+                <li><strong>成效：</strong>提升程式碼可讀性，降低 Bug 發生率，新人 onboarding 時間縮短。</li>
+              </ul>
+            </div>
 
-          <div>
-            <h4 class="font-bold text-lg mb-2">📦 Monorepo 架構</h4>
-            <ul class="list-disc pl-5 space-y-1">
-              <li>
-                <strong>技術實踐：</strong>導入 Melos 建立 Monorepo 架構，將單體應用拆分為多個獨立 Package。核心邏輯與
-                UI 分離，同一套 Business Logic 可服務 App / Web / SDK。開發 Remote Config
-                機制，不只是功能開關，而是完整的動態配置系統。依據客戶需求配置功能模組，無需發版即可更新配置。
-              </li>
-              <li>
-                <strong>成效：</strong>
-                <ul class="list-circle pl-5 mt-1">
-                  <li>支援快速產出 Web 版本 (PWA)</li>
-                  <li>企業 SDK 可獨立打包交付</li>
-                  <li>支援多產品變體，企業客戶可在同一套程式碼基礎上客製化</li>
-                </ul>
-              </li>
-            </ul>
-          </div>
+            <div>
+              <h4 class="font-bold text-lg mb-2">📦 Monorepo 架構</h4>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>
+                  <strong>技術實踐：</strong>導入 Melos 建立 Monorepo 架構，將單體應用拆分為多個獨立 Package。核心邏輯與
+                  UI 分離，同一套 Business Logic 可服務 App / Web / SDK。開發 Remote Config
+                  機制，不只是功能開關，而是完整的動態配置系統。依據客戶需求配置功能模組，無需發版即可更新配置。
+                </li>
+                <li>
+                  <strong>成效：</strong>
+                  <ul class="list-circle pl-5 mt-1">
+                    <li>支援快速產出 Web 版本 (PWA)</li>
+                    <li>企業 SDK 可獨立打包交付</li>
+                    <li>支援多產品變體，企業客戶可在同一套程式碼基礎上客製化</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
 
-          <div>
-            <h4 class="font-bold text-lg mb-2">⚙️ Multi-Brand Build System</h4>
-            <ul class="list-disc pl-5 space-y-1">
-              <li>
-                <strong>技術實踐：</strong>設計配置驅動的多品牌建置系統，透過宣告式配置檔定義各產品變體的品牌元素（App
-                名稱、Icon、配色、啟動畫面）、功能模組開關、後端 API Endpoint 及簽名憑證。建立 GitHub Actions
-                自動化流程，自動讀取配置產生對應建置參數，整合 iOS / Android 雙平台代碼簽名，支援一鍵送審上架。
-              </li>
-              <li>
-                <strong>成效：</strong>
-                <ul class="list-circle pl-5 mt-1">
-                  <li>新客戶部署從數週縮短至數小時</li>
-                  <li>單一程式碼庫同時維護多個產品變體，降低維護成本</li>
-                  <li>Bug 修復與功能更新可同步推送至所有產品線</li>
-                </ul>
-              </li>
-            </ul>
-          </div>
+            <div>
+              <h4 class="font-bold text-lg mb-2">⚙️ Multi-Brand Build System</h4>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>
+                  <strong>技術實踐：</strong>設計配置驅動的多品牌建置系統，透過宣告式配置檔定義各產品變體的品牌元素（App
+                  名稱、Icon、配色、啟動畫面）、功能模組開關、後端 API Endpoint 及簽名憑證。建立 GitHub Actions
+                  自動化流程，自動讀取配置產生對應建置參數，整合 iOS / Android 雙平台代碼簽名，支援一鍵送審上架。
+                </li>
+                <li>
+                  <strong>成效：</strong>
+                  <ul class="list-circle pl-5 mt-1">
+                    <li>新客戶部署從數週縮短至數小時</li>
+                    <li>單一程式碼庫同時維護多個產品變體，降低維護成本</li>
+                    <li>Bug 修復與功能更新可同步推送至所有產品線</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
 
-          <div>
-            <h4 class="font-bold text-lg mb-2">🔗 區塊鏈技術積累</h4>
-            <ul class="list-disc pl-5 space-y-1">
-              <li>自主研發多鏈錢包核心：開發錢包建立、私鑰保管、助記詞備份等核心功能，支援 EVM / Solana / Tron 多鏈</li>
-              <li>實作 Shamir Secret Sharing (SSS) 私鑰分片備份，提升資產安全性</li>
-              <li>串接 AAVE V3 借貸協議 (Supply / Withdraw / Borrow)</li>
-              <li>整合多個 DEX 聚合器 (Jupiter / OKX / Raydium)，實現最佳價格路由</li>
-              <li>開發 Gasless Send、USDC Permit 等進階轉帳功能</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <hr class="my-8 bg-gray-200 dark:bg-gray-700 h-[1px]" />
-
-      <div class="mb-8">
-        <div class="flex justify-between items-center mb-2">
-          <div class="flex items-center gap-3">
-            <img src={hanamiLogo.src} alt="花見" class="w-10 h-10 rounded-lg object-contain" />
-            <h3 class="text-xl font-semibold m-0">依賴傳媒娛樂有限公司 (花見-高端社群交友)</h3>
-          </div>
-          <span class="text-sm text-gray-500">2020.07 - Present</span>
-        </div>
-        <div class="text-gray-600 mb-4">軟體工程師 (Vue | Flutter | Solidity)</div>
-
-        <div class="space-y-4">
-          <div>
-            <h4 class="font-bold text-lg mb-2">App Developer</h4>
-            <p class="mb-2">高品質交友軟體，提供高端社交服務</p>
-            <ul class="list-disc pl-5 space-y-1">
-              <li>Flutter 6 人團隊，從零開始到完成整個系統開發</li>
-              <li>利用 Canvas 實作禮物特效、娃娃換裝系統、彈幕飄屏，達到更好的畫面效果與效能</li>
-              <li>系統實作包含 IM 聊天室、語音房、送禮物等常用互動功能</li>
-              <li>運用 socket IO 達成實時競拍、離線更新等功能</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 class="font-bold text-lg mb-2">Web Developer (管理後台)</h4>
-            <p class="mb-2">會員管理系統及各項後台需求工具</p>
-            <ul class="list-disc pl-5 space-y-1">
-              <li>獨立開發完整後台系統</li>
-              <li>採用 Vue (NuxtJs) 和 Golang server 結合 Casbin 權限用戶管理</li>
-              <li>Element UI 實現後台操作系統 UI</li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 class="font-bold text-lg mb-2">區塊鏈產品負責人</h4>
-            <p class="mb-2">虛擬幣金流代收服務、NFT 交易市場</p>
-            <ul class="list-disc pl-5 space-y-1">
-              <li>
-                <strong>金流代收平台：</strong>負責領導產品需求與設計，撰寫智能合約 (Solidity, Tron network,
-                TRC20)，開發前端頁面 (NuxtJs)。
-              </li>
-              <li>
-                <strong>NFT 交易市場：</strong>負責領導產品需求與設計，撰寫智能合約 (Solidity, Ethereum, ERC721,
-                ERC1155, Market Contract)，開發前端頁面 (Vue3, TypeScript)。
-              </li>
-            </ul>
+            <div>
+              <h4 class="font-bold text-lg mb-2">🔗 區塊鏈技術積累</h4>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>
+                  自主研發多鏈錢包核心：開發錢包建立、私鑰保管、助記詞備份等核心功能，支援 EVM / Solana / Tron 多鏈
+                </li>
+                <li>實作 Shamir Secret Sharing (SSS) 私鑰分片備份，提升資產安全性</li>
+                <li>串接 AAVE V3 借貸協議 (Supply / Withdraw / Borrow)</li>
+                <li>整合多個 DEX 聚合器 (Jupiter / OKX / Raydium)，實現最佳價格路由</li>
+                <li>開發 Gasless Send、USDC Permit 等進階轉帳功能</li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
+      </details>
+      <details class="experience-details">
+        <summary class="experience-summary cursor-pointer list-none">
+          <div class="flex justify-between items-center mb-2">
+            <div class="flex items-center gap-3">
+              <img src={hanamiLogo.src} alt="花見" class="w-10 h-10 rounded-lg object-contain" />
+              <h3 class="text-xl font-semibold m-0">依賴傳媒娛樂有限公司 (花見-高端社群交友)</h3>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-gray-500">2020.07 - <span class="underline">至今</span></span>
+              <span class="expand-icon text-gray-400">▼</span>
+            </div>
+          </div>
+          <div class="text-gray-600">軟體工程師 (Vue | Flutter | Solidity)</div>
+        </summary>
+        <div class="experience-content mt-4">
+          <div class="space-y-4">
+            <div>
+              <h4 class="font-bold text-lg mb-2">App Developer</h4>
+              <p class="mb-2">高品質交友軟體，提供高端社交服務</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>Flutter 6 人團隊，從零開始到完成整個系統開發</li>
+                <li>利用 Canvas 實作禮物特效、娃娃換裝系統、彈幕飄屏，達到更好的畫面效果與效能</li>
+                <li>系統實作包含 IM 聊天室、語音房、送禮物等常用互動功能</li>
+                <li>運用 socket IO 達成實時競拍、離線更新等功能</li>
+              </ul>
+            </div>
 
-      <hr class="my-8 bg-gray-200 dark:bg-gray-700 h-[1px]" />
+            <div>
+              <h4 class="font-bold text-lg mb-2">Web Developer (管理後台)</h4>
+              <p class="mb-2">會員管理系統及各項後台需求工具</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>獨立開發完整後台系統</li>
+                <li>採用 Vue (NuxtJs) 和 Golang server 結合 Casbin 權限用戶管理</li>
+                <li>Element UI 實現後台操作系統 UI</li>
+              </ul>
+            </div>
 
-      <div class="mb-8">
-        <div class="flex justify-between items-baseline mb-2">
-          <h3 class="text-xl font-semibold m-0">國立雲林科技大學</h3>
-          <span class="text-sm text-gray-500">2020.06 - 2020.08</span>
+            <div>
+              <h4 class="font-bold text-lg mb-2">區塊鏈產品負責人</h4>
+              <p class="mb-2">虛擬幣金流代收服務、NFT 交易市場</p>
+              <ul class="list-disc pl-5 space-y-1">
+                <li>
+                  <strong>金流代收平台：</strong>負責領導產品需求與設計，撰寫智能合約 (Solidity, Tron network,
+                  TRC20)，開發前端頁面 (NuxtJs)。
+                </li>
+                <li>
+                  <strong>NFT 交易市場：</strong>負責領導產品需求與設計，撰寫智能合約 (Solidity, Ethereum, ERC721,
+                  ERC1155, Market Contract)，開發前端頁面 (Vue3, TypeScript)。
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div class="text-gray-600 mb-4">網頁設計課程講師</div>
-        <p>擔任雲林科技大學網頁設計課微學分講師，帶領學生從零開始製作網頁，從入門到踏入網路設計師的領域。</p>
-      </div>
+      </details>
 
-      <hr class="my-8 bg-gray-200 dark:bg-gray-700 h-[1px]" />
-
-      <div class="mb-8">
-        <div class="flex justify-between items-baseline mb-2">
-          <h3 class="text-xl font-semibold m-0">多多設計有限公司</h3>
-          <span class="text-sm text-gray-500">2019.10 - 2020.07</span>
+      <details class="experience-details">
+        <summary class="experience-summary cursor-pointer list-none">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold m-0">國立雲林科技大學</h3>
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-gray-500">2020.06 - 2020.08</span>
+              <span class="expand-icon text-gray-400">▼</span>
+            </div>
+          </div>
+          <div class="text-gray-600">網頁設計課程講師</div>
+        </summary>
+        <div class="experience-content mt-4">
+          <p>擔任雲林科技大學網頁設計課微學分講師，帶領學生從零開始製作網頁，從入門到踏入網路設計師的領域。</p>
         </div>
-        <div class="text-gray-600 mb-4">負責人</div>
-        <p class="mb-2">
-          負責帶領四人團隊，提供網頁、App 的接案服務。在團隊中負責與客戶討論訂定需求、前端網頁及 App 開發、UI/UX 設計。
-        </p>
-        <ul class="list-disc pl-5 space-y-1">
-          <li>Figma、Sketch UI/UX 設計</li>
-          <li>Vue 網頁設計</li>
-          <li>Flutter 程式設計</li>
-        </ul>
-      </div>
+      </details>
+
+      <details class="experience-details">
+        <summary class="experience-summary cursor-pointer list-none">
+          <div class="flex justify-between items-center mb-2">
+            <h3 class="text-xl font-semibold m-0">多多設計有限公司</h3>
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-gray-500">2019.10 - 2020.07</span>
+              <span class="expand-icon text-gray-400">▼</span>
+            </div>
+          </div>
+          <div class="text-gray-600">負責人</div>
+        </summary>
+        <div class="experience-content mt-4">
+          <p class="mb-2">
+            負責帶領四人團隊，提供網頁、App 的接案服務。在團隊中負責與客戶討論訂定需求、前端網頁及 App 開發、UI/UX
+            設計。
+          </p>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Figma、Sketch UI/UX 設計</li>
+            <li>Vue 網頁設計</li>
+            <li>Flutter 程式設計</li>
+          </ul>
+        </div>
+      </details>
     </section>
-
-    <hr class="my-8 bg-gray-200 dark:bg-gray-700 h-[1px]" />
 
     <section class="mb-12 special-experience not-prose">
       <!-- SVG Symbol 定義，只需定義一次 -->
@@ -320,6 +390,8 @@ return
           ></path>
         </symbol>
       </svg>
+
+      <hr class="mb-12 bg-gray-200 dark:bg-gray-700 h-[1px]" />
 
       <h2 class="text-2xl font-bold mb-6">特殊經歷</h2>
 
@@ -336,11 +408,21 @@ return
 
         <!-- 成果數據卡片 -->
         <div class="grid grid-cols-3 gap-4 mb-8">
-          <div class="stat-card">
+          <a href="https://www.threads.com/@dorara_hsieh" target="_blank" class="stat-card stat-card-link">
+            <svg class="external-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
             <div class="stat-number">5,800+</div>
             <div class="stat-label">Threads 追蹤</div>
-          </div>
+          </a>
           <a href="https://dweam.xyz/sitemap" target="_blank" class="stat-card stat-card-link">
+            <svg class="external-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
             <div class="stat-number">15+</div>
             <div class="stat-label">網站工具</div>
             <div class="stat-sublabel">77 萬+ 瀏覽量</div>
@@ -481,6 +563,21 @@ return
         cursor: pointer;
         text-decoration: none;
         color: inherit;
+        position: relative;
+      }
+
+      .external-link-icon {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 14px;
+        height: 14px;
+        color: #999;
+        transition: color 0.2s ease;
+      }
+
+      .stat-card-link:hover .external-link-icon {
+        color: #667eea;
       }
 
       .stat-card-link:hover {

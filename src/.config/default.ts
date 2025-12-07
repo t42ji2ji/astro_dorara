@@ -6,9 +6,9 @@ import type { ThemeConfig } from '~/types'
 export const defaultConfig: ThemeConfig = {
   site: {
     title: '謝哆啦',
-    subtitle: '打開你未知世界的鑰匙',
+    subtitle: '給你點亮世界的鑰匙',
     author: '謝哆啦',
-    description: '打開你未知世界的鑰匙',
+    description: '給你點亮世界的鑰匙',
     website: 'https://dorara.app/',
     pageSize: 5,
     socialLinks: [

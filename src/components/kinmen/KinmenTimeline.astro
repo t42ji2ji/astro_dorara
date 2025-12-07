@@ -5,126 +5,102 @@ interface TimelineEvent {
   year: string
   title: string
   description: string
-  category: 'war' | 'politics' | 'culture' | 'transport' | 'ecology' | 'industry'
+  location: 'kinmen' | 'taiwan'
   icon: string
 }
 
 const events: TimelineEvent[] = [
   {
-    year: '1842',
-    title: '廈門開港',
-    description: '金門人開始「落番」南洋謀生，開啟海外移民潮',
-    category: 'culture',
-    icon: '⛵'
+    year: '1949.05',
+    title: '台灣頒布戒嚴令',
+    description: '台灣省政府主席陳誠頒布戒嚴令，開啟了長達 38 年的戒嚴時期。',
+    location: 'taiwan',
+    icon: '🇹🇼'
   },
   {
-    year: '1921',
-    title: '陳景蘭洋樓落成',
-    description: '金門規模最大的洋樓，見證南洋僑民衣錦還鄉',
-    category: 'culture',
-    icon: '🏛️'
-  },
-  {
-    year: '1949',
+    year: '1949.10',
     title: '古寧頭戰役',
-    description: '國共內戰關鍵戰役，共軍登島後全軍覆沒',
-    category: 'war',
+    description: '共軍登陸金門古寧頭，經過三天激戰全軍覆沒，確立了兩岸分治的局面。',
+    location: 'kinmen',
     icon: '⚔️'
   },
   {
-    year: '1952',
-    title: '金門酒廠創立',
-    description: '胡璉將軍為解決財政問題創辦，現年營收130億',
-    category: 'industry',
-    icon: '🥃'
+    year: '1950',
+    title: '台灣實施地方自治',
+    description: '台灣開始實施縣市長與縣市議員直接選舉，開啟地方民主自治。',
+    location: 'taiwan',
+    icon: '🗳️'
+  },
+  {
+    year: '1956',
+    title: '金門實施戰地政務',
+    description: '金門、馬祖劃為戰地政務實驗區，實施軍政一元化領導，居民生活受嚴格軍事管制。',
+    location: 'kinmen',
+    icon: '🪖'
   },
   {
     year: '1958',
     title: '八二三砲戰',
-    description: '44天內落彈47萬發，改變金門地景的激烈砲擊',
-    category: 'war',
+    description: '共軍對金門發動猛烈砲擊，44 天內落下 47 萬發砲彈。',
+    location: 'kinmen',
     icon: '💥'
   },
   {
-    year: '1958-79',
-    title: '單打雙不打',
-    description: '持續20年的騷擾式砲擊，單日打、雙日停',
-    category: 'war',
-    icon: '📅'
+    year: '1979',
+    title: '停止「單打雙不打」',
+    description: '中美建交後，中共宣布停止對金門長達 20 年的宣傳彈砲擊。',
+    location: 'kinmen',
+    icon: '📢'
   },
   {
-    year: '1992',
-    title: '解除戰地政務',
-    description: '結束軍政一元統治，金門終於「解嚴」',
-    category: 'politics',
+    year: '1987',
+    title: '台灣解除戒嚴',
+    description: '蔣經國總統宣布解除戒嚴，開放黨禁、報禁，台灣民主化加速。但金馬地區仍持續戒嚴。',
+    location: 'taiwan',
     icon: '🕊️'
   },
   {
-    year: '1999',
-    title: '丹恩颱風',
-    description: '14隻孔雀從畜試所逃脫，外來種危機的開始',
-    category: 'ecology',
-    icon: '🦚'
+    year: '1992',
+    title: '金門解除戰地政務',
+    description: '金馬地區終於解除長達 36 年的戰地政務，回歸憲政體制，比台灣晚了 5 年。',
+    location: 'kinmen',
+    icon: '🎉'
   },
-  {
-    year: '2001',
-    title: '小三通啟航',
-    description: '金門到廈門20分鐘，兩岸交流新紀元',
-    category: 'transport',
-    icon: '⛴️'
-  },
-  {
-    year: '2022',
-    title: '金門大橋通車',
-    description: '連結大小金門，全長5.4公里的跨海大橋',
-    category: 'transport',
-    icon: '🌉'
-  },
-  {
-    year: '2024',
-    title: '孔雀破2400隻',
-    description: '繁殖失控，政府懸賞600元，餐廳推孔雀料理',
-    category: 'ecology',
-    icon: '🦚'
+    {
+    year: '1993',
+    title: '金門首屆民選縣長',
+    description: '金門人終於能自己選縣長。而在這之前，台灣已經實施地方自治超過 40 年。',
+    location: 'kinmen',
+    icon: '🗳️'
   }
 ]
 
-const categoryColors = {
-  war: 'bg-red-500',
-  politics: 'bg-purple-500',
-  culture: 'bg-amber-500',
-  transport: 'bg-blue-500',
-  ecology: 'bg-green-500',
-  industry: 'bg-orange-500'
+const locationColors = {
+  kinmen: 'bg-orange-500',
+  taiwan: 'bg-blue-500' // KMT blue or just a distinct color? Blue represents the ROC/Taiwan connection usually, or maybe Green for Taiwan geography? Let's use Blue/Green/Teal to contrast Orange. Teal is nice.
+}
+// Actually, let's look at the colors. Kinmen often associated with red/brown/orange (bricks). Taiwan.. maybe Green or Blue. Let's use Teal for Taiwan to be neutral political but distinct.
+const locationConfig = {
+    kinmen: { color: 'bg-amber-600', label: '金門戰地' },
+    taiwan: { color: 'bg-emerald-600', label: '台灣本島' }
 }
 
-const categoryLabels = {
-  war: '戰爭',
-  politics: '政治',
-  culture: '文化',
-  transport: '交通',
-  ecology: '生態',
-  industry: '產業'
-}
 ---
 
 <InteractiveContainer
-  title="金門歷史時間軸"
-  description="從落番南洋到小三通，一座島嶼的百年變遷"
+  title="兩岸時差：被遺忘的戰地歲月"
+  description="當台灣走向民主，金門仍處於戰爭狀態。一條時間軸，看見兩個世界的落差。"
 >
-  <!-- Category Filter -->
-  <div class="flex flex-wrap gap-2 mb-6">
-    <button class="filter-btn active px-3 py-1 text-xs rounded-full bg-stone-200 dark:bg-stone-700 text-stone-700 dark:text-stone-200 transition-all" data-filter="all">
-      全部
-    </button>
-    {Object.entries(categoryLabels).map(([key, label]) => (
-      <button
-        class={`filter-btn px-3 py-1 text-xs rounded-full bg-stone-100 dark:bg-stone-800 text-stone-500 dark:text-stone-400 hover:text-white transition-all hover:${categoryColors[key as keyof typeof categoryColors]}`}
-        data-filter={key}
-      >
-        {label}
-      </button>
-    ))}
+  <!-- Legend -->
+  <div class="flex justify-center gap-6 mb-8">
+    <div class="flex items-center gap-2">
+        <div class={`w-3 h-3 rounded-full ${locationConfig.taiwan.color}`}></div>
+        <span class="text-sm text-stone-600 dark:text-stone-300">台灣本島</span>
+    </div>
+    <div class="flex items-center gap-2">
+        <div class={`w-3 h-3 rounded-full ${locationConfig.kinmen.color}`}></div>
+        <span class="text-sm text-stone-600 dark:text-stone-300">金門戰地</span>
+    </div>
   </div>
 
   <!-- Timeline -->
@@ -136,30 +112,38 @@ const categoryLabels = {
     <div class="space-y-8">
       {events.map((event, index) => (
         <div
-          class={`timeline-event relative flex flex-col md:flex-row ${index % 2 === 0 ? 'md:flex-row-reverse' : ''} items-start md:items-center gap-4 opacity-0 translate-y-4`}
-          data-category={event.category}
+          class={`timeline-event relative flex flex-col md:flex-row items-start md:items-center gap-4 opacity-0 translate-y-4`}
           data-index={index}
           style={`animation-delay: ${index * 100}ms`}
         >
           <!-- Year badge (center on desktop) -->
           <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 z-10">
-            <div class={`w-8 h-8 rounded-full ${categoryColors[event.category]} flex items-center justify-center text-white text-sm shadow-lg`}>
+            <div class={`w-8 h-8 rounded-full ${locationConfig[event.location].color} flex items-center justify-center text-white text-sm shadow-lg ring-4 ring-white dark:ring-stone-900`}>
               {event.icon}
             </div>
           </div>
 
           <!-- Content card -->
-          <div class={`ml-12 md:ml-0 md:w-[calc(50%-2rem)] ${index % 2 === 0 ? 'md:mr-auto md:pr-8' : 'md:ml-auto md:pl-8'}`}>
-            <div class="event-card bg-white dark:bg-stone-800 rounded-lg p-4 shadow-md border border-stone-100 dark:border-stone-700 hover:shadow-lg transition-all cursor-pointer group">
-              <div class="flex items-center gap-2 mb-2">
-                <span class={`text-xs px-2 py-0.5 rounded ${categoryColors[event.category]} text-white`}>
-                  {event.year}
-                </span>
-                <span class={`text-xs px-2 py-0.5 rounded bg-stone-100 dark:bg-stone-700 text-stone-500 dark:text-stone-400`}>
-                  {categoryLabels[event.category]}
-                </span>
-              </div>
-              <h4 class="font-bold text-stone-800 dark:text-stone-100 mb-1 group-hover:text-primary transition-colors">
+          <!-- 
+            Logic: 
+            Taiwan (Left): md:mr-auto md:pr-12 md:text-right md:items-end
+            Kinmen (Right): md:ml-auto md:pl-12 md:text-left md:items-start
+           -->
+          <div class={`
+            ml-12 md:ml-0 md:w-[calc(50%-0rem)] flex flex-col
+            ${event.location === 'taiwan' 
+                ? 'md:mr-auto md:pr-12 md:items-end md:text-right' 
+                : 'md:ml-auto md:pl-12 md:items-start md:text-left'}
+          `}>
+             <span class={`inline-block mb-2 text-xs px-2 py-0.5 rounded text-white ${locationConfig[event.location].color}`}>
+                {event.year}
+            </span>
+            <div class={`
+                event-card bg-white dark:bg-stone-800 rounded-lg p-4 shadow-md border-l-4 
+                ${event.location === 'taiwan' ? 'border-r-4 border-l-0 border-emerald-500/50' : 'border-amber-500/50'} 
+                hover:shadow-lg transition-all cursor-pointer group w-full md:w-auto
+            `}>
+              <h4 class="font-bold text-stone-800 dark:text-stone-100 mb-1">
                 {event.title}
               </h4>
               <p class="text-sm text-stone-600 dark:text-stone-400 leading-relaxed">
@@ -190,35 +174,6 @@ const categoryLabels = {
   document.querySelectorAll('.timeline-event').forEach((el) => {
     observer.observe(el)
   })
-
-  // Filter functionality
-  const filterBtns = document.querySelectorAll('.filter-btn')
-  const events = document.querySelectorAll('.timeline-event')
-
-  filterBtns.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const filter = btn.getAttribute('data-filter')
-
-      // Update active state
-      filterBtns.forEach((b) => {
-        b.classList.remove('active', 'bg-stone-200', 'dark:bg-stone-700', 'text-stone-700', 'dark:text-stone-200')
-        b.classList.add('bg-stone-100', 'dark:bg-stone-800', 'text-stone-500', 'dark:text-stone-400')
-      })
-      btn.classList.add('active', 'bg-stone-200', 'dark:bg-stone-700', 'text-stone-700', 'dark:text-stone-200')
-      btn.classList.remove('bg-stone-100', 'dark:bg-stone-800', 'text-stone-500', 'dark:text-stone-400')
-
-      // Filter events
-      events.forEach((event) => {
-        const category = event.getAttribute('data-category')
-        if (filter === 'all' || category === filter) {
-          (event as HTMLElement).style.display = ''
-          event.classList.add('animate-in')
-        } else {
-          (event as HTMLElement).style.display = 'none'
-        }
-      })
-    })
-  })
 </script>
 
 <style>
@@ -231,17 +186,7 @@ const categoryLabels = {
     transform: translateY(0);
   }
 
-  .filter-btn.active {
-    font-weight: 600;
-  }
-
   .event-card:hover {
-    transform: translateX(4px);
-  }
-
-  @media (min-width: 768px) {
-    .timeline-event:nth-child(odd) .event-card:hover {
-      transform: translateX(-4px);
-    }
+    transform: translateY(-2px);
   }
 </style>
