@@ -52,6 +52,14 @@ const cssExtend = {
     'margin-bottom': '0rem',
   },
 
+  'hr': {
+    'margin': '2rem 0',
+    'height': '1px',
+    'border': 'none',
+    'opacity': '0.2',
+    'background-color': '#ccc',
+  },
+
   ':where(:not(pre):not(a) > code)': {
     'white-space': 'normal',
     'word-wrap': 'break-word',
