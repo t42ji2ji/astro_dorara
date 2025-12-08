@@ -12,7 +12,7 @@ const { translate: t } = Astro.locals
 
 const categoryList = post.data.categories ?? []
 const isDraft = post.data.draft === true
-const isEssay = categoryList.some(cat => cat.toLowerCase() === 'essays')
+const isEssay = categoryList.some((cat) => cat.toLowerCase() === 'essays')
 ---
 
 <header flex="~ col gap-2">
