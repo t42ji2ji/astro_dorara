@@ -20,6 +20,9 @@ export default defineConfig({
       // @ts-ignore
       devtoolsJson(),
     ],
+    define: {
+      'import.meta.env.SHOW_DRAFTS': JSON.stringify(process.env.SHOW_DRAFTS || ''),
+    },
   },
   markdown: {
     remarkPlugins: [

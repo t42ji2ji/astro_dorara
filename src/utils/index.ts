@@ -35,11 +35,14 @@ export async function getPosts(isArchivePage = false) {
     return aDate.isBefore(bDate) ? 1 : -1
   })
 
-  if (import.meta.env.PROD) {
-    return posts.filter(post => post.data.draft !== true)
+  // Show drafts if SHOW_DRAFTS env var is set, or in dev mode
+  const showDrafts = import.meta.env.SHOW_DRAFTS === 'true' || !import.meta.env.PROD
+
+  if (showDrafts) {
+    return posts
   }
 
-  return posts
+  return posts.filter(post => post.data.draft !== true)
 }
 
 const parser = new MarkdownIt()

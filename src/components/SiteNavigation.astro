@@ -1,5 +1,6 @@
 ---
 import { themeConfig } from '~/.config'
+import threadsIcon from '~/assets/threads.webp'
 
 const { navLinks, socialLinks } = themeConfig.site
 const { translate: t } = Astro.locals
@@ -22,7 +23,11 @@ const { translate: t } = Astro.locals
       socialLinks.map(({ href, name }) => (
         <li>
           <a href={href} target="_blank" title={name} class="not-underline-hover inline-flex items-center">
-            <span class:list={[`i-mdi-${name}`, 'w-6 h-6']}>{name}</span>
+            {name === 'threads' ? (
+              <img src={threadsIcon.src} alt="Threads" class="w-6 h-6 dark:invert" />
+            ) : (
+              <span class:list={[`i-mdi-${name}`, 'w-6 h-6']}>{name}</span>
+            )}
           </a>
         </li>
       ))

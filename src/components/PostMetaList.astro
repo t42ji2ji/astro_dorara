@@ -1,0 +1,29 @@
+---
+import type { Post } from '~/types'
+import { formatDate } from '~/utils'
+import PostCategory from './PostCategory.astro'
+
+interface Props {
+  post: Post
+}
+
+const { post } = Astro.props
+const { translate: t } = Astro.locals
+
+const categoryList = post.data.categories ?? []
+const isDraft = post.data.draft === true
+const isEssay = categoryList.some(cat => cat.toLowerCase() === 'essays')
+---
+
+<header flex="~ col gap-2">
+  <h1 class="post-title inline-flex items-center">
+    {isDraft && <span class="text-amber-500 dark:text-amber-400 mr-2 shrink-0">[草稿]</span>}
+    {isEssay && <span class="text-sm mr-2">[Essay]</span>}
+    <a class="not-prose not-underline-hover" href={`/posts/${post.id}/`}>{post.data.title}</a>
+  </h1>
+  <div class="text-3.5 text-gray-500">
+    <span>{t(post.data.modDate ? 'updated_at' : 'posted_at')}</span>
+    <time>{formatDate(post.data.modDate ?? post.data.pubDate)}</time>
+    {categoryList.map((category) => <PostCategory category={category} />)}
+  </div>
+</header>

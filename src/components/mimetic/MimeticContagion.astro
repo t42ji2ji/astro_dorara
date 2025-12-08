@@ -1,0 +1,652 @@
+---
+import InteractiveContainer from '../InteractiveContainer.astro'
+---
+
+<InteractiveContainer
+  title="慾望傳染模擬 (Mimetic Contagion)"
+  description="觀察慾望如何在群體中傳播。點擊任意位置注入新慾望，觀察它如何像病毒一樣擴散。"
+  id="mimetic-contagion-demo"
+>
+  <div class="contagion-stage relative">
+    <!-- Canvas Container -->
+    <div class="canvas-wrapper relative w-full aspect-[4/3] md:aspect-[16/9] bg-stone-900 rounded-lg overflow-hidden">
+      <canvas id="contagion-canvas" class="w-full h-full"></canvas>
+
+      <!-- Overlay Stats -->
+      <div class="absolute top-3 left-3 flex flex-wrap gap-2 text-xs font-mono" id="stats-panel">
+        <div class="px-2 py-1 bg-black/50 rounded text-white/80">
+          人數: <span id="stat-count">0</span>
+        </div>
+        <div class="px-2 py-1 bg-black/50 rounded text-white/80">
+          張力: <span id="stat-tension">0%</span>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="absolute bottom-3 right-3 flex flex-wrap gap-1 text-xs" id="legend-panel">
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="mt-4 space-y-4">
+      <!-- Desire Selection -->
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="text-xs text-stone-500 uppercase tracking-widest">注入慾望:</span>
+        <div class="flex flex-wrap gap-2" id="desire-buttons">
+          <button class="desire-btn w-10 h-10 rounded-lg bg-stone-100 dark:bg-stone-800 border-2 border-stone-300 dark:border-stone-600 flex items-center justify-center text-xl hover:scale-110 transition-all" data-desire="💎" data-color="#a855f7">💎</button>
+          <button class="desire-btn w-10 h-10 rounded-lg bg-stone-100 dark:bg-stone-800 border-2 border-stone-300 dark:border-stone-600 flex items-center justify-center text-xl hover:scale-110 transition-all" data-desire="🏆" data-color="#eab308">🏆</button>
+          <button class="desire-btn w-10 h-10 rounded-lg bg-stone-100 dark:bg-stone-800 border-2 border-stone-300 dark:border-stone-600 flex items-center justify-center text-xl hover:scale-110 transition-all" data-desire="❤️" data-color="#ef4444">❤️</button>
+          <button class="desire-btn w-10 h-10 rounded-lg bg-stone-100 dark:bg-stone-800 border-2 border-stone-300 dark:border-stone-600 flex items-center justify-center text-xl hover:scale-110 transition-all" data-desire="💼" data-color="#3b82f6">💼</button>
+          <button class="desire-btn w-10 h-10 rounded-lg bg-stone-100 dark:bg-stone-800 border-2 border-stone-300 dark:border-stone-600 flex items-center justify-center text-xl hover:scale-110 transition-all" data-desire="🎯" data-color="#22c55e">🎯</button>
+        </div>
+      </div>
+
+      <!-- Sliders -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="space-y-1">
+          <label class="text-xs text-stone-500 flex justify-between">
+            <span>傳染率</span>
+            <span id="contagion-rate-value">50%</span>
+          </label>
+          <input type="range" id="contagion-rate" min="0" max="100" value="50" class="w-full h-2 bg-stone-200 dark:bg-stone-700 rounded-lg appearance-none cursor-pointer">
+        </div>
+        <div class="space-y-1">
+          <label class="text-xs text-stone-500 flex justify-between">
+            <span>群聚傾向</span>
+            <span id="cohesion-value">30%</span>
+          </label>
+          <input type="range" id="cohesion" min="0" max="100" value="30" class="w-full h-2 bg-stone-200 dark:bg-stone-700 rounded-lg appearance-none cursor-pointer">
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap gap-2">
+        <button id="btn-add-agents" class="px-3 py-1.5 text-xs bg-stone-200 dark:bg-stone-700 hover:bg-stone-300 dark:hover:bg-stone-600 rounded transition-colors">
+          +10 人
+        </button>
+        <button id="btn-add-influencer" class="px-3 py-1.5 text-xs bg-amber-200 dark:bg-amber-900 hover:bg-amber-300 dark:hover:bg-amber-800 rounded transition-colors">
+          加入中介者 ⭐
+        </button>
+        <button id="btn-trigger-scapegoat" class="px-3 py-1.5 text-xs bg-rose-200 dark:bg-rose-900 hover:bg-rose-300 dark:hover:bg-rose-800 rounded transition-colors">
+          觸發替罪羊
+        </button>
+        <button id="btn-reset" class="px-3 py-1.5 text-xs bg-stone-200 dark:bg-stone-700 hover:bg-stone-300 dark:hover:bg-stone-600 rounded transition-colors">
+          重置
+        </button>
+      </div>
+    </div>
+
+    <!-- Insight Box -->
+    <div class="mt-4 p-4 bg-stone-100 dark:bg-stone-900 rounded border-l-4 border-amber-500 text-sm text-stone-600 dark:text-stone-400" id="insight-box">
+      <p class="italic">點擊畫布上的任何位置，為該位置附近的人注入一個新慾望，然後觀察它如何傳播。</p>
+    </div>
+  </div>
+</InteractiveContainer>
+
+<script>
+interface Agent {
+  id: number
+  x: number
+  y: number
+  vx: number
+  vy: number
+  desire: string | null
+  desireColor: string | null
+  desireStrength: number
+  influence: number
+  susceptibility: number
+  isInfluencer: boolean
+  isScapegoat: boolean
+  rivalWith: number | null
+  size: number
+}
+
+interface ContagionLine {
+  fromX: number
+  fromY: number
+  toX: number
+  toY: number
+  progress: number
+  color: string
+}
+
+function initMimeticContagion() {
+  const container = document.getElementById('mimetic-contagion-demo')
+  if (!container) return
+
+  const canvas = container.querySelector('#contagion-canvas') as HTMLCanvasElement
+  if (!canvas) return
+
+  const ctx = canvas.getContext('2d')
+  if (!ctx) return
+
+  // Store references for closures (TypeScript null safety)
+  const canvasCtx = ctx
+  const containerEl = container
+
+  // State
+  let agents: Agent[] = []
+  let contagionLines: ContagionLine[] = []
+  let selectedDesire = '💎'
+  let selectedColor = '#a855f7'
+  let contagionRate = 0.5
+  let cohesionStrength = 0.3
+  let tension = 0
+  let animationId: number | null = null
+  let agentIdCounter = 0
+
+  // Resize canvas
+  function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect()
+    const dpr = window.devicePixelRatio || 1
+    canvas.width = rect.width * dpr
+    canvas.height = rect.height * dpr
+    canvasCtx.scale(dpr, dpr)
+  }
+
+  // Create agent
+  function createAgent(x?: number, y?: number, isInfluencer = false): Agent {
+    const rect = canvas.getBoundingClientRect()
+    return {
+      id: agentIdCounter++,
+      x: x ?? Math.random() * rect.width,
+      y: y ?? Math.random() * rect.height,
+      vx: (Math.random() - 0.5) * 2,
+      vy: (Math.random() - 0.5) * 2,
+      desire: null,
+      desireColor: null,
+      desireStrength: 0,
+      influence: isInfluencer ? 0.9 : 0.2 + Math.random() * 0.3,
+      susceptibility: isInfluencer ? 0.1 : 0.5 + Math.random() * 0.5,
+      isInfluencer,
+      isScapegoat: false,
+      rivalWith: null,
+      size: isInfluencer ? 16 : 10
+    }
+  }
+
+  // Initialize agents
+  function initAgents(count: number) {
+    agents = []
+    for (let i = 0; i < count; i++) {
+      agents.push(createAgent())
+    }
+  }
+
+  // Boids-like movement
+  function updateMovement(agent: Agent) {
+    const rect = canvas.getBoundingClientRect()
+    const maxSpeed = agent.isScapegoat ? 4 : 2
+    const neighborRadius = 80
+
+    let separationX = 0, separationY = 0
+    let alignmentX = 0, alignmentY = 0
+    let cohesionX = 0, cohesionY = 0
+    let neighborCount = 0
+
+    for (const other of agents) {
+      if (other.id === agent.id) continue
+
+      const dx = other.x - agent.x
+      const dy = other.y - agent.y
+      const dist = Math.sqrt(dx * dx + dy * dy)
+
+      if (dist < neighborRadius && dist > 0) {
+        // Separation (avoid crowding)
+        const repulsion = agent.isScapegoat ? 0.5 : 0.3
+        separationX -= (dx / dist) * (repulsion / dist) * 10
+        separationY -= (dy / dist) * (repulsion / dist) * 10
+
+        // Alignment (match velocity)
+        alignmentX += other.vx
+        alignmentY += other.vy
+
+        // Cohesion (move toward center of neighbors)
+        if (!agent.isScapegoat) {
+          cohesionX += other.x
+          cohesionY += other.y
+        }
+
+        neighborCount++
+
+        // Rivalry effect - agents with same desire repel slightly
+        if (agent.desire && agent.desire === other.desire && dist < 40) {
+          separationX -= (dx / dist) * 0.5
+          separationY -= (dy / dist) * 0.5
+        }
+      }
+    }
+
+    if (neighborCount > 0) {
+      // Apply alignment
+      alignmentX /= neighborCount
+      alignmentY /= neighborCount
+      agent.vx += (alignmentX - agent.vx) * 0.02
+
+      // Apply cohesion
+      if (!agent.isScapegoat) {
+        cohesionX /= neighborCount
+        cohesionY /= neighborCount
+        agent.vx += (cohesionX - agent.x) * 0.001 * cohesionStrength
+        agent.vy += (cohesionY - agent.y) * 0.001 * cohesionStrength
+      }
+    }
+
+    // Apply separation
+    agent.vx += separationX * 0.1
+    agent.vy += separationY * 0.1
+
+    // Scapegoat runs away from center
+    if (agent.isScapegoat) {
+      const centerX = rect.width / 2
+      const centerY = rect.height / 2
+      const dx = agent.x - centerX
+      const dy = agent.y - centerY
+      const dist = Math.sqrt(dx * dx + dy * dy)
+      if (dist > 0) {
+        agent.vx += (dx / dist) * 0.3
+        agent.vy += (dy / dist) * 0.3
+      }
+    }
+
+    // Random wandering
+    agent.vx += (Math.random() - 0.5) * 0.2
+    agent.vy += (Math.random() - 0.5) * 0.2
+
+    // Limit speed
+    const speed = Math.sqrt(agent.vx * agent.vx + agent.vy * agent.vy)
+    if (speed > maxSpeed) {
+      agent.vx = (agent.vx / speed) * maxSpeed
+      agent.vy = (agent.vy / speed) * maxSpeed
+    }
+
+    // Update position
+    agent.x += agent.vx
+    agent.y += agent.vy
+
+    // Bounce off walls
+    const padding = 20
+    if (agent.x < padding) { agent.x = padding; agent.vx *= -0.8 }
+    if (agent.x > rect.width - padding) { agent.x = rect.width - padding; agent.vx *= -0.8 }
+    if (agent.y < padding) { agent.y = padding; agent.vy *= -0.8 }
+    if (agent.y > rect.height - padding) { agent.y = rect.height - padding; agent.vy *= -0.8 }
+  }
+
+  // Desire contagion
+  function updateContagion(agent: Agent) {
+    if (agent.isScapegoat) return
+
+    const contagionRadius = 50
+
+    for (const other of agents) {
+      if (other.id === agent.id || other.isScapegoat) continue
+      if (!other.desire) continue
+
+      const dx = other.x - agent.x
+      const dy = other.y - agent.y
+      const dist = Math.sqrt(dx * dx + dy * dy)
+
+      if (dist < contagionRadius) {
+        // Calculate contagion probability
+        const proximity = 1 - (dist / contagionRadius)
+        const probability = proximity * other.influence * agent.susceptibility * contagionRate * 0.02
+
+        if (Math.random() < probability) {
+          // Get infected!
+          if (agent.desire !== other.desire) {
+            agent.desire = other.desire
+            agent.desireColor = other.desireColor
+            agent.desireStrength = Math.min(1, other.desireStrength * 0.9)
+
+            // Add contagion line animation
+            contagionLines.push({
+              fromX: other.x,
+              fromY: other.y,
+              toX: agent.x,
+              toY: agent.y,
+              progress: 0,
+              color: other.desireColor || '#fff'
+            })
+
+            // Increase tension when same desires exist
+            tension = Math.min(100, tension + 2)
+          }
+        }
+      }
+    }
+
+    // Desire decay
+    if (agent.desireStrength > 0) {
+      agent.desireStrength -= 0.0005
+      if (agent.desireStrength <= 0) {
+        agent.desire = null
+        agent.desireColor = null
+      }
+    }
+  }
+
+  // Update contagion lines
+  function updateContagionLines() {
+    contagionLines = contagionLines.filter(line => {
+      line.progress += 0.05
+      return line.progress < 1
+    })
+  }
+
+  // Calculate tension
+  function updateTension() {
+    // Count agents with same desires
+    const desireCounts: Record<string, number> = {}
+    for (const agent of agents) {
+      if (agent.desire) {
+        desireCounts[agent.desire] = (desireCounts[agent.desire] || 0) + 1
+      }
+    }
+
+    // More same desires = more tension
+    let maxCount = 0
+    for (const count of Object.values(desireCounts)) {
+      if (count > maxCount) maxCount = count
+    }
+
+    const targetTension = (maxCount / agents.length) * 100
+    tension = tension * 0.99 + targetTension * 0.01
+
+    // Natural decay
+    tension = Math.max(0, tension - 0.1)
+  }
+
+  // Trigger scapegoat mechanism
+  function triggerScapegoat() {
+    if (tension < 30) {
+      updateInsight('張力不足，無法觸發替罪羊機制。讓慾望傳播一段時間後再試。')
+      return
+    }
+
+    // Find a random agent to be scapegoat
+    const candidates = agents.filter(a => !a.isInfluencer && !a.isScapegoat)
+    if (candidates.length === 0) return
+
+    const scapegoat = candidates[Math.floor(Math.random() * candidates.length)]
+    scapegoat.isScapegoat = true
+    scapegoat.desire = '😈'
+    scapegoat.desireColor = '#000'
+    scapegoat.size = 14
+
+    // Reset tension
+    tension = Math.max(0, tension - 50)
+
+    // Clear other agents' desires temporarily
+    for (const agent of agents) {
+      if (!agent.isScapegoat && !agent.isInfluencer) {
+        agent.desireStrength *= 0.5
+      }
+    }
+
+    updateInsight('替罪羊被選出！群體的張力暫時得到釋放，但這只是幻覺...')
+
+    // Scapegoat gets expelled after a while
+    setTimeout(() => {
+      const idx = agents.findIndex(a => a.id === scapegoat.id)
+      if (idx !== -1) {
+        agents.splice(idx, 1)
+        updateInsight('替罪羊被驅逐了。和平恢復了嗎？還是新的慾望競爭即將開始？')
+      }
+    }, 5000)
+  }
+
+  // Draw
+  function draw() {
+    const rect = canvas.getBoundingClientRect()
+    canvasCtx.clearRect(0, 0, rect.width, rect.height)
+
+    // Draw contagion lines
+    for (const line of contagionLines) {
+      const alpha = 1 - line.progress
+      canvasCtx.beginPath()
+      canvasCtx.moveTo(line.fromX, line.fromY)
+      const currentX = line.fromX + (line.toX - line.fromX) * line.progress
+      const currentY = line.fromY + (line.toY - line.fromY) * line.progress
+      canvasCtx.lineTo(currentX, currentY)
+      canvasCtx.strokeStyle = line.color + Math.floor(alpha * 255).toString(16).padStart(2, '0')
+      canvasCtx.lineWidth = 2
+      canvasCtx.stroke()
+    }
+
+    // Draw agents
+    for (const agent of agents) {
+      // Glow for influencers
+      if (agent.isInfluencer) {
+        canvasCtx.beginPath()
+        canvasCtx.arc(agent.x, agent.y, agent.size + 8, 0, Math.PI * 2)
+        canvasCtx.fillStyle = 'rgba(251, 191, 36, 0.3)'
+        canvasCtx.fill()
+      }
+
+      // Scapegoat effect
+      if (agent.isScapegoat) {
+        canvasCtx.beginPath()
+        canvasCtx.arc(agent.x, agent.y, agent.size + 6, 0, Math.PI * 2)
+        canvasCtx.fillStyle = 'rgba(239, 68, 68, 0.4)'
+        canvasCtx.fill()
+      }
+
+      // Agent body
+      canvasCtx.beginPath()
+      canvasCtx.arc(agent.x, agent.y, agent.size, 0, Math.PI * 2)
+
+      if (agent.isScapegoat) {
+        canvasCtx.fillStyle = '#1f1f1f'
+      } else if (agent.desireColor) {
+        canvasCtx.fillStyle = agent.desireColor + '40'
+      } else {
+        canvasCtx.fillStyle = '#4a4a4a'
+      }
+      canvasCtx.fill()
+
+      // Border
+      canvasCtx.strokeStyle = agent.isInfluencer ? '#fbbf24' : (agent.isScapegoat ? '#ef4444' : '#666')
+      canvasCtx.lineWidth = agent.isInfluencer ? 3 : 1.5
+      canvasCtx.stroke()
+
+      // Desire emoji
+      if (agent.desire) {
+        canvasCtx.font = `${agent.size}px sans-serif`
+        canvasCtx.textAlign = 'center'
+        canvasCtx.textBaseline = 'middle'
+        canvasCtx.fillText(agent.desire, agent.x, agent.y)
+      }
+
+      // Star for influencers
+      if (agent.isInfluencer && !agent.desire) {
+        canvasCtx.font = `${agent.size - 2}px sans-serif`
+        canvasCtx.textAlign = 'center'
+        canvasCtx.textBaseline = 'middle'
+        canvasCtx.fillText('⭐', agent.x, agent.y)
+      }
+    }
+
+    // Update stats
+    const statCount = containerEl.querySelector('#stat-count')
+    const statTension = containerEl.querySelector('#stat-tension')
+    if (statCount) statCount.textContent = agents.length.toString()
+    if (statTension) statTension.textContent = Math.round(tension) + '%'
+
+    // Update tension bar color
+    if (statTension) {
+      if (tension > 70) {
+        (statTension as HTMLElement).style.color = '#ef4444'
+      } else if (tension > 40) {
+        (statTension as HTMLElement).style.color = '#f59e0b'
+      } else {
+        (statTension as HTMLElement).style.color = 'inherit'
+      }
+    }
+  }
+
+  // Animation loop
+  function animate() {
+    for (const agent of agents) {
+      updateMovement(agent)
+      updateContagion(agent)
+    }
+    updateContagionLines()
+    updateTension()
+    draw()
+    animationId = requestAnimationFrame(animate)
+  }
+
+  // Update insight text
+  function updateInsight(text: string) {
+    const insightBox = containerEl.querySelector('#insight-box p')
+    if (insightBox) {
+      insightBox.textContent = text
+    }
+  }
+
+  // Event handlers
+  function handleCanvasClick(e: MouseEvent) {
+    const rect = canvas.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+
+    // Find nearest agent or create influence zone
+    let nearestAgent: Agent | null = null
+    let nearestDist = Infinity
+
+    for (const agent of agents) {
+      const dx = agent.x - x
+      const dy = agent.y - y
+      const dist = Math.sqrt(dx * dx + dy * dy)
+      if (dist < nearestDist && dist < 60) {
+        nearestDist = dist
+        nearestAgent = agent
+      }
+    }
+
+    if (nearestAgent && !nearestAgent.isScapegoat) {
+      nearestAgent.desire = selectedDesire
+      nearestAgent.desireColor = selectedColor
+      nearestAgent.desireStrength = 1
+
+      updateInsight(`新慾望 ${selectedDesire} 被注入！觀察它如何傳染給周圍的人...`)
+    } else {
+      // Infect agents in radius
+      const radius = 50
+      for (const agent of agents) {
+        const dx = agent.x - x
+        const dy = agent.y - y
+        const dist = Math.sqrt(dx * dx + dy * dy)
+        if (dist < radius && !agent.isScapegoat) {
+          agent.desire = selectedDesire
+          agent.desireColor = selectedColor
+          agent.desireStrength = 1
+        }
+      }
+      updateInsight(`區域感染！${selectedDesire} 正在擴散...`)
+    }
+  }
+
+  // Setup event listeners
+  canvas.addEventListener('click', handleCanvasClick)
+
+  // Desire buttons
+  const desireButtons = containerEl.querySelectorAll('.desire-btn')
+  desireButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      desireButtons.forEach(b => b.classList.remove('border-rose-500', 'bg-rose-100', 'dark:bg-rose-900/30'))
+      btn.classList.add('border-rose-500', 'bg-rose-100', 'dark:bg-rose-900/30')
+      selectedDesire = btn.getAttribute('data-desire') || '💎'
+      selectedColor = btn.getAttribute('data-color') || '#a855f7'
+    })
+  })
+  // Select first by default
+  desireButtons[0]?.classList.add('border-rose-500', 'bg-rose-100', 'dark:bg-rose-900/30')
+
+  // Sliders
+  const contagionRateSlider = containerEl.querySelector('#contagion-rate') as HTMLInputElement
+  const cohesionSlider = containerEl.querySelector('#cohesion') as HTMLInputElement
+  const contagionRateValue = containerEl.querySelector('#contagion-rate-value')
+  const cohesionValue = containerEl.querySelector('#cohesion-value')
+
+  contagionRateSlider?.addEventListener('input', () => {
+    contagionRate = parseInt(contagionRateSlider.value) / 100
+    if (contagionRateValue) contagionRateValue.textContent = contagionRateSlider.value + '%'
+  })
+
+  cohesionSlider?.addEventListener('input', () => {
+    cohesionStrength = parseInt(cohesionSlider.value) / 100
+    if (cohesionValue) cohesionValue.textContent = cohesionSlider.value + '%'
+  })
+
+  // Buttons
+  containerEl.querySelector('#btn-add-agents')?.addEventListener('click', () => {
+    for (let i = 0; i < 10; i++) {
+      agents.push(createAgent())
+    }
+    updateInsight(`加入了 10 個新成員。群體變大了！`)
+  })
+
+  containerEl.querySelector('#btn-add-influencer')?.addEventListener('click', () => {
+    const rect = canvas.getBoundingClientRect()
+    const influencer = createAgent(rect.width / 2, rect.height / 2, true)
+    influencer.desire = selectedDesire
+    influencer.desireColor = selectedColor
+    influencer.desireStrength = 1
+    agents.push(influencer)
+    updateInsight(`一個中介者（KOL）加入了！他的影響力會讓慾望傳播得更快。`)
+  })
+
+  containerEl.querySelector('#btn-trigger-scapegoat')?.addEventListener('click', () => {
+    triggerScapegoat()
+  })
+
+  containerEl.querySelector('#btn-reset')?.addEventListener('click', () => {
+    if (animationId) cancelAnimationFrame(animationId)
+    tension = 0
+    contagionLines = []
+    initAgents(30)
+    animate()
+    updateInsight('已重置。點擊畫布上的任何位置，為該位置附近的人注入一個新慾望。')
+  })
+
+  // Initialize
+  resizeCanvas()
+  window.addEventListener('resize', resizeCanvas)
+  initAgents(30)
+  animate()
+
+  // Cleanup on page leave (for Swup)
+  const cleanup = () => {
+    if (animationId) cancelAnimationFrame(animationId)
+    window.removeEventListener('resize', resizeCanvas)
+  }
+
+  document.addEventListener('swup:willReplaceContent', cleanup, { once: true })
+}
+
+// Initialize
+initMimeticContagion()
+document.addEventListener('swup:contentReplaced', initMimeticContagion)
+</script>
+
+<style>
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #a855f7;
+    cursor: pointer;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #a855f7;
+    cursor: pointer;
+    border: none;
+  }
+</style>

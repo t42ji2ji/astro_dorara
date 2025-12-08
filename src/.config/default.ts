@@ -6,9 +6,9 @@ import type { ThemeConfig } from '~/types'
 export const defaultConfig: ThemeConfig = {
   site: {
     title: '謝哆啦',
-    subtitle: '給你點亮世界的鑰匙',
+    subtitle: '分享我看見的世界',
     author: '謝哆啦',
-    description: '給你點亮世界的鑰匙',
+    description: '分享我看見的世界',
     website: 'https://dorara.app/',
     pageSize: 5,
     socialLinks: [
@@ -21,9 +21,14 @@ export const defaultConfig: ThemeConfig = {
         href: '/atom.xml',
       },
       {
+        name: 'threads',
+        href: 'https://www.threads.com/@dorara_hsieh',
+      },
+      {
         name: 'twitter',
         href: 'https://x.com/DoraraHsieh',
       },
+
       // {
       //   name: 'mastodon',
       //   href: 'https://github.com/moeyua/astro-theme-typography',

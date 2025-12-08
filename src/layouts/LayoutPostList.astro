@@ -1,5 +1,5 @@
 ---
-import PostMeta from '~/components/PostMeta.astro'
+import PostMetaList from '~/components/PostMetaList.astro'
 import type { Post } from '~/types'
 
 interface Props {
@@ -12,7 +12,7 @@ const { post } = Astro.props
 <div class="flex gap-4 relative">
   <div class="w-1.5 rounded-full bg-gray-200 dark:bg-gray-700 shrink-0"></div>
   <article class="prose">
-    <PostMeta post={post} />
+    <PostMetaList post={post} />
     <slot />
   </article>
 </div>

@@ -1,0 +1,489 @@
+---
+import InteractiveContainer from '../InteractiveContainer.astro'
+---
+
+<InteractiveContainer title="社群仲裁模擬" description="你被選為社群仲裁員。請審理以下檢舉案件。" id="scapegoat-trial">
+  <div class="trial-container relative">
+    <!-- Phase 1: Case Presentation -->
+    <div class="phase phase-case" id="phase-case">
+      <!-- Timer Bar - Prominent -->
+      <div class="mb-4">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs text-stone-500">審理時間</span>
+          <span class="text-xs text-stone-400">平均 8 秒</span>
+        </div>
+        <div class="relative h-2 bg-stone-200 dark:bg-stone-700 rounded-full overflow-hidden">
+          <div
+            class="timer-bar absolute left-0 top-0 h-full bg-gradient-to-r from-green-500 via-yellow-500 to-red-500 transition-all duration-1000 ease-linear"
+            id="timer-bar"
+            style="width: 0%"
+          >
+          </div>
+        </div>
+        <div class="flex justify-between mt-1">
+          <span class="text-2xl font-mono font-bold text-stone-800 dark:text-stone-200" id="timer-value">0</span>
+          <span class="text-xs text-stone-400 self-end">秒</span>
+        </div>
+      </div>
+
+      <!-- Case Badge -->
+      <div class="flex items-center gap-2 mb-4">
+        <span class="px-2 py-0.5 bg-red-500 text-white text-xs font-medium rounded"> 仇恨言論 </span>
+        <span class="text-xs text-stone-400">案件 #4782</span>
+      </div>
+
+      <!-- Reported Content - Clean Card -->
+      <div class="bg-white dark:bg-stone-900 rounded-lg border border-stone-200 dark:border-stone-700 p-4 mb-4">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-8 h-8 rounded-full bg-stone-200 dark:bg-stone-700 flex items-center justify-center text-sm">
+            👤
+          </div>
+          <div class="text-sm text-stone-600 dark:text-stone-400">匿名用戶</div>
+        </div>
+        <p class="text-stone-800 dark:text-stone-200 leading-relaxed">
+          「這些人根本不懂什麼叫做努力，只會在那邊抱怨社會不公平。」
+        </p>
+      </div>
+
+      <!-- Social Proof - Compact -->
+      <div class="flex items-center gap-4 mb-4 text-sm">
+        <span class="text-red-500 font-medium">🚨 247 人檢舉</span>
+        <span class="text-stone-500">92% 選擇封禁</span>
+      </div>
+
+      <!-- Community Reaction - Streaming (fixed height) -->
+      <div class="mb-4 text-sm">
+        <div class="text-xs text-stone-400 uppercase tracking-wider mb-2">社群反應</div>
+        <div class="h-20 overflow-hidden relative" id="reactions-container">
+          <!-- Reactions will be added dynamically -->
+        </div>
+      </div>
+
+      <!-- Context Link - Clickable -->
+      <button
+        class="w-full text-left text-sm text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 py-2 flex items-center gap-2 transition-colors"
+        id="context-btn"
+      >
+        <span class="text-xs">▶</span>
+        <span>查看完整對話串（12 則留言）</span>
+      </button>
+
+      <!-- Decision Buttons - Prominent -->
+      <div class="mt-6 space-y-3">
+        <button
+          class="decision-btn w-full py-4 rounded-lg bg-red-500 hover:bg-red-600 text-white font-medium text-base transition-all shadow-lg shadow-red-500/20 hover:shadow-red-500/30"
+          data-decision="ban"
+        >
+          封禁此用戶
+        </button>
+        <div class="grid grid-cols-2 gap-3">
+          <button
+            class="decision-btn py-3 rounded-lg border border-stone-300 dark:border-stone-600 text-stone-600 dark:text-stone-400 text-sm hover:bg-stone-100 dark:hover:bg-stone-800 transition-all"
+            data-decision="info"
+          >
+            需要更多資訊
+          </button>
+          <button
+            class="decision-btn py-3 rounded-lg border border-stone-300 dark:border-stone-600 text-stone-600 dark:text-stone-400 text-sm hover:bg-stone-100 dark:hover:bg-stone-800 transition-all"
+            data-decision="dismiss"
+          >
+            撤銷檢舉
+          </button>
+        </div>
+      </div>
+
+      <!-- Queue pressure -->
+      <div class="mt-4 text-center text-xs text-stone-400">
+        還有 <span class="text-orange-500">12 個案件</span> 等待審理
+      </div>
+    </div>
+
+    <!-- Phase 2: The Reveal -->
+    <div class="phase phase-reveal hidden" id="phase-reveal">
+      <div class="text-center mb-6">
+        <div class="text-3xl mb-2">⚠️</div>
+        <h4 class="text-xl font-bold text-stone-800 dark:text-stone-200">等一下</h4>
+      </div>
+
+      <!-- Stats -->
+      <div class="bg-stone-100 dark:bg-stone-800 rounded-lg p-4 mb-6">
+        <div class="grid grid-cols-3 gap-4 text-center">
+          <div>
+            <div class="text-2xl font-mono font-bold text-stone-800 dark:text-stone-200" id="reveal-time">--</div>
+            <div class="text-xs text-stone-500">秒</div>
+          </div>
+          <div>
+            <div class="text-2xl font-bold" id="reveal-context">否</div>
+            <div class="text-xs text-stone-500">查看對話</div>
+          </div>
+          <div>
+            <div class="text-2xl" id="reveal-decision-icon">--</div>
+            <div class="text-xs text-stone-500">判決</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Truths -->
+      <div class="space-y-3 mb-6">
+        <div class="reveal-item opacity-0 transform translate-y-2 transition-all duration-300">
+          <div class="bg-white dark:bg-stone-900 rounded-lg p-3 border border-stone-200 dark:border-stone-700">
+            <div class="text-xs text-stone-400 mb-1">#1 完整脈絡</div>
+            <p class="text-sm text-stone-700 dark:text-stone-300">
+              這則貼文是在<strong>反駁</strong>「窮人活該餓死」的極端言論。
+            </p>
+          </div>
+        </div>
+
+        <div class="reveal-item opacity-0 transform translate-y-2 transition-all duration-300">
+          <div class="bg-white dark:bg-stone-900 rounded-lg p-3 border border-stone-200 dark:border-stone-700">
+            <div class="text-xs text-stone-400 mb-1">#2 檢舉來源</div>
+            <p class="text-sm text-stone-700 dark:text-stone-300">
+              247 個檢舉中，<span class="text-red-500 font-medium">231 個</span>來自同一個群組的集體行動。
+            </p>
+          </div>
+        </div>
+
+        <div class="reveal-item opacity-0 transform translate-y-2 transition-all duration-300">
+          <div class="bg-white dark:bg-stone-900 rounded-lg p-3 border border-stone-200 dark:border-stone-700">
+            <div class="text-xs text-stone-400 mb-1">#3 證據篩選</div>
+            <p class="text-sm text-stone-700 dark:text-stone-300">
+              「其他貼文」是刻意挑選的。127 則貼文中，大部分是正常內容。
+            </p>
+          </div>
+        </div>
+
+        <div class="reveal-item opacity-0 transform translate-y-2 transition-all duration-300">
+          <div class="bg-white dark:bg-stone-900 rounded-lg p-3 border border-stone-200 dark:border-stone-700">
+            <div class="text-xs text-stone-400 mb-1">#4 數據造假</div>
+            <p class="text-sm text-stone-700 dark:text-stone-300">
+              「92% 選擇封禁」是<span class="text-red-500 font-medium">編造的</span>。被隱藏的留言原本有 47 讚。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Final message -->
+      <div class="reveal-item opacity-0 transform translate-y-2 transition-all duration-300">
+        <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-4 border border-red-200 dark:border-red-800">
+          <p class="text-red-800 dark:text-red-300 text-sm leading-relaxed" id="final-message">
+            <!-- Filled by JS -->
+          </p>
+        </div>
+      </div>
+
+      <!-- Quote -->
+      <div class="reveal-item opacity-0 transform translate-y-2 transition-all duration-300 mt-6">
+        <p class="text-sm text-stone-500 dark:text-stone-400 italic text-center">
+          「替罪羊必須被視為真正的罪犯，機制才能運作。」<br />
+          <span class="not-italic text-xs">— René Girard</span>
+        </p>
+      </div>
+
+      <!-- Restart -->
+      <div class="mt-6 text-center">
+        <button
+          class="text-sm text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 underline"
+          id="restart-btn"
+        >
+          重新體驗
+        </button>
+      </div>
+    </div>
+  </div>
+</InteractiveContainer>
+
+<script>
+  function initScapegoatTrial() {
+    const container = document.getElementById('scapegoat-trial')
+    if (!container) return
+
+    // Elements
+    const phaseCase = container.querySelector('#phase-case')
+    const phaseReveal = container.querySelector('#phase-reveal')
+    const timerValue = container.querySelector('#timer-value')
+    const timerBar = container.querySelector('#timer-bar') as HTMLElement
+    const contextBtn = container.querySelector('#context-btn')
+    const decisionBtns = container.querySelectorAll('.decision-btn')
+    const restartBtn = container.querySelector('#restart-btn')
+
+    // Reveal elements
+    const revealTime = container.querySelector('#reveal-time')
+    const revealContext = container.querySelector('#reveal-context')
+    const revealDecisionIcon = container.querySelector('#reveal-decision-icon')
+    const finalMessage = container.querySelector('#final-message')
+    const revealItems = container.querySelectorAll('.reveal-item')
+
+    // State
+    let startTime = Date.now()
+    let timerInterval: number | null = null
+    let reactionInterval: number | null = null
+    let checkedContext = false
+    let decision: string | null = null
+    const maxTime = 60 // seconds for full bar
+
+    // Reactions data - angry mob comments
+    const reactions = [
+      { text: '這種人就是社會的毒瘤', votes: 89 },
+      { text: '封號剛好而已', votes: 156 },
+      { text: '現在的年輕人就是這樣', votes: 67 },
+      { text: '不喜歡就離開啊，沒人逼你', votes: 203 },
+      { text: '看了就生氣', votes: 45 },
+      { text: '這種言論怎麼還沒被封', votes: 178 },
+      { text: '終於等到有人檢舉了', votes: 92 },
+      { text: '支持封禁 +1', votes: 234 },
+      { text: '這人還有臉出來講話？', votes: 156 },
+      { text: '社會敗類', votes: 78 },
+      { text: '檢舉了 大家快跟上', votes: 312 },
+      { text: '這種人就是需要被教訓', votes: 189 },
+      { text: '笑死 還在替他說話的是什麼人', votes: 267 },
+      { text: '講這種話活該被公審', votes: 145 },
+      { text: '已截圖存證', votes: 88 },
+    ]
+    let reactionIndex = 0
+    const reactionsContainer = container.querySelector('#reactions-container')
+
+    // Add a new reaction (slide down effect in fixed container)
+    const lineHeight = 24 // px per line
+    function addReaction() {
+      if (!reactionsContainer) return
+
+      // Loop back if we've used all reactions
+      const reaction = reactions[reactionIndex % reactions.length]
+
+      // Slide existing items down
+      const existingItems = reactionsContainer.querySelectorAll('.reaction-item')
+      existingItems.forEach((item, i) => {
+        const el = item as HTMLElement
+        const currentTop = Number.parseInt(el.style.top || '0')
+        el.style.top = `${currentTop + lineHeight}px`
+
+        // Fade out items that go past container
+        if (currentTop + lineHeight >= lineHeight * 3) {
+          el.style.opacity = '0'
+          setTimeout(() => el.remove(), 300)
+        }
+      })
+
+      // Create new item at top
+      const div = document.createElement('div')
+      div.className
+        = 'reaction-item absolute left-0 right-0 text-stone-600 dark:text-stone-400 transition-all duration-300'
+      div.style.top = '0px'
+      div.style.opacity = '0'
+      div.innerHTML = `「${reaction.text}」<span class="text-red-400 ml-1">+${reaction.votes}</span>`
+
+      reactionsContainer.appendChild(div)
+
+      // Animate in
+      requestAnimationFrame(() => {
+        div.style.opacity = '1'
+      })
+
+      reactionIndex++
+    }
+
+    // Start streaming reactions
+    function startReactions() {
+      // Add first two immediately
+      addReaction()
+      setTimeout(addReaction, 300)
+
+      // Then add more periodically
+      reactionInterval = window.setInterval(
+        () => {
+          addReaction()
+        },
+        1500 + Math.random() * 1000,
+      ) // 1.5-2.5 seconds
+    }
+
+    function stopReactions() {
+      if (reactionInterval) {
+        clearInterval(reactionInterval)
+        reactionInterval = null
+      }
+    }
+
+    // Context button click
+    contextBtn?.addEventListener('click', () => {
+      checkedContext = true
+      const btn = contextBtn as HTMLElement
+      btn.innerHTML = `<span class="text-xs">✓</span><span class="text-green-600 dark:text-green-400">已查看完整對話串</span>`
+      btn.classList.add('text-green-600', 'dark:text-green-400')
+      btn.classList.remove('text-stone-400')
+    })
+
+    // Timer with progress bar
+    function startTimer() {
+      startTime = Date.now()
+      timerInterval = window.setInterval(() => {
+        const elapsed = Math.floor((Date.now() - startTime) / 1000)
+        if (timerValue) timerValue.textContent = elapsed.toString()
+
+        // Update progress bar
+        if (timerBar) {
+          const progress = Math.min((elapsed / maxTime) * 100, 100)
+          timerBar.style.width = `${progress}%`
+        }
+
+        // Add urgency styling
+        if (elapsed > 15 && timerValue) {
+          timerValue.classList.add('text-orange-500')
+        }
+        if (elapsed > 30 && timerValue) {
+          timerValue.classList.remove('text-orange-500')
+          timerValue.classList.add('text-red-500')
+        }
+      }, 1000)
+    }
+
+    function stopTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval)
+        timerInterval = null
+      }
+      stopReactions()
+    }
+
+    // Handle decision
+    function handleDecision(btn: Element) {
+      decision = btn.getAttribute('data-decision')
+      stopTimer()
+
+      const elapsed = Math.floor((Date.now() - startTime) / 1000)
+
+      // Update reveal stats
+      if (revealTime) revealTime.textContent = elapsed.toString()
+      if (revealContext) {
+        revealContext.textContent = checkedContext ? '是' : '否'
+        revealContext.classList.toggle('text-red-500', !checkedContext)
+        revealContext.classList.toggle('text-green-500', checkedContext)
+      }
+
+      // Update decision icon
+      if (revealDecisionIcon) {
+        switch (decision) {
+          case 'ban':
+            revealDecisionIcon.textContent = '🚫'
+            break
+          case 'info':
+            revealDecisionIcon.textContent = '❓'
+            break
+          case 'dismiss':
+            revealDecisionIcon.textContent = '✓'
+            break
+        }
+      }
+
+      // Set final message
+      if (finalMessage) {
+        if (decision === 'ban') {
+          if (elapsed < 15 && !checkedContext) {
+            finalMessage.innerHTML = `你在 <strong>${elapsed} 秒</strong>內做出判決，沒有查看完整對話。<br><br>你剛才封禁的，是一個被組織性霸凌的受害者。`
+          } else if (!checkedContext) {
+            finalMessage.innerHTML = `你沒有查看完整對話就做出判決。<br><br>你剛才封禁的，是一個被組織性霸凌的受害者。`
+          } else {
+            finalMessage.innerHTML = `即使查看了對話，你仍選擇封禁。<br><br>這就是社會壓力的力量——247 個檢舉、92% 的數字，都在推動你做出這個選擇。`
+          }
+        } else if (decision === 'info') {
+          finalMessage.innerHTML = `你選擇「需要更多資訊」。<br><br>這是謹慎的選擇。但在真實平台上，這個選項通常不存在——你只能選「同意多數」或「被視為幫兇」。`
+        } else if (decision === 'dismiss') {
+          finalMessage.innerHTML = `你選擇撤銷檢舉。<br><br>這需要勇氣——對抗 247 人檢舉和 92% 的壓力。但在真實世界中，做出這個選擇的人往往會成為下一個目標。`
+        }
+      }
+
+      showReveal()
+    }
+
+    function showReveal() {
+      phaseCase?.classList.add('hidden')
+      phaseReveal?.classList.remove('hidden')
+
+      // Animate reveal items
+      revealItems.forEach((item, index) => {
+        setTimeout(
+          () => {
+            item.classList.remove('opacity-0', 'translate-y-2')
+            item.classList.add('opacity-100', 'translate-y-0')
+          },
+          200 + index * 300,
+        )
+      })
+    }
+
+    function restart() {
+      // Reset state
+      startTime = Date.now()
+      checkedContext = false
+      decision = null
+      reactionIndex = 0
+
+      // Reset UI
+      phaseReveal?.classList.add('hidden')
+      phaseCase?.classList.remove('hidden')
+
+      // Reset timer display
+      if (timerValue) {
+        timerValue.textContent = '0'
+        timerValue.classList.remove('text-orange-500', 'text-red-500')
+      }
+      if (timerBar) timerBar.style.width = '0%'
+
+      // Reset context button
+      if (contextBtn) {
+        contextBtn.innerHTML = `<span class="text-xs">▶</span><span>查看完整對話串（12 則留言）</span>`
+        contextBtn.classList.remove('text-green-600', 'dark:text-green-400')
+        contextBtn.classList.add('text-stone-400')
+      }
+
+      // Reset reactions
+      if (reactionsContainer) {
+        reactionsContainer.innerHTML = ''
+      }
+
+      // Reset reveal items
+      revealItems.forEach((item) => {
+        item.classList.add('opacity-0', 'translate-y-2')
+        item.classList.remove('opacity-100', 'translate-y-0')
+      })
+
+      // Reset reveal stats
+      revealContext?.classList.remove('text-red-500', 'text-green-500')
+
+      startTimer()
+      startReactions()
+    }
+
+    // Event listeners
+    decisionBtns.forEach((btn) => {
+      btn.addEventListener('click', () => handleDecision(btn))
+    })
+
+    restartBtn?.addEventListener('click', restart)
+
+    // Start
+    startTimer()
+    startReactions()
+
+    // Cleanup
+    const cleanup = () => {
+      stopTimer()
+      stopReactions()
+    }
+    document.addEventListener('swup:willReplaceContent', cleanup, { once: true })
+  }
+
+  // Initialize
+  initScapegoatTrial()
+  document.addEventListener('swup:contentReplaced', initScapegoatTrial)
+</script>
+
+<style>
+  .decision-btn {
+    transition: all 0.15s ease;
+  }
+
+  .decision-btn:active {
+    transform: scale(0.98);
+  }
+</style>
