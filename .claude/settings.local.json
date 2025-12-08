@@ -6,7 +6,11 @@
       "Bash(xargs cat:*)",
       "Bash(cat:*)",
       "Bash(pnpm typecheck:*)",
-      "Bash(npx astro check:*)"
+      "Bash(npx astro check:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm approve-builds:*)",
+      "Bash(pnpm rebuild:*)",
+      "Bash(pnpm build:*)"
     ],
     "deny": [],
     "ask": []
