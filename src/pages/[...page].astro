@@ -9,7 +9,7 @@ import { getPostDescription, getPosts } from '~/utils'
 const { translate: t } = Astro.locals
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const posts = await getPosts({ includeDrafts: true })
+  const posts = await getPosts()
   posts.sort((a, b) => {
     if (a.data.pin && !b.data.pin) return -1
     if (!a.data.pin && b.data.pin) return 1
@@ -49,7 +49,7 @@ const { page } = Astro.props
   document.addEventListener('astro:page-load', () => {
     const showDraft = new URLSearchParams(window.location.search).has('draft')
     if (showDraft) {
-      document.querySelectorAll('.draft-post').forEach(el => el.classList.remove('hidden'))
+      document.querySelectorAll('.draft-post').forEach((el) => el.classList.remove('hidden'))
     }
   })
 </script>
