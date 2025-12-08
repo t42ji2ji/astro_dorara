@@ -44,9 +44,21 @@
       const level = Number.parseInt(heading.tagName.substring(1))
       const link = document.createElement('a')
       link.href = `#${heading.id}`
-      link.textContent = heading.textContent || ''
       link.className = `toc-link toc-level-${level}`
       link.dataset.target = heading.id
+
+      // Check if heading is inside an InteractiveContainer
+      const isInteractive = heading.closest('.interactive-container') !== null
+
+      if (isInteractive) {
+        // Add green dot indicator for interactive sections
+        const dot = document.createElement('span')
+        dot.className = 'toc-interactive-dot'
+        link.appendChild(dot)
+      }
+
+      const text = document.createTextNode(heading.textContent || '')
+      link.appendChild(text)
 
       tocNav.appendChild(link)
       tocItems.push({ element: heading, link })
@@ -54,7 +66,23 @@
       // Smooth scroll on click
       link.addEventListener('click', (e) => {
         e.preventDefault()
-        heading.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        const main = document.querySelector('main')
+        if (!main) return
+
+        // Calculate cumulative offsetTop (handles nested positioned elements)
+        let headingTop = 0
+        let element: HTMLElement | null = heading as HTMLElement
+        while (element && element !== main) {
+          headingTop += element.offsetTop
+          element = element.offsetParent as HTMLElement | null
+        }
+
+        // Calculate position: heading at 30% from top of viewport
+        const viewportHeight = main.clientHeight
+        const offset = viewportHeight * 0.3
+        const targetScroll = headingTop - offset
+
+        main.scrollTo({ top: targetScroll, behavior: 'smooth' })
       })
     })
 
@@ -76,7 +104,14 @@ progressText.textContent = `${Math.round(progress)}%`
       let activeIndex = -1
       for (let i = headings.length - 1; i >= 0; i--) {
         const heading = headings[i] as HTMLElement
-        if (heading.offsetTop <= scrollTop + 100) {
+        // Calculate cumulative offsetTop for nested elements
+        let headingTop = 0
+        let el: HTMLElement | null = heading
+        while (el && el !== main) {
+          headingTop += el.offsetTop
+          el = el.offsetParent as HTMLElement | null
+        }
+        if (headingTop <= scrollTop + 100) {
           activeIndex = i
           break
         }
@@ -175,7 +210,27 @@ progressText.textContent = `${Math.round(progress)}%`
     padding: 0.375rem 0.75rem;
     border-left: 2px solid var(--uno-colors-stone-200);
     transition: all 0.2s;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  :global(.toc-interactive-dot) {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #22c55e;
+    animation: pulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
   }
 
   :global(.dark .toc-link) {

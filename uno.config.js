@@ -13,20 +13,30 @@ import { themeConfig } from './src/.config'
 const { colorsDark, colorsLight, fonts } = themeConfig.appearance
 
 const cssExtend = {
-  ':root': {
-    '--prose-borders': '#eee',
-    '--blockquote-border': colorsLight.primary,
+  'table': {
+    'border-collapse': 'collapse',
+    'border-spacing': '0',
   },
 
-  '.dark': {
-    '--blockquote-border': colorsDark.primary,
+  'table th': {
+    'border': '1px solid',
+    'border-color': 'var(--prose-borders)',
+    'padding': '0.5rem',
+    'text-align': 'left',
+  },
+
+  'table td': {
+    'border': '1px solid',
+    'border-color': 'var(--prose-borders)',
+    'padding': '0.5rem',
   },
 
   'blockquote': {
     'border-left': '4px solid',
-    'border-left-color': 'var(--blockquote-border)',
+    'border-left-color': colorsLight.primary,
     'padding-left': '1rem',
     'margin-top': '2rem',
+    'margin-bottom': '2rem',
   },
 
   'blockquote p': {

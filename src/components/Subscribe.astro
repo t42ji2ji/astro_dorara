@@ -1,0 +1,20 @@
+---
+interface Props {
+  title?: string
+}
+
+const { title = 'Subscribe' } = Astro.props
+---
+
+<div class="my-10 p-4 lg:p-6 rounded-lg border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+  <div class="flex items-center gap-2 mb-4">
+    <div class="i-mdi-email-outline text-xl"></div>
+    <h3 class="font-bold text-lg m-0">{title}</h3>
+  </div>
+  <iframe
+    src="https://dorara.substack.com/embed"
+    height="150"
+    class="w-full max-w-full box-border rounded-lg"
+    frameborder="0"
+    scrolling="no"></iframe>
+</div>

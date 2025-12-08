@@ -6,6 +6,7 @@ import SiteSeo from '~/components/SiteSeo.astro'
 import LayoutPostDetail from '~/layouts/LayoutPostDetail.astro'
 import LayoutPost from '~/layouts/LayoutPost.astro'
 import { getPosts } from '~/utils'
+import Subscribe from '~/components/Subscribe.astro'
 import { render } from 'astro:content'
 
 export const getStaticPaths = (async () => {
@@ -39,6 +40,7 @@ function getUrl(id: string) {
     <Content />
   </LayoutPost>
 
+  <Subscribe />
   <Pagination
     showLeft={Boolean(prev)}
     leftTitle={`${t('prev_post')}: ${prev?.data.title}`}

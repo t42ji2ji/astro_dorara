@@ -44,7 +44,8 @@ async function fetchOGData(targetUrl: string) {
     const htmlTitle = html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]
 
     // 取得描述
-    const ogDescription = getMetaContent('og:description') || getMetaContent('twitter:description') || getMetaContent('description')
+    const ogDescription =
+      getMetaContent('og:description') || getMetaContent('twitter:description') || getMetaContent('description')
 
     // 取得圖片
     const ogImage = getMetaContent('og:image') || getMetaContent('twitter:image')
@@ -69,25 +70,23 @@ const fallbackImageSrc = typeof fallbackImage === 'string' ? fallbackImage : fal
 const displayImage = ogImage || fallbackImageSrc
 
 // 處理相對路徑圖片
-const absoluteImage = displayImage && !displayImage.startsWith('http')
-  ? new URL(displayImage, url).href
-  : displayImage
+const absoluteImage = displayImage && !displayImage.startsWith('http') ? new URL(displayImage, url).href : displayImage
 
 // 取得網站 hostname
 const hostname = new URL(url).hostname
 ---
 
 <a href={url} target="_blank" rel="noopener noreferrer" class="link-preview">
-  {absoluteImage && (
-    <div class="link-preview-image">
-      <img src={absoluteImage} alt={displayTitle} loading="lazy" />
-    </div>
-  )}
+  {
+    absoluteImage && (
+      <div class="link-preview-image">
+        <img src={absoluteImage} alt={displayTitle} loading="lazy" />
+      </div>
+    )
+  }
   <div class="link-preview-content">
     <div class="link-preview-title">{displayTitle}</div>
-    {displayDescription && (
-      <div class="link-preview-description">{displayDescription}</div>
-    )}
+    {displayDescription && <div class="link-preview-description">{displayDescription}</div>}
     <div class="link-preview-url">{hostname}</div>
   </div>
 </a>
@@ -102,9 +101,16 @@ const hostname = new URL(url).hostname
     border-radius: 12px;
     text-decoration: none;
     color: inherit;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
     background: var(--card-bg, #fff);
     overflow: hidden;
+  }
+
+  :global(.dark) .link-preview {
+    background: var(--card-bg-dark, rgba(31, 41, 55, 0.4));
+    border-color: var(--border-color-dark, #374151);
   }
 
   .link-preview:hover {
@@ -119,6 +125,10 @@ const hostname = new URL(url).hostname
     border-radius: 8px;
     overflow: hidden;
     background: var(--bg-muted, #f3f4f6);
+  }
+
+  :global(.dark) .link-preview-image {
+    background: var(--bg-muted-dark, #374151);
   }
 
   .link-preview-image img {
@@ -156,6 +166,10 @@ const hostname = new URL(url).hostname
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+  }
+
+  :global(.dark) .link-preview-description {
+    color: var(--text-muted-dark, #9ca3af);
   }
 
   .link-preview-url {
