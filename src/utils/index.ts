@@ -21,8 +21,7 @@ export async function getCategories() {
   return categories
 }
 
-export async function getPosts(options: { isArchivePage?: boolean, includeDrafts?: boolean } = {}) {
-  const { isArchivePage = false, includeDrafts = false } = options
+export async function getPosts(isArchivePage = false) {
   const posts = await getCollection('posts')
 
   posts.sort((a, b) => {
@@ -36,7 +35,10 @@ export async function getPosts(options: { isArchivePage?: boolean, includeDrafts
     return aDate.isBefore(bDate) ? 1 : -1
   })
 
-  if (includeDrafts) {
+  // Show drafts if SHOW_DRAFTS env var is set, or in dev mode
+  const showDrafts = import.meta.env.SHOW_DRAFTS === 'true' || !import.meta.env.PROD
+
+  if (showDrafts) {
     return posts
   }
 

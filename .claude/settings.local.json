@@ -11,7 +11,12 @@
       "Bash(pnpm approve-builds:*)",
       "Bash(pnpm rebuild:*)",
       "Bash(pnpm build:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(brew list:*)",
+      "Bash(find:*)",
+      "Bash(node scripts/optimize-images.mjs:*)",
+      "Bash(git checkout:*)",
+      "Bash(pnpm optimize-images:*)"
     ],
     "deny": [],
     "ask": []

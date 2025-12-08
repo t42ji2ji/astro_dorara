@@ -16,9 +16,13 @@ const isEssay = categoryList.some((cat) => cat.toLowerCase() === 'essays')
 ---
 
 <header flex="~ col gap-2">
-  <h1 class="post-title inline-flex items-center">
-    {isDraft && <span class="text-amber-500 dark:text-amber-400 mr-2 shrink-0">[草稿]</span>}
-    {isEssay && <span class="text-sm mr-2">[Essay]</span>}
+  {(isDraft || isEssay) && (
+    <div class="flex gap-2 text-sm">
+      {isDraft && <span class="text-amber-500 dark:text-amber-400">[草稿]</span>}
+      {isEssay && <span>[Essay]</span>}
+    </div>
+  )}
+  <h1 class="post-title">
     <a class="not-prose not-underline-hover" href={`/posts/${post.id}/`}>{post.data.title}</a>
   </h1>
   <div class="text-3.5 text-gray-500">
