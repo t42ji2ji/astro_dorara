@@ -15,19 +15,22 @@ const isDraft = post.data.draft === true
 const isEssay = categoryList.some((cat) => cat.toLowerCase() === 'essays')
 ---
 
-<header flex="~ col gap-2">
-  {(isDraft || isEssay) && (
-    <div class="flex gap-2 text-sm">
-      {isDraft && <span class="text-amber-500 dark:text-amber-400">[草稿]</span>}
-      {isEssay && <span>[Essay]</span>}
+<header flex="~ col gap-2 ">
+  <div flex="~ row gap-2 justify-between">
+    {
+      (isDraft || isEssay) && (
+        <div class="flex gap-2 text-sm">
+          {isDraft && <span class="text-amber-500 dark:text-amber-400">[草稿]</span>}
+          {isEssay && <span>[Essay]</span>}
+        </div>
+      )
+    }
+    <div class="text-3 text-gray-500">
+      <span>{t(post.data.modDate ? 'updated_at' : 'posted_at')}</span>
+      <time>{formatDate(post.data.modDate ?? post.data.pubDate)}</time>
     </div>
-  )}
+  </div>
   <h1 class="post-title">
     <a class="not-prose not-underline-hover" href={`/posts/${post.id}/`}>{post.data.title}</a>
   </h1>
-  <div class="text-3.5 text-gray-500">
-    <span>{t(post.data.modDate ? 'updated_at' : 'posted_at')}</span>
-    <time>{formatDate(post.data.modDate ?? post.data.pubDate)}</time>
-    {categoryList.map((category) => <PostCategory category={category} />)}
-  </div>
 </header>

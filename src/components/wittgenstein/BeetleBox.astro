@@ -8,62 +8,49 @@ import InteractiveContainer from '../InteractiveContainer.astro'
 >
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative">
     <!-- User's Box -->
-    <div class="box-container group cursor-pointer" id="user-box">
+    <div class="box-container cursor-pointer" id="user-box">
       <div class="text-center mb-4 font-bold text-stone-500 uppercase tracking-widest text-xs">
-        Your Box (Consciousness)
+        你的盒子 (Consciousness)
       </div>
       <div
-        class="relative w-full aspect-square bg-stone-800 rounded-xl overflow-hidden shadow-2xl border-4 border-stone-700 transition-all duration-500 group-hover:border-stone-500 group-hover:shadow-stone-500/20"
+        class="box-inner relative w-full aspect-square bg-stone-800 rounded-xl overflow-hidden shadow-2xl border-4 border-stone-700 transition-all duration-500"
       >
         <!-- Lid -->
         <div
-          class="lid absolute inset-0 bg-stone-900 flex items-center justify-center z-20 transition-transform duration-700 origin-top group-hover:-rotate-x-110"
+          class="lid absolute inset-0 bg-stone-900 flex items-center justify-center z-20 transition-transform duration-700 origin-top"
         >
           <span class="text-4xl opacity-50">🔒</span>
         </div>
-        <!-- Content (The Beetle) -->
-        <div class="absolute inset-0 flex items-center justify-center bg-black z-10">
-          <div
-            class="absolute w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 blur-md animate-pulse"
-          >
-          </div>
-          <span class="relative z-10 text-4xl">🪲</span>
-        </div>
+        <!-- Canvas for beetles -->
+        <canvas class="absolute inset-0 w-full h-full z-10" id="beetles-canvas"></canvas>
       </div>
       <div class="mt-4 text-center">
         <p class="text-sm text-stone-600 dark:text-stone-400">
-          你說：「這是一隻<span class="font-bold text-purple-600">甲蟲</span>。」
+          你說：「裡面是<span class="font-bold text-purple-600">甲蟲</span>。」
         </p>
       </div>
     </div>
 
     <!-- AI's Box -->
-    <div class="box-container group cursor-pointer" id="ai-box">
+    <div class="box-container cursor-pointer" id="ai-box">
       <div class="text-center mb-4 font-bold text-stone-500 uppercase tracking-widest text-xs">
-        AI's Box (Algorithm)
+        AI 的盒子 (Algorithm)
       </div>
       <div
-        class="relative w-full aspect-square bg-stone-800 rounded-xl overflow-hidden shadow-2xl border-4 border-stone-700 transition-all duration-500 group-hover:border-blue-500 group-hover:shadow-blue-500/20"
+        class="box-inner relative w-full aspect-square bg-stone-800 rounded-xl overflow-hidden shadow-2xl border-4 border-stone-700 transition-all duration-500"
       >
         <!-- Lid -->
         <div
-          class="lid absolute inset-0 bg-stone-900 flex items-center justify-center z-20 transition-transform duration-700 origin-top group-hover:-rotate-x-110"
+          class="lid absolute inset-0 bg-stone-900 flex items-center justify-center z-20 transition-transform duration-700 origin-top"
         >
           <span class="text-4xl opacity-50">🤖</span>
         </div>
-        <!-- Content (The Void) -->
-        <div class="absolute inset-0 flex items-center justify-center bg-black">
-          <!-- Empty or Different? -->
-          <div
-            class="text-stone-400 font-mono text-xs tracking-widest opacity-0 group-hover:opacity-100 transition-opacity delay-300"
-          >
-            [0x9asdfji-02894j]
-          </div>
-        </div>
+        <!-- Canvas for matrix -->
+        <canvas class="absolute inset-0 w-full h-full" id="matrix-canvas"></canvas>
       </div>
       <div class="mt-4 text-center">
         <p class="text-sm text-stone-600 dark:text-stone-400">
-          AI 說：「是的，這是一隻<span class="font-bold text-purple-600">甲蟲</span>。」
+          AI 說：「是的，裡面是<span class="font-bold text-purple-600">甲蟲</span>。」
         </p>
       </div>
     </div>
@@ -71,13 +58,288 @@ import InteractiveContainer from '../InteractiveContainer.astro'
 </InteractiveContainer>
 
 <style>
-  .rotate-x-110 {
-    transform: rotateX(110deg);
+  /* Box states - hover to open */
+  .box-container:hover .box-inner {
+    border-color: var(--hover-color, #78716c);
+    box-shadow: 0 25px 50px -12px var(--shadow-color, rgba(120, 113, 108, 0.2));
   }
-  .-rotate-x-110 {
+
+  .box-container:hover .lid {
     transform: rotateX(-110deg);
   }
-  .perspective-1000 {
-    perspective: 1000px;
+
+  #user-box {
+    --hover-color: #78716c;
+    --shadow-color: rgba(120, 113, 108, 0.2);
+  }
+
+  #ai-box {
+    --hover-color: #3b82f6;
+    --shadow-color: rgba(59, 130, 246, 0.2);
+  }
+
+  canvas {
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .box-container:hover canvas {
+    opacity: 1;
   }
 </style>
+
+<script>
+  // Boids-based beetle simulation with Canvas
+  interface Beetle {
+    x: number
+    y: number
+    vx: number
+    vy: number
+  }
+
+  function initBeetleBox() {
+    const beetlesCanvas = document.getElementById('beetles-canvas') as HTMLCanvasElement | null
+    const matrixCanvas = document.getElementById('matrix-canvas') as HTMLCanvasElement | null
+
+    if (!beetlesCanvas || !matrixCanvas)
+return
+
+    const beetlesCtx = beetlesCanvas.getContext('2d')
+    const matrixCtx = matrixCanvas.getContext('2d')
+
+    if (!beetlesCtx || !matrixCtx)
+return
+
+    // Setup canvas resolution
+    function setupCanvas(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+      const rect = canvas.getBoundingClientRect()
+      const dpr = window.devicePixelRatio || 1
+      canvas.width = rect.width * dpr
+      canvas.height = rect.height * dpr
+      ctx.scale(dpr, dpr)
+      return { width: rect.width, height: rect.height }
+    }
+
+    let beetlesSize = setupCanvas(beetlesCanvas, beetlesCtx)
+    let matrixSize = setupCanvas(matrixCanvas, matrixCtx)
+
+    // Resize handler
+    const resizeObserver = new ResizeObserver(() => {
+      beetlesSize = setupCanvas(beetlesCanvas, beetlesCtx)
+      matrixSize = setupCanvas(matrixCanvas, matrixCtx)
+      // Reinitialize drops for new size
+      initDrops()
+    })
+    resizeObserver.observe(beetlesCanvas)
+    resizeObserver.observe(matrixCanvas)
+
+    // ============ BEETLES (Boids) ============
+    const beetles: Beetle[] = []
+    const NUM_BEETLES = 25
+    const SEPARATION_DIST = 20
+    const ALIGNMENT_DIST = 40
+    const COHESION_DIST = 60
+    const MAX_SPEED = 2
+    const MIN_SPEED = 0.5
+
+    // Initialize beetles
+    for (let i = 0; i < NUM_BEETLES; i++) {
+      const angle = Math.random() * Math.PI * 2
+      const speed = MIN_SPEED + Math.random() * (MAX_SPEED - MIN_SPEED)
+      beetles.push({
+        x: Math.random() * beetlesSize.width,
+        y: Math.random() * beetlesSize.height,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+      })
+    }
+
+    function animateBeetles() {
+      if (!beetlesCtx)
+return
+
+      const width = beetlesSize.width
+      const height = beetlesSize.height
+
+      beetlesCtx.clearRect(0, 0, width, height)
+      beetlesCtx.fillStyle = '#000'
+      beetlesCtx.fillRect(0, 0, width, height)
+
+      beetles.forEach((beetle, i) => {
+        let sepX = 0
+        let sepY = 0
+        let sepCount = 0
+        let alignX = 0
+        let alignY = 0
+        let alignCount = 0
+        let cohX = 0
+        let cohY = 0
+        let cohCount = 0
+
+        beetles.forEach((other, j) => {
+          if (i === j)
+return
+          const dx = other.x - beetle.x
+          const dy = other.y - beetle.y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+
+          if (dist < SEPARATION_DIST && dist > 0) {
+            sepX -= dx / dist
+            sepY -= dy / dist
+            sepCount++
+          }
+          if (dist < ALIGNMENT_DIST) {
+            alignX += other.vx
+            alignY += other.vy
+            alignCount++
+          }
+          if (dist < COHESION_DIST) {
+            cohX += other.x
+            cohY += other.y
+            cohCount++
+          }
+        })
+
+        // Apply forces
+        if (sepCount > 0) {
+          beetle.vx += (sepX / sepCount) * 0.15
+          beetle.vy += (sepY / sepCount) * 0.15
+        }
+        if (alignCount > 0) {
+          beetle.vx += (alignX / alignCount - beetle.vx) * 0.05
+          beetle.vy += (alignY / alignCount - beetle.vy) * 0.05
+        }
+        if (cohCount > 0) {
+          beetle.vx += (cohX / cohCount - beetle.x) * 0.001
+          beetle.vy += (cohY / cohCount - beetle.y) * 0.001
+        }
+
+        // Random wander
+        beetle.vx += (Math.random() - 0.5) * 0.1
+        beetle.vy += (Math.random() - 0.5) * 0.1
+
+        // Boundary avoidance
+        const margin = 30
+        if (beetle.x < margin)
+beetle.vx += 0.3
+        if (beetle.x > width - margin)
+beetle.vx -= 0.3
+        if (beetle.y < margin)
+beetle.vy += 0.3
+        if (beetle.y > height - margin)
+beetle.vy -= 0.3
+
+        // Limit speed
+        const speed = Math.sqrt(beetle.vx * beetle.vx + beetle.vy * beetle.vy)
+        if (speed > MAX_SPEED) {
+          beetle.vx = (beetle.vx / speed) * MAX_SPEED
+          beetle.vy = (beetle.vy / speed) * MAX_SPEED
+        } else if (speed < MIN_SPEED && speed > 0) {
+          beetle.vx = (beetle.vx / speed) * MIN_SPEED
+          beetle.vy = (beetle.vy / speed) * MIN_SPEED
+        }
+
+        // Update position
+        beetle.x += beetle.vx
+        beetle.y += beetle.vy
+
+        // Wrap around edges (with buffer)
+        if (beetle.x < -20)
+beetle.x = width + 20
+        if (beetle.x > width + 20)
+beetle.x = -20
+        if (beetle.y < -20)
+beetle.y = height + 20
+        if (beetle.y > height + 20)
+beetle.y = -20
+
+        // Draw beetle
+        const angle = Math.atan2(beetle.vy, beetle.vx)
+        beetlesCtx.save()
+        beetlesCtx.translate(beetle.x, beetle.y)
+        beetlesCtx.rotate(angle + Math.PI / 2)
+        beetlesCtx.font = '16px serif'
+        beetlesCtx.textAlign = 'center'
+        beetlesCtx.textBaseline = 'middle'
+        beetlesCtx.fillText('🪲', 0, 0)
+        beetlesCtx.restore()
+      })
+
+      requestAnimationFrame(animateBeetles)
+    }
+
+    // ============ MATRIX STATIC GRID ============
+    const CHARS = '虫蟲甲蟻蜂蝶789ABCDXx蛾蚊蠅蚯蚓蟬蜻蜓蠍蜈蚣蟑螂カブトムシ0A3F'
+    const FONT_SIZE = 16
+    const COLS = 14
+    const ROWS = 14
+
+    interface Cell {
+      char: string
+      nextChange: number
+    }
+
+    const grid: Cell[][] = []
+
+    function initGrid() {
+      grid.length = 0
+      for (let row = 0; row < ROWS; row++) {
+        const rowCells: Cell[] = []
+        for (let col = 0; col < COLS; col++) {
+          rowCells.push({
+            char: CHARS[Math.floor(Math.random() * CHARS.length)],
+            nextChange: Math.random() * 60 + 20,
+          })
+        }
+        grid.push(rowCells)
+      }
+    }
+    initGrid()
+
+    function animateMatrix() {
+      if (!matrixCtx)
+return
+
+      const width = matrixSize.width
+      const height = matrixSize.height
+
+      // Clear
+      matrixCtx.fillStyle = '#000'
+      matrixCtx.fillRect(0, 0, width, height)
+
+      // Calculate cell size
+      const cellWidth = width / COLS
+      const cellHeight = height / ROWS
+
+      matrixCtx.font = `${FONT_SIZE}px monospace`
+      matrixCtx.textAlign = 'center'
+      matrixCtx.textBaseline = 'middle'
+      matrixCtx.fillStyle = '#78716c' // stone-500
+
+      grid.forEach((row, rowIdx) => {
+        row.forEach((cell, colIdx) => {
+          // Check if it's time to change
+          cell.nextChange--
+          if (cell.nextChange <= 0) {
+            cell.char = CHARS[Math.floor(Math.random() * CHARS.length)]
+            cell.nextChange = Math.random() * 80 + 30
+          }
+
+          const x = colIdx * cellWidth + cellWidth / 2
+          const y = rowIdx * cellHeight + cellHeight / 2
+
+          matrixCtx.fillText(cell.char, x, y)
+        })
+      })
+
+      requestAnimationFrame(animateMatrix)
+    }
+
+    // Start animations
+    requestAnimationFrame(animateBeetles)
+    requestAnimationFrame(animateMatrix)
+  }
+
+  document.addEventListener('DOMContentLoaded', initBeetleBox)
+  document.addEventListener('astro:page-load', initBeetleBox)
+</script>

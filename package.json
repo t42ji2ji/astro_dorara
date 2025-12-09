@@ -31,6 +31,7 @@
     "astro-seo": "^0.8.4",
     "giscus": "^1.6.0",
     "lottie-web": "^5.13.0",
+    "number-flow": "^0.5.8",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
     "sharp": "^0.34.5",

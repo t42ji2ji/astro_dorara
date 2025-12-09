@@ -12,7 +12,7 @@ const { post, class: className } = Astro.props
 
 <div class:list={['flex gap-4 relative', className]}>
   <div class="w-1.5 rounded-full bg-gray-200 dark:bg-gray-700 shrink-0"></div>
-  <article class="prose">
+  <article class="prose w-full">
     <PostMetaList post={post} />
     <slot />
   </article>

@@ -31,7 +31,9 @@ import InteractiveContainer from '../InteractiveContainer.astro'
             class="flex items-center gap-2 bg-white dark:bg-stone-800 p-3 rounded border border-stone-200 dark:border-stone-700"
           >
             <span class="font-mono">1000 + 2 =</span>
-            <span id="result-display" class="font-mono font-semibold min-w-[40px]">?</span>
+            <span id="result-display" class="font-mono font-semibold min-w-[40px]">
+              <number-flow id="number-flow"></number-flow>
+            </span>
           </div>
           <button
             id="run-btn"
@@ -71,23 +73,60 @@ import InteractiveContainer from '../InteractiveContainer.astro'
   </div>
 </InteractiveContainer>
 
+<style>
+  #number-flow {
+    --number-flow-char-height: 1.2em;
+  }
+
+  #number-flow.error {
+    color: #dc2626;
+  }
+
+  :global(.dark) #number-flow.error {
+    color: #f87171;
+  }
+</style>
+
 <script>
+  import 'number-flow'
+
   const runBtn = document.getElementById('run-btn')
   const resultDisplay = document.getElementById('result-display')
   const explanation = document.getElementById('paradox-explanation')
+  const numberFlowEl = document.getElementById('number-flow') as HTMLElement & {
+    update: (value: number) => void
+    animated: boolean
+  }
 
-  if (runBtn && resultDisplay && explanation) {
+  if (runBtn && resultDisplay && explanation && numberFlowEl) {
+    // 初始化顯示 ?
+    numberFlowEl.textContent = '?'
+
     runBtn.addEventListener('click', () => {
-      resultDisplay.textContent = '...'
       explanation.classList.add('hidden')
+      numberFlowEl.classList.remove('error')
       ;(runBtn as HTMLButtonElement).disabled = true
 
-      setTimeout(() => {
-        resultDisplay.textContent = '5'
-        resultDisplay.classList.add('text-red-600', 'dark:text-red-400')
-        explanation.classList.remove('hidden')
-        ;(runBtn as HTMLButtonElement).disabled = false
-      }, 500)
+      // 隨機數字跳動，模擬 AI 計算的不可預測性
+      let iterations = 0
+      const maxIterations = 12
+
+      const interval = setInterval(() => {
+        const randomNum = Math.floor(Math.random() * 9999) + 1
+        numberFlowEl.update(randomNum)
+        iterations++
+
+        if (iterations >= maxIterations) {
+          clearInterval(interval)
+          // 最後顯示錯誤答案
+          setTimeout(() => {
+            numberFlowEl.update(5)
+            numberFlowEl.classList.add('error')
+            explanation.classList.remove('hidden')
+            ;(runBtn as HTMLButtonElement).disabled = false
+          }, 250)
+        }
+      }, 100)
     })
   }
 </script>
