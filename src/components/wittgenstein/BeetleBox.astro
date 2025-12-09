@@ -127,8 +127,6 @@ return
     const resizeObserver = new ResizeObserver(() => {
       beetlesSize = setupCanvas(beetlesCanvas, beetlesCtx)
       matrixSize = setupCanvas(matrixCanvas, matrixCtx)
-      // Reinitialize drops for new size
-      initDrops()
     })
     resizeObserver.observe(beetlesCanvas)
     resizeObserver.observe(matrixCanvas)
