@@ -15,7 +15,10 @@ import hanamiLogo from '~/assets/resume/hanami.png'
       <div class="hero-avatar" id="avatarContainer"></div>
       <div class="hero-info">
         <h1 class="text-4xl font-bold mb-2">Hi, I'm Dorara 👋</h1>
-        <p class="text-xl text-gray-500 dark:text-gray-400 mb-4">Flutter Lead & Full Stack Developer</p>
+        <p class="text-xl text-gray-500 dark:text-gray-400 mb-2">Flutter Lead & Full Stack Developer</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          <a href="mailto:doraralab@gmail.com" class="hover:text-[#667eea] transition-colors">doraralab@gmail.com</a>
+        </p>
 
         <div class="value-intro">
           <p class="mb-3">
@@ -154,8 +157,7 @@ import hanamiLogo from '~/assets/resume/hanami.png'
 
     function initLottie() {
       const container = document.getElementById('avatarContainer')
-      if (!container)
-return
+      if (!container) return
 
       // 如果已存在實例，先銷毀
       destroyLottie()
@@ -196,7 +198,7 @@ return
     // 頁面離開時清理
     document.addEventListener('astro:before-swap', destroyLottie)
     document.addEventListener('swup:willReplaceContent', destroyLottie)
-</script>
+  </script>
 
   <article class="prose max-w-none">
     <section class="mb-12">
@@ -293,7 +295,7 @@ return
               <h3 class="text-xl font-semibold m-0">依賴傳媒娛樂有限公司 (花見-高端社群交友)</h3>
             </div>
             <div class="flex items-center gap-3">
-              <span class="text-sm text-gray-500">2020.07 - <span class="underline">至今</span></span>
+              <span class="text-sm text-gray-500">2020.07 - <span class="underline">2022.05</span></span>
               <span class="expand-icon text-gray-400">▼</span>
             </div>
           </div>

@@ -55,7 +55,7 @@ export const defaultConfig: ThemeConfig = {
     categoryMap: [{ name: '--', path: 'dora' }],
     footer: [
       '© %year <a target="_blank" href="%website">%author</a>',
-      'Theme <a target="_blank" href="https://github.com/t42ji2ji">Typography</a> by <a target="_blank" href="https://moeyua.com">Moeyua</a>',
+      'Theme <a target="_blank" href="https://github.com/Moeyua/astro-theme-typography">Typography</a> modified by <a target="_blank" href="https://dorara.app">Dorara Hsieh</a>',
       'Proudly published with <a target="_blank" href="https://astro.build/">Astro</a>',
     ],
   },
@@ -85,7 +85,9 @@ export const defaultConfig: ThemeConfig = {
     fullText: true,
   },
   comment: {
-    // disqus: { shortname: "typography-astro" },
+    twikoo: {
+      envId: 'https://twikoo-cloudflare.joy8963259.workers.dev',
+    },
   },
   analytics: {
     googleAnalyticsId: '',

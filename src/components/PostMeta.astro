@@ -17,7 +17,8 @@ const categoryList = post.data.categories ?? []
   <h1 class="post-title">
     <a class="not-prose not-underline-hover" href={`/posts/${post.id}/`}>{post.data.title}</a>
   </h1>
-  <div class="text-3.5 text-gray-500">
+  <p class="!my-0 opacity-50">{post.data.description}</p>
+  <div class="text-3.5 text-gray-500 mt-2">
     <span>{t(post.data.modDate ? 'updated_at' : 'posted_at')}</span>
     <time>{formatDate(post.data.modDate ?? post.data.pubDate)}</time>
     {categoryList.map((category) => <PostCategory category={category} />)}

@@ -28,3 +28,35 @@ html {
   --at-apply: 'ease-in-out duration-300ms';
   --at-apply: 'hover:(c-background bg-primary decoration-primary)';
 }
+
+/* twikoo */
+
+.tk-comments {
+  max-width: 65ch;
+}
+
+.tk-meta-input {
+  background-color: transparent;
+}
+
+.el-button.tk-send {
+  background-color: var(--uno-colors-primary);
+  border-color: var(--uno-colors-primary);
+  color: var(--uno-colors-background);
+  transition: opacity 0.3s ease;
+}
+
+.el-button.tk-send:hover {
+  background-color: var(--uno-colors-primary);
+  border-color: var(--uno-colors-primary);
+  opacity: 0.9;
+}
+
+.el-button.tk-send.is-disabled,
+.el-button.tk-send.is-disabled:hover {
+  background-color: transparent !important;
+  border-color: var(--uno-colors-primary) !important;
+  color: var(--uno-colors-primary) !important;
+  opacity: 0.4;
+  cursor: not-allowed;
+}

@@ -4,7 +4,7 @@
 
 <aside class="reading-progress-sidebar">
   <!-- Reading Progress Bar -->
-  <div class="progress-container">
+  <div class="progress-container hidden lg:block">
     <div class="text-xs font-bold text-stone-500 dark:text-stone-400 mb-2 uppercase tracking-wider">
       閱讀進度 <span id="progress-text" class="progress-text">0%</span>
     </div>
@@ -20,6 +20,7 @@
       <!-- TOC will be populated by JavaScript -->
     </nav>
   </div>
+  <div class="lg:hidden h-16"></div>
 </aside>
 
 <script>
@@ -29,7 +30,8 @@
     const tocNav = document.getElementById('toc-nav')
     const article = document.querySelector('article.prose')
 
-    if (!progressBar || !progressText || !tocNav || !article) return
+    if (!progressBar || !progressText || !tocNav || !article)
+return
 
     // Generate Table of Contents
     const headings = article.querySelectorAll('h1, h2, h3, h4')
@@ -67,7 +69,8 @@
       link.addEventListener('click', (e) => {
         e.preventDefault()
         const main = document.querySelector('main')
-        if (!main) return
+        if (!main)
+return
 
         // Calculate cumulative offsetTop (handles nested positioned elements)
         let headingTop = 0
@@ -89,16 +92,15 @@
     // Update progress on scroll
     function updateProgress() {
       const main = document.querySelector('main')
-      if (!main) return
+      if (!main)
+return
 
       const scrollTop = main.scrollTop
       const scrollHeight = main.scrollHeight - main.clientHeight
       const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0
 
-      if (progressBar) 
-progressBar.style.width = `${progress}%`
-      if (progressText) 
-progressText.textContent = `${Math.round(progress)}%`
+      if (progressBar) progressBar.style.width = `${progress}%`
+      if (progressText) progressText.textContent = `${Math.round(progress)}%`
 
       // Update active TOC item
       let activeIndex = -1
@@ -224,7 +226,8 @@ progressText.textContent = `${Math.round(progress)}%`
   }
 
   @keyframes pulse {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 1;
     }
     50% {
