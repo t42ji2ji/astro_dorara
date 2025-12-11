@@ -92,6 +92,7 @@ export const defaultConfig: ThemeConfig = {
   analytics: {
     googleAnalyticsId: '',
     umamiAnalyticsId: '',
+    goatCounterId: 'dorara',
   },
   latex: {
     katex: false,

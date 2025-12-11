@@ -66,9 +66,9 @@ export interface ConfigRSS {
 }
 
 export interface ConfigAnalytics {
-  /** google analytics */
   googleAnalyticsId: string
   umamiAnalyticsId: string
+  goatCounterId: string
 }
 
 export interface ConfigLaTeX {
