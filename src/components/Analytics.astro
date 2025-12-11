@@ -9,11 +9,8 @@ const googleAnalyticsId = themeConfig.analytics.googleAnalyticsId || PUBLIC_GOOG
 
 const PUBLIC_UMAMI_ANALYTICS_ID = import.meta.env.PUBLIC_UMAMI_ANALYTICS_ID
 const umamiAnalyticsId = themeConfig.analytics.umamiAnalyticsId || PUBLIC_UMAMI_ANALYTICS_ID
-
-const PUBLIC_GOATCOUNTER_ID = import.meta.env.PUBLIC_GOATCOUNTER_ID
-const goatCounterId = themeConfig.analytics.goatCounterId || PUBLIC_GOATCOUNTER_ID
 ---
 
 {googleAnalyticsId && <GoogleAnalytics id={googleAnalyticsId} />}
 {umamiAnalyticsId && <UmamiAnalytics id={umamiAnalyticsId} />}
-{goatCounterId && <KVAnalytics />}
+{(<KVAnalytics />)}
