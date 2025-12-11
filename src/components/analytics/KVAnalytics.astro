@@ -1,0 +1,40 @@
+---
+
+---
+
+<script>
+  ;(function () {
+    const WORKER_URL = 'https://dorara-page-view.joy8963259.workers.dev'
+    const path = window.location.pathname
+    const storageKey = `viewed:${path}`
+    const now = Date.now()
+
+    // 檢查 24 小時內是否已計數
+    const viewed = localStorage.getItem(storageKey)
+    const shouldCount = !viewed || now - Number.parseInt(viewed) > 24 * 60 * 60 * 1000
+
+    if (shouldCount) {
+      // POST 增加計數
+      fetch(`${WORKER_URL}?p=${encodeURIComponent(path)}`, { method: 'POST' })
+        .then((r) => r.json())
+        .then((d) => {
+          localStorage.setItem(storageKey, String(now))
+          // 如果頁面上有顯示元素，更新它
+          const el = document.querySelector('.views-count')
+          if (el)
+el.textContent = d.count
+        })
+        .catch(() => {})
+    } else {
+      // GET 只讀取，不增加
+      fetch(`${WORKER_URL}?p=${encodeURIComponent(path)}`)
+        .then((r) => r.json())
+        .then((d) => {
+          const el = document.querySelector('.views-count')
+          if (el)
+el.textContent = d.count
+        })
+        .catch(() => {})
+    }
+  })()
+</script>

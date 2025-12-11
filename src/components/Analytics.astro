@@ -1,7 +1,7 @@
 ---
 import GoogleAnalytics from '~/components/analytics/GoogleAnalytics.astro'
 import UmamiAnalytics from '~/components/analytics/UmamiAnalytics.astro'
-import GoatCounterAnalytics from '~/components/analytics/GoatCounterAnalytics.astro'
+import KVAnalytics from '~/components/analytics/KVAnalytics.astro'
 import { themeConfig } from '~/.config'
 
 const PUBLIC_GOOGLE_ANALYTICS_ID = import.meta.env.PUBLIC_GOOGLE_ANALYTICS_ID
@@ -16,4 +16,4 @@ const goatCounterId = themeConfig.analytics.goatCounterId || PUBLIC_GOATCOUNTER_
 
 {googleAnalyticsId && <GoogleAnalytics id={googleAnalyticsId} />}
 {umamiAnalyticsId && <UmamiAnalytics id={umamiAnalyticsId} />}
-{goatCounterId && <GoatCounterAnalytics id={goatCounterId} />}
+{goatCounterId && <KVAnalytics />}

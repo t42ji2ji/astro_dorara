@@ -28,11 +28,6 @@ export const defaultConfig: ThemeConfig = {
         name: 'twitter',
         href: 'https://x.com/DoraraHsieh',
       },
-
-      // {
-      //   name: 'mastodon',
-      //   href: 'https://github.com/moeyua/astro-theme-typography',
-      // },
     ],
     navLinks: [
       {
@@ -92,7 +87,6 @@ export const defaultConfig: ThemeConfig = {
   analytics: {
     googleAnalyticsId: '',
     umamiAnalyticsId: '',
-    goatCounterId: 'dorara',
   },
   latex: {
     katex: false,
