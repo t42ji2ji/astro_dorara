@@ -13,6 +13,7 @@ function parseFooter(str: string) {
 }
 ---
 
+<span class="text-left w-full text-sm"><number-flow class="views-count"></number-flow> 個人來過</span>
 {footer.length && footer.map((str) => <p set:html={parseFooter(str)} />)}
 
 <style>

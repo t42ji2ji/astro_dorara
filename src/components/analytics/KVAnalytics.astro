@@ -3,6 +3,8 @@
 ---
 
 <script>
+  import 'number-flow'
+
   ;(function () {
     const WORKER_URL = 'https://dorara-page-view.joy8963259.workers.dev'
     const path = window.location.pathname
@@ -13,16 +15,32 @@
     const viewed = localStorage.getItem(storageKey)
     const shouldCount = !viewed || now - Number.parseInt(viewed) > 24 * 60 * 60 * 1000
 
+    function updateViewCount(finalCount: number) {
+      const el = document.querySelector('.views-count') as HTMLElement & { update?: (value: number) => void }
+      if (!el || !el.update) return
+
+      // 隨機數字跳動後再顯示正確數字
+      let iterations = 0
+      const maxIterations = 8
+      const interval = setInterval(() => {
+        const randomNum = Math.floor(Math.random() * 9999) + 1
+        el.update!(randomNum)
+        iterations++
+
+        if (iterations >= maxIterations) {
+          clearInterval(interval)
+          setTimeout(() => el.update!(finalCount), 100)
+        }
+      }, 60)
+    }
+
     if (shouldCount) {
       // POST 增加計數
       fetch(`${WORKER_URL}?p=${encodeURIComponent(path)}`, { method: 'POST' })
         .then((r) => r.json())
         .then((d) => {
           localStorage.setItem(storageKey, String(now))
-          // 如果頁面上有顯示元素，更新它
-          const el = document.querySelector('.views-count')
-          if (el)
-el.textContent = d.count
+          updateViewCount(d.count)
         })
         .catch(() => {})
     } else {
@@ -30,9 +48,7 @@ el.textContent = d.count
       fetch(`${WORKER_URL}?p=${encodeURIComponent(path)}`)
         .then((r) => r.json())
         .then((d) => {
-          const el = document.querySelector('.views-count')
-          if (el)
-el.textContent = d.count
+          updateViewCount(d.count)
         })
         .catch(() => {})
     }

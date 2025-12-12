@@ -252,7 +252,7 @@ import InteractiveContainer from '../InteractiveContainer.astro'
 
       // Slide existing items down
       const existingItems = reactionsContainer.querySelectorAll('.reaction-item')
-      existingItems.forEach((item, i) => {
+      existingItems.forEach((item) => {
         const el = item as HTMLElement
         const currentTop = Number.parseInt(el.style.top || '0')
         el.style.top = `${currentTop + lineHeight}px`
