@@ -6,6 +6,9 @@ import cardmaIcon from '~/assets/resume/cardma.webp'
 import woodIcon from '~/assets/resume/wood.webp'
 import kryptogoLogo from '~/assets/resume/kryptogo.png'
 import hanamiLogo from '~/assets/resume/hanami.png'
+import WebInteractiveWorks from '~/components/resume/WebInteractiveWorks.astro'
+
+// Web works moved to src/components/resume/WebInteractiveWorks.astro
 ---
 
 <LayoutDefault>
@@ -157,7 +160,8 @@ import hanamiLogo from '~/assets/resume/hanami.png'
 
     function initLottie() {
       const container = document.getElementById('avatarContainer')
-      if (!container) return
+      if (!container)
+return
 
       // 如果已存在實例，先銷毀
       destroyLottie()
@@ -198,7 +202,7 @@ import hanamiLogo from '~/assets/resume/hanami.png'
     // 頁面離開時清理
     document.addEventListener('astro:before-swap', destroyLottie)
     document.addEventListener('swup:willReplaceContent', destroyLottie)
-  </script>
+</script>
 
   <article class="prose max-w-none">
     <section class="mb-12">
@@ -494,6 +498,8 @@ import hanamiLogo from '~/assets/resume/hanami.png'
             </div>
           </a>
         </div>
+
+        <WebInteractiveWorks />
       </div>
 
       <hr class="my-8 border-gray-200 dark:border-gray-700" />
@@ -797,7 +803,186 @@ import hanamiLogo from '~/assets/resume/hanami.png'
         .stat-number {
           font-size: 1.5rem;
         }
+
+        .grid-cols-3 {
+          grid-template-columns: repeat(1, 1fr);
+        }
+      }
+
+      /* Web Work Styles */
+      .filter-btn {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        color: #666;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+      }
+
+      :global(.dark) .filter-btn {
+        color: #aaa;
+      }
+
+      .filter-btn:hover {
+        border-color: #667eea;
+        color: #667eea;
+      }
+
+      .filter-btn.active {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+      }
+
+      .web-work-card {
+        display: flex;
+        flex-direction: column;
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 16px;
+        overflow: hidden;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        height: 100%;
+      }
+
+      .web-work-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        border-color: rgba(102, 126, 234, 0.3);
+      }
+
+      :global(.dark) .web-work-card:hover {
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .web-work-image-container {
+        width: 100%;
+        aspect-ratio: 16/10;
+        overflow: hidden;
+        position: relative;
+        background: #f5f5f5;
+        border-bottom: 1px solid var(--card-border);
+      }
+
+      :global(.dark) .web-work-image-container {
+        background: #2a2a2a;
+      }
+
+      .web-work-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .web-work-card:hover .web-work-image {
+        transform: scale(1.05);
+      }
+
+      .web-work-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .web-work-card:hover .web-work-overlay {
+        opacity: 1;
+      }
+
+      .view-btn {
+        background: rgba(255, 255, 255, 0.9);
+        color: #333;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        transform: translateY(10px);
+        transition: transform 0.3s ease;
+      }
+
+      .web-work-card:hover .view-btn {
+        transform: translateY(0);
+      }
+
+      .web-work-info {
+        padding: 1.25rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .web-work-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+      }
+
+      .web-work-desc {
+        font-size: 0.875rem;
+        color: #666;
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      :global(.dark) .web-work-desc {
+        color: #aaa;
       }
     </style>
+
+    <script>
+      function initWebWorksFilter() {
+        const filterBtns = document.querySelectorAll('.filter-btn')
+        const workCards = document.querySelectorAll('.web-work-card')
+
+        if (!filterBtns.length || !workCards.length)
+return
+
+        filterBtns.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            // Remove active class from all buttons
+            filterBtns.forEach((b) => b.classList.remove('active'))
+            // Add active class to clicked button
+            btn.classList.add('active')
+
+            const category = btn.getAttribute('data-category')
+
+            workCards.forEach((card) => {
+              const categories = JSON.parse(card.getAttribute('data-categories') || '[]')
+              const element = card as HTMLElement
+
+              if (category === 'all' || categories.includes(category)) {
+                element.style.display = 'flex'
+                // Simple fade in effect could be added here
+                element.style.opacity = '1'
+              } else {
+                element.style.display = 'none'
+                element.style.opacity = '0'
+              }
+            })
+          })
+        })
+      }
+
+      // Initialize on load and page transitions
+      document.addEventListener('DOMContentLoaded', initWebWorksFilter)
+      document.addEventListener('astro:page-load', initWebWorksFilter)
+      document.addEventListener('swup:contentReplaced', initWebWorksFilter)
+</script>
   </article>
 </LayoutDefault>

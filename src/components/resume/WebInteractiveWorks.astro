@@ -1,0 +1,418 @@
+---
+// Import sitemap images
+import astrologyImage from '~/assets/sitemap/astrology.png'
+import bumperImage from '~/assets/sitemap/bumper.png'
+import chiiImage from '~/assets/sitemap/chii.png'
+import drawImage from '~/assets/sitemap/draw.png'
+import imgifImage from '~/assets/sitemap/imgif.png'
+import lifeImage from '~/assets/sitemap/life.png'
+import luckImage from '~/assets/sitemap/luck.png'
+import lyricsImage from '~/assets/sitemap/lyrics.png'
+import mandalasImage from '~/assets/sitemap/mandalas.png'
+import manSplainImage from '~/assets/sitemap/manSplain.png'
+import mrtImage from '~/assets/sitemap/mrt.png'
+import qrcodeImage from '~/assets/sitemap/qrcode.png'
+import rebuttalImage from '~/assets/sitemap/rebuttal.png'
+import scratchCardImage from '~/assets/sitemap/scratch-card.png'
+import skillImage from '~/assets/sitemap/skill.png'
+import socialCardsImage from '~/assets/sitemap/social-cards.png'
+import threadsImage from '~/assets/sitemap/threads.png'
+import vcreatorImage from '~/assets/sitemap/vcreator.png'
+import voiceImage from '~/assets/sitemap/voice.png'
+import wishImage from '~/assets/sitemap/wish.png'
+import woopImage from '~/assets/sitemap/woop.png'
+
+const categories = [
+  { id: 'personal', name: '個人成長' },
+  { id: 'create', name: '創作工具' },
+  { id: 'fun', name: '趣味體驗' },
+  { id: 'utility', name: '實用工具' },
+  { id: 'all', name: '全部' },
+]
+
+const webWorks = [
+  {
+    title: '許願 Wishes',
+    description: '開始你的神秘占卜之旅，探索天河密語的指引',
+    path: '/wish',
+    image: wishImage,
+    categories: ['fun'],
+  },
+  {
+    title: '抽牌占卜',
+    description: '把自己設計的占卜牌做成線上互動版本，探索神秘的天河密語。',
+    path: '/draw',
+    image: drawImage,
+    categories: ['fun'],
+  },
+  {
+    title: '紫微星座',
+    description: '將六年紫微斗數經驗結合 AI，讓 AI 幫你探索星座運勢，體驗新世代的命理服務。',
+    path: '/astrology',
+    image: astrologyImage,
+    categories: ['fun'],
+    featured: true,
+  },
+  {
+    title: '投胎抽卡機',
+    description: '用機率模擬出生地，讓人更直觀地感受生在台灣的幸運與不易，提醒大家珍惜當下。',
+    path: '/luck',
+    image: luckImage,
+    categories: ['fun'],
+  },
+  {
+    title: '少年A 的故事',
+    description: '將自我懷疑與孤單的心情轉化為 AI 小男孩，與他對話，探索理解與自我接納的可能性。',
+    path: '/voice',
+    image: voiceImage,
+    categories: ['personal'],
+    featured: true,
+  },
+  {
+    title: '反駁金字塔',
+    description: '運用 Paul Graham 的理論，幫助你辨識討論層次，促進更健康的線上溝通，提升社群媒體的討論品質。',
+    path: '/rebuttal',
+    image: rebuttalImage,
+    categories: ['personal'],
+    featured: true,
+  },
+  {
+    title: '生命倒計時',
+    description: '用最直觀的方式感受時間的流逝。看到進度條一點點前進，更能體會人生的有限，提醒自己活在當下、珍惜健康。',
+    path: '/life',
+    image: lifeImage,
+    categories: ['personal'],
+  },
+  // {
+  //   title: '情人創作工具',
+  //   description: '拯救沒心男友的應景之作，緊急製作專屬情人節卡片，為特別的人創作驚喜。',
+  //   path: '/vcreator',
+  //   image: vcreatorImage,
+  //   categories: ['create'],
+  // },
+  {
+    title: '男性說教',
+    description: '反思「男性說教」現象，透過小測驗評估自己的說教指數，促進自我覺察。',
+    path: '/manSplain',
+    image: manSplainImage,
+    categories: ['fun'],
+  },
+  {
+    title: '技能學習計算器',
+    description:
+      '「人生有多少個一萬小時？」這個小工具能幫你量化學習新技能所需的時間，讓目標更務實，也更能督促自己，實踐長期主義的成長思維。',
+    path: '/skill',
+    image: skillImage,
+    categories: ['utility'],
+  },
+  {
+    title: '曼陀羅產生器',
+    description: '測試 Claude 3.7 強悍能力，創造屬於你的曼陀羅藝術，體驗對稱之美與 AI 創作的樂趣。',
+    path: '/mandalas',
+    image: mandalasImage,
+    categories: ['create'],
+  },
+  {
+    title: 'WOOP 行動地圖',
+    description: '運用心理學 WOOP 理論，透過 AI 協助將願望拆解成具體行動路徑，幫助你攻克拖延，實現目標。',
+    path: '/woop',
+    image: woopImage,
+    categories: ['personal'],
+  },
+  {
+    title: '球體撞擊對戰',
+    description: '有趣的物理碰撞遊戲',
+    path: '/bumper',
+    image: bumperImage,
+    categories: ['fun'],
+  },
+  {
+    title: '眼冒金星生成器',
+    description: '據說看可愛的東西能減壓？把任何照片都變成「吉伊卡哇」風格，療癒你的心情。',
+    path: '/chii',
+    image: chiiImage,
+    categories: ['create'],
+  },
+  {
+    title: '圖片轉GIF工具',
+    description: '針對製作 Meme/GIF 的痛點優化，讓你更快編輯、創作有趣的 GIF 動畫。',
+    path: '/imgif',
+    image: imgifImage,
+    categories: ['utility', 'create'],
+  },
+  {
+    title: '誰還腿開開',
+    description: '以「男性開腿」社會議題為靈感，結合可愛小遊戲，希望引起關注與討論，而非說教。',
+    path: '/mrt',
+    image: mrtImage,
+    categories: ['fun'],
+  },
+  {
+    title: 'QR Code 產生器',
+    description: '創建自定義風格的 QR 碼',
+    path: '/qrcode',
+    image: qrcodeImage,
+    categories: ['utility', 'create'],
+  },
+  {
+    title: '日文歌詞翻譯',
+    description: '顯示日文歌詞的羅馬拼音和中文翻譯',
+    path: '/lyrics',
+    image: lyricsImage,
+    categories: ['utility'],
+  },
+  {
+    title: '社群卡片製作',
+    description: '為 Instagram 或 Threads 創建精美的卡片系列',
+    path: '/social-cards',
+    image: socialCardsImage,
+    categories: ['create'],
+    featured: true,
+  },
+  {
+    title: 'Dweam 社群',
+    description: '為夢想家打造的共創社群',
+    path: '/threads',
+    image: threadsImage,
+    categories: ['personal'],
+    featured: true,
+  },
+  {
+    title: '刮刮樂',
+    description: '新年願望太多不知從何開始？刮一下決定優先級，發現你的新年第一願望。',
+    path: '/scratch-card',
+    image: scratchCardImage,
+    categories: ['fun'],
+  },
+]
+---
+
+<!-- Web 互動作品 -->
+<h4 class="font-bold text-lg mb-4 mt-8">🌐 Web 互動作品</h4>
+
+<!-- Filter Tabs -->
+<div class="filter-tabs mb-6 overflow-x-auto">
+  <div class="flex gap-2 min-w-max pb-2">
+    {
+      categories.map((category) => (
+        <button class={`filter-btn ${category.id === 'personal' ? 'active' : ''}`} data-category={category.id}>
+          {category.name}
+        </button>
+      ))
+    }
+  </div>
+</div>
+
+<div class="cards-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="web-works-grid">
+  {
+    webWorks.map((work) => (
+      <a
+        href={`https://dweam.xyz${work.path}`}
+        target="_blank"
+        class="web-work-card group"
+        data-categories={JSON.stringify(work.categories)}
+        style={`display: ${work.categories.includes('personal') ? 'flex' : 'none'}; opacity: ${work.categories.includes('personal') ? '1' : '0'};`}
+      >
+        <div class="web-work-image-container">
+          <img src={work.image.src} alt={work.title} class="web-work-image" />
+          <div class="web-work-overlay">
+            <span class="view-btn">View Project</span>
+          </div>
+        </div>
+        <div class="web-work-info">
+          <h3 class="web-work-title">{work.title}</h3>
+          <p class="web-work-desc">{work.description}</p>
+        </div>
+      </a>
+    ))
+  }
+</div>
+
+<script>
+  function initWebWorksFilter() {
+    const filterBtns = document.querySelectorAll('.filter-btn')
+    const workCards = document.querySelectorAll('.web-work-card')
+
+    if (!filterBtns.length || !workCards.length) 
+return
+
+    filterBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        // Remove active class from all buttons
+        filterBtns.forEach((b) => b.classList.remove('active'))
+        // Add active class to clicked button
+        btn.classList.add('active')
+
+        const category = btn.getAttribute('data-category')
+        filterItems(category)
+      })
+    })
+
+    // Initial filter for 'personal'
+    filterItems('personal')
+  }
+
+  function filterItems(category: string | null) {
+    if (!category) 
+return
+
+    const workCards = document.querySelectorAll('.web-work-card')
+    workCards.forEach((card) => {
+      const categories = JSON.parse(card.getAttribute('data-categories') || '[]')
+      const element = card as HTMLElement
+
+      if (category === 'all' || categories.includes(category)) {
+        element.style.display = 'flex'
+        // Simple fade in effect could be added here
+        setTimeout(() => {
+          element.style.opacity = '1'
+        }, 10)
+      } else {
+        element.style.display = 'none'
+        element.style.opacity = '0'
+      }
+    })
+  }
+
+  // Initialize on load and page transitions
+  document.addEventListener('DOMContentLoaded', initWebWorksFilter)
+  document.addEventListener('astro:page-load', initWebWorksFilter)
+  document.addEventListener('swup:contentReplaced', initWebWorksFilter)
+</script>
+
+<style>
+  /* Web Work Styles */
+  .filter-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: #666;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    white-space: nowrap;
+  }
+
+  :global(.dark) .filter-btn {
+    color: #aaa;
+  }
+
+  .filter-btn:hover {
+    border-color: #667eea;
+    color: #667eea;
+  }
+
+  .filter-btn.active {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+  }
+
+  .web-work-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    height: 100%;
+  }
+
+  .web-work-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    border-color: rgba(102, 126, 234, 0.3);
+  }
+
+  :global(.dark) .web-work-card:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .web-work-image-container {
+    width: 100%;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+    position: relative;
+    background: #f5f5f5;
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  :global(.dark) .web-work-image-container {
+    background: #2a2a2a;
+  }
+
+  .web-work-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .web-work-card:hover .web-work-image {
+    transform: scale(1.05);
+  }
+
+  .web-work-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .web-work-card:hover .web-work-overlay {
+    opacity: 1;
+  }
+
+  .view-btn {
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transform: translateY(10px);
+    transition: transform 0.3s ease;
+  }
+
+  .web-work-card:hover .view-btn {
+    transform: translateY(0);
+  }
+
+  .web-work-info {
+    padding: 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .web-work-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+
+  .web-work-desc {
+    font-size: 0.875rem;
+    color: #666;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  :global(.dark) .web-work-desc {
+    color: #aaa;
+  }
+</style>
