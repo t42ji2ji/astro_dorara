@@ -21,6 +21,7 @@ import vcreatorImage from '~/assets/sitemap/vcreator.png'
 import voiceImage from '~/assets/sitemap/voice.png'
 import wishImage from '~/assets/sitemap/wish.png'
 import woopImage from '~/assets/sitemap/woop.png'
+import gpxImage from '~/assets/sitemap/gpx.png'
 
 const categories = [
   { id: 'personal', name: '個人成長' },
@@ -141,6 +142,13 @@ const webWorks = [
     categories: ['utility', 'create'],
   },
   {
+    title: 'GPX 路徑動畫',
+    description: '能根據 GPX 幫你生成路徑動畫的網站',
+    path: 'https://gpx.dorara.app/',
+    image: gpxImage,
+    categories: ['utility', 'create'],
+  },
+  {
     title: '誰還腿開開',
     description: '以「男性開腿」社會議題為靈感，結合可愛小遊戲，希望引起關注與討論，而非說教。',
     path: '/mrt',
@@ -207,7 +215,7 @@ const webWorks = [
   {
     webWorks.map((work) => (
       <a
-        href={`https://dweam.xyz${work.path}`}
+        href={work.path.startsWith('http') ? work.path : `https://dweam.xyz${work.path}`}
         target="_blank"
         class="web-work-card group"
         data-categories={JSON.stringify(work.categories)}
@@ -233,7 +241,7 @@ const webWorks = [
     const filterBtns = document.querySelectorAll('.filter-btn')
     const workCards = document.querySelectorAll('.web-work-card')
 
-    if (!filterBtns.length || !workCards.length) 
+    if (!filterBtns.length || !workCards.length)
 return
 
     filterBtns.forEach((btn) => {
@@ -253,7 +261,7 @@ return
   }
 
   function filterItems(category: string | null) {
-    if (!category) 
+    if (!category)
 return
 
     const workCards = document.querySelectorAll('.web-work-card')
