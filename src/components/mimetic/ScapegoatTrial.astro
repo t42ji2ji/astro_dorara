@@ -195,7 +195,8 @@ import InteractiveContainer from '../InteractiveContainer.astro'
 <script>
   function initScapegoatTrial() {
     const container = document.getElementById('scapegoat-trial')
-    if (!container) return
+    if (!container) 
+return
 
     // Elements
     const phaseCase = container.querySelector('#phase-case')
@@ -245,7 +246,8 @@ import InteractiveContainer from '../InteractiveContainer.astro'
     // Add a new reaction (slide down effect in fixed container)
     const lineHeight = 24 // px per line
     function addReaction() {
-      if (!reactionsContainer) return
+      if (!reactionsContainer) 
+return
 
       // Loop back if we've used all reactions
       const reaction = reactions[reactionIndex % reactions.length]
@@ -267,7 +269,7 @@ import InteractiveContainer from '../InteractiveContainer.astro'
       // Create new item at top
       const div = document.createElement('div')
       div.className
-        = 'reaction-item absolute left-0 right-0 text-stone-600 dark:text-stone-400 transition-all duration-300'
+       = 'reaction-item absolute left-0 right-0 text-stone-600 dark:text-stone-400 transition-all duration-300'
       div.style.top = '0px'
       div.style.opacity = '0'
       div.innerHTML = `「${reaction.text}」<span class="text-red-400 ml-1">+${reaction.votes}</span>`
@@ -318,7 +320,8 @@ import InteractiveContainer from '../InteractiveContainer.astro'
       startTime = Date.now()
       timerInterval = window.setInterval(() => {
         const elapsed = Math.floor((Date.now() - startTime) / 1000)
-        if (timerValue) timerValue.textContent = elapsed.toString()
+        if (timerValue) 
+timerValue.textContent = elapsed.toString()
 
         // Update progress bar
         if (timerBar) {
@@ -353,7 +356,8 @@ import InteractiveContainer from '../InteractiveContainer.astro'
       const elapsed = Math.floor((Date.now() - startTime) / 1000)
 
       // Update reveal stats
-      if (revealTime) revealTime.textContent = elapsed.toString()
+      if (revealTime) 
+revealTime.textContent = elapsed.toString()
       if (revealContext) {
         revealContext.textContent = checkedContext ? '是' : '否'
         revealContext.classList.toggle('text-red-500', !checkedContext)
@@ -427,7 +431,8 @@ import InteractiveContainer from '../InteractiveContainer.astro'
         timerValue.textContent = '0'
         timerValue.classList.remove('text-orange-500', 'text-red-500')
       }
-      if (timerBar) timerBar.style.width = '0%'
+      if (timerBar) 
+timerBar.style.width = '0%'
 
       // Reset context button
       if (contextBtn) {

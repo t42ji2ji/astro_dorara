@@ -164,7 +164,7 @@ import WebInteractiveWorks from '~/components/resume/WebInteractiveWorks.astro'
 
     function initLottie() {
       const container = document.getElementById('avatarContainer')
-      if (!container) 
+      if (!container)
 return
 
       // 如果已存在實例，先銷毀
@@ -206,7 +206,7 @@ return
     // 頁面離開時清理
     document.addEventListener('astro:before-swap', destroyLottie)
     document.addEventListener('swup:willReplaceContent', destroyLottie)
-  </script>
+</script>
 
   <article class="prose max-w-none">
     <section class="mb-12">
@@ -954,7 +954,7 @@ return
         const filterBtns = document.querySelectorAll('.filter-btn')
         const workCards = document.querySelectorAll('.web-work-card')
 
-        if (!filterBtns.length || !workCards.length) 
+        if (!filterBtns.length || !workCards.length)
 return
 
         filterBtns.forEach((btn) => {
@@ -987,6 +987,6 @@ return
       document.addEventListener('DOMContentLoaded', initWebWorksFilter)
       document.addEventListener('astro:page-load', initWebWorksFilter)
       document.addEventListener('swup:contentReplaced', initWebWorksFilter)
- </script>
+</script>
   </article>
 </LayoutDefault>
