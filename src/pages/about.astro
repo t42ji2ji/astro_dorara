@@ -21,6 +21,10 @@ import WebInteractiveWorks from '~/components/resume/WebInteractiveWorks.astro'
         <p class="text-xl text-gray-500 dark:text-gray-400 mb-2">Flutter Lead & Full Stack Developer</p>
         <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
           <a href="mailto:doraralab@gmail.com" class="hover:text-[#667eea] transition-colors">doraralab@gmail.com</a>
+          <span class="mx-2">·</span>
+          <a href="https://www.threads.net/@dorara_hsieh" target="_blank" class="hover:text-[#667eea] transition-colors"
+            >@dorara_hsieh</a
+          >
         </p>
 
         <div class="value-intro">
@@ -160,7 +164,8 @@ import WebInteractiveWorks from '~/components/resume/WebInteractiveWorks.astro'
 
     function initLottie() {
       const container = document.getElementById('avatarContainer')
-      if (!container) return
+      if (!container) 
+return
 
       // 如果已存在實例，先銷毀
       destroyLottie()
@@ -949,7 +954,8 @@ import WebInteractiveWorks from '~/components/resume/WebInteractiveWorks.astro'
         const filterBtns = document.querySelectorAll('.filter-btn')
         const workCards = document.querySelectorAll('.web-work-card')
 
-        if (!filterBtns.length || !workCards.length) return
+        if (!filterBtns.length || !workCards.length) 
+return
 
         filterBtns.forEach((btn) => {
           btn.addEventListener('click', () => {
@@ -981,7 +987,6 @@ import WebInteractiveWorks from '~/components/resume/WebInteractiveWorks.astro'
       document.addEventListener('DOMContentLoaded', initWebWorksFilter)
       document.addEventListener('astro:page-load', initWebWorksFilter)
       document.addEventListener('swup:contentReplaced', initWebWorksFilter)
-
-</script>
+ </script>
   </article>
 </LayoutDefault>
