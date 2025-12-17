@@ -17,7 +17,6 @@ import scratchCardImage from '~/assets/sitemap/scratch-card.png'
 import skillImage from '~/assets/sitemap/skill.png'
 import socialCardsImage from '~/assets/sitemap/social-cards.png'
 import threadsImage from '~/assets/sitemap/threads.png'
-import vcreatorImage from '~/assets/sitemap/vcreator.png'
 import voiceImage from '~/assets/sitemap/voice.png'
 import wishImage from '~/assets/sitemap/wish.png'
 import woopImage from '~/assets/sitemap/woop.png'
@@ -241,8 +240,7 @@ const webWorks = [
     const filterBtns = document.querySelectorAll('.filter-btn')
     const workCards = document.querySelectorAll('.web-work-card')
 
-    if (!filterBtns.length || !workCards.length)
-return
+    if (!filterBtns.length || !workCards.length) return
 
     filterBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -261,8 +259,7 @@ return
   }
 
   function filterItems(category: string | null) {
-    if (!category)
-return
+    if (!category) return
 
     const workCards = document.querySelectorAll('.web-work-card')
     workCards.forEach((card) => {
