@@ -1,6 +1,7 @@
 import mdx from '@astrojs/mdx'
 import sitemap from '@astrojs/sitemap'
 import swup from '@swup/astro'
+import mermaid from 'astro-mermaid'
 import robotsTxt from 'astro-robots-txt'
 import { defineConfig } from 'astro/config'
 import rehypeKatex from 'rehype-katex'
@@ -37,6 +38,9 @@ export default defineConfig({
     },
   },
   integrations: [
+    mermaid({
+      autoTheme: true,
+    }),
     UnoCSS({ injectReset: true }),
     mdx({}),
     robotsTxt(),

@@ -1,0 +1,62 @@
+---
+interface Props {
+  summary: string
+  content?: string
+}
+
+const { summary, content } = Astro.props
+---
+
+<details class="details-component">
+  <summary class="details-summary">{summary}</summary>
+  <div class="details-content">
+    {content ? <Fragment set:html={content} /> : <slot />}
+  </div>
+</details>
+
+<style>
+  .details-component {
+    margin: 1rem 0;
+    border: 1px solid var(--c-text-3, #e5e5e5);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  :global(.dark) .details-component {
+    border-color: var(--c-text-3, #404040);
+  }
+
+  .details-summary {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    font-weight: 500;
+    background: var(--c-bg-1, #fafafa);
+    transition: background 0.2s;
+  }
+
+  :global(.dark) .details-summary {
+    background: var(--c-bg-1, #1a1a1a);
+  }
+
+  .details-summary:hover {
+    background: var(--c-bg-2, #f0f0f0);
+  }
+
+  :global(.dark) .details-summary:hover {
+    background: var(--c-bg-2, #262626);
+  }
+
+  .details-content {
+    padding: 1rem;
+    border-top: 1px solid var(--c-text-3, #e5e5e5);
+  }
+
+  :global(.dark) .details-content {
+    border-color: var(--c-text-3, #404040);
+  }
+
+  details[open] .details-summary {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+</style>

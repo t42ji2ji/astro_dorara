@@ -10,7 +10,7 @@ export const defaultConfig: ThemeConfig = {
     author: '謝哆啦',
     description: '分享我看見的世界',
     website: 'https://dorara.app/',
-    pageSize: 5,
+    pageSize: 10,
     socialLinks: [
       {
         name: 'github',
@@ -44,7 +44,7 @@ export const defaultConfig: ThemeConfig = {
       },
       {
         name: 'About',
-        href: '/resume',
+        href: '/about',
       },
     ],
     categoryMap: [{ name: '--', path: 'dora' }],

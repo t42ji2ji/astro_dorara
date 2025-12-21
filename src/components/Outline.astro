@@ -30,12 +30,16 @@
     const tocNav = document.getElementById('toc-nav')
     const article = document.querySelector('article.prose')
 
-    if (!progressBar || !progressText || !tocNav || !article)
+    if (!progressBar || !progressText || !tocNav || !article) 
 return
 
     // Generate Table of Contents
     const headings = article.querySelectorAll('h1, h2, h3, h4')
     const tocItems: { element: Element; link: HTMLAnchorElement }[] = []
+
+    // Group headings by parent (h1/h2)
+    let currentParent: HTMLAnchorElement | null = null
+    const childrenMap = new Map<HTMLAnchorElement, HTMLAnchorElement[]>()
 
     headings.forEach((heading, index) => {
       // Add ID to heading if not present
@@ -62,45 +66,99 @@ return
       const text = document.createTextNode(heading.textContent || '')
       link.appendChild(text)
 
+      // Track parent-child relationships
+      if (level <= 2) {
+        currentParent = link
+        childrenMap.set(link, [])
+      } else if (currentParent) {
+        // h3/h4 are children, hide by default
+        link.classList.add('toc-child', 'toc-collapsed')
+        childrenMap.get(currentParent)?.push(link)
+        // Mark parent as having children
+        currentParent.classList.add('toc-has-children')
+      }
+
       tocNav.appendChild(link)
       tocItems.push({ element: heading, link })
 
-      // Smooth scroll on click
-      link.addEventListener('click', (e) => {
-        e.preventDefault()
-        const main = document.querySelector('main')
-        if (!main)
-return
+      // Click handler for h1/h2 to toggle children
+      if (level <= 2) {
+        link.addEventListener('click', (e) => {
+          e.preventDefault()
+          const children = childrenMap.get(link) || []
+          const isExpanded = link.classList.contains('toc-expanded')
 
-        // Calculate cumulative offsetTop (handles nested positioned elements)
-        let headingTop = 0
-        let element: HTMLElement | null = heading as HTMLElement
-        while (element && element !== main) {
-          headingTop += element.offsetTop
-          element = element.offsetParent as HTMLElement | null
-        }
+          // Collapse all other expanded sections
+          childrenMap.forEach((childLinks, parentLink) => {
+            if (parentLink !== link && parentLink.classList.contains('toc-expanded')) {
+              parentLink.classList.remove('toc-expanded')
+              childLinks.forEach(child => child.classList.add('toc-collapsed'))
+            }
+          })
 
-        // Calculate position: heading at 30% from top of viewport
-        const viewportHeight = main.clientHeight
-        const offset = viewportHeight * 0.3
-        const targetScroll = headingTop - offset
+          // Toggle current section
+          if (isExpanded) {
+            link.classList.remove('toc-expanded')
+            children.forEach(child => child.classList.add('toc-collapsed'))
+          } else {
+            link.classList.add('toc-expanded')
+            children.forEach(child => child.classList.remove('toc-collapsed'))
+          }
 
-        main.scrollTo({ top: targetScroll, behavior: 'smooth' })
-      })
+          // Scroll to heading
+          const main = document.querySelector('main')
+          if (!main) return
+
+          let headingTop = 0
+          let element: HTMLElement | null = heading as HTMLElement
+          while (element && element !== main) {
+            headingTop += element.offsetTop
+            element = element.offsetParent as HTMLElement | null
+          }
+
+          const viewportHeight = main.clientHeight
+          const offset = viewportHeight * 0.3
+          const targetScroll = headingTop - offset
+
+          main.scrollTo({ top: targetScroll, behavior: 'smooth' })
+        })
+      } else {
+        // h3/h4 just scroll
+        link.addEventListener('click', (e) => {
+          e.preventDefault()
+          const main = document.querySelector('main')
+          if (!main) return
+
+          let headingTop = 0
+          let element: HTMLElement | null = heading as HTMLElement
+          while (element && element !== main) {
+            headingTop += element.offsetTop
+            element = element.offsetParent as HTMLElement | null
+          }
+
+          const viewportHeight = main.clientHeight
+          const offset = viewportHeight * 0.3
+          const targetScroll = headingTop - offset
+
+          main.scrollTo({ top: targetScroll, behavior: 'smooth' })
+        })
+      }
     })
 
     // Update progress on scroll
     function updateProgress() {
       const main = document.querySelector('main')
-      if (!main)
+      if (!main) 
 return
 
       const scrollTop = main.scrollTop
       const scrollHeight = main.scrollHeight - main.clientHeight
       const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0
 
-      if (progressBar) progressBar.style.width = `${progress}%`
-      if (progressText) progressText.textContent = `${Math.round(progress)}%`
+      if (progressBar)
+progressBar.style.width = `${progress}%`
+      if (progressText)
+progressText.textContent = `${Math.round(progress)}%`
 
       // Update active TOC item
       let activeIndex = -1
@@ -258,37 +316,84 @@ return
     color: var(--uno-colors-purple-400);
   }
 
-  :global(.toc-level-1) {
+  :global(.toc-link.toc-level-1) {
     font-weight: 500;
   }
 
-  :global(.toc-level-2) {
-    padding-left: 1rem;
+  :global(.toc-link.toc-level-2) {
     color: var(--uno-colors-stone-500);
   }
 
-  :global(.dark .toc-level-2) {
+  :global(.dark .toc-link.toc-level-2) {
     color: var(--uno-colors-stone-500);
   }
 
-  :global(.toc-level-3) {
-    padding-left: 1.5rem;
+  :global(.toc-link.toc-level-3) {
+    padding-left: 1.25rem;
     font-size: 0.8125rem;
     color: var(--uno-colors-stone-400);
   }
 
-  :global(.dark .toc-level-3) {
+  :global(.toc-link.toc-level-3)::before {
+    content: '└';
+    margin-right: 0.25rem;
+    color: var(--uno-colors-stone-300);
+  }
+
+  :global(.dark .toc-link.toc-level-3)::before {
+    color: var(--uno-colors-stone-600);
+  }
+
+  :global(.dark .toc-link.toc-level-3) {
     color: var(--uno-colors-stone-500);
   }
 
-  :global(.toc-level-4) {
-    padding-left: 2rem;
+  :global(.toc-link.toc-level-4) {
+    padding-left: 1.75rem;
     font-size: 0.75rem;
     color: var(--uno-colors-stone-400);
   }
 
-  :global(.dark .toc-level-4) {
+  :global(.toc-link.toc-level-4)::before {
+    content: '└';
+    margin-right: 0.25rem;
+    color: var(--uno-colors-stone-300);
+  }
+
+  :global(.dark .toc-link.toc-level-4)::before {
     color: var(--uno-colors-stone-600);
+  }
+
+  :global(.dark .toc-link.toc-level-4) {
+    color: var(--uno-colors-stone-600);
+  }
+
+  /* Collapsible children */
+  :global(.toc-collapsed) {
+    display: none;
+  }
+
+  :global(.toc-link.toc-level-1),
+  :global(.toc-link.toc-level-2) {
+    cursor: pointer;
+  }
+
+  :global(.toc-has-children)::after {
+    content: '';
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 0.5rem;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 4px solid currentColor;
+    opacity: 0.4;
+    transition: transform 0.2s ease;
+  }
+
+  :global(.toc-expanded)::after {
+    transform: rotate(90deg);
+    opacity: 0.6;
   }
 
   /* Custom scrollbar for TOC */

@@ -60,3 +60,68 @@ html {
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* Details/Summary collapsible */
+details {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  padding: 1rem;
+  margin: 0.5rem 0;
+}
+
+details:hover {
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.dark details:hover {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+details summary {
+  padding: 0.5rem 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  list-style: none;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details[open] > div,
+details[open] > p {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* YouTube embed styling */
+lite-youtube {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+lite-youtube::before {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, transparent 50%) !important;
+}
+
+lite-youtube:hover::before {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, transparent 60%) !important;
+}
+
+lite-youtube .lyt-playbtn {
+  background-color: transparent !important;
+}
+
+lite-youtube .lyt-playbtn:hover {
+  background-color: transparent !important;
+}

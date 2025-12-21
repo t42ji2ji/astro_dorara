@@ -12,15 +12,17 @@ const { translate: t } = Astro.locals
 const categoryList = post.data.categories ?? []
 const isDraft = post.data.draft === true
 const isEssay = categoryList.some((cat) => cat.toLowerCase() === 'essays')
+const isNotes = categoryList.some((cat) => cat.toLowerCase() === 'notes')
 ---
 
 <header flex="~ col gap-2 ">
   <div flex="~ row gap-2 justify-between">
     {
-      (isDraft || isEssay) && (
+      (isDraft || isEssay || isNotes) && (
         <div class="flex gap-2 text-sm">
           {isDraft && <span class="text-amber-500 dark:text-amber-400">[草稿]</span>}
           {isEssay && <span>[Essay]</span>}
+          {isNotes && <span class="text-stone-500">[筆記]</span>}
         </div>
       )
     }
