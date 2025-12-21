@@ -48,7 +48,7 @@
     "@types/node": "^22.16.4",
     "@types/sanitize-html": "^2.16.0",
     "@types/three": "^0.181.0",
-    "@unocss/eslint-plugin": "^66.3.3",
+    "@unocss/eslint-plugin": "^66.5.10",
     "@unocss/preset-attributify": "^66.3.3",
     "@unocss/reset": "^66.3.3",
     "@unocss/transformer-directives": "^66.3.3",
