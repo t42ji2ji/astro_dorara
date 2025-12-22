@@ -1,0 +1,408 @@
+---
+import type { ImageMetadata } from 'astro'
+
+interface Props {
+  src: string | ImageMetadata
+  alt: string
+  caption?: string
+  class?: string
+  /** 掃描線強度 0-1 */
+  scanlineIntensity?: number
+  /** 色差強度 0-1 */
+  chromaticAberration?: number
+  /** 雜訊強度 0-1 */
+  noiseIntensity?: number
+  /** 畫面彎曲強度 0-1 */
+  curvature?: number
+  /** 是否有閃爍效果 */
+  flicker?: boolean
+  /** 訊號干擾強度 0-1 (VHS 風格的扭曲) */
+  glitchIntensity?: number
+}
+
+const {
+  src,
+  alt,
+  caption,
+  class: className,
+  scanlineIntensity = 0.5,
+  chromaticAberration = 0.5,
+  noiseIntensity = 0.15,
+  curvature = 0.2,
+  flicker = false,
+  glitchIntensity = 0.3,
+} = Astro.props
+
+const displayCaption = caption ?? alt
+const imageSrc = typeof src === 'string' ? src : src.src
+---
+
+<div
+  class:list={['crt-image', className]}
+  data-src={imageSrc}
+  data-scanline={scanlineIntensity}
+  data-chromatic={chromaticAberration}
+  data-noise={noiseIntensity}
+  data-curvature={curvature}
+  data-flicker={flicker}
+  data-glitch={glitchIntensity}
+>
+  <div class="crt-container">
+    <canvas class="crt-canvas"></canvas>
+    <div class="crt-overlay"></div>
+  </div>
+  <noscript>
+    <img src={imageSrc} alt={alt} />
+  </noscript>
+  {displayCaption && <p class="caption">{displayCaption}</p>}
+</div>
+
+<style>
+  .crt-image {
+    margin: 1.5rem 0;
+  }
+
+  .crt-container {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #111;
+  }
+
+  .crt-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .crt-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: 8px;
+    box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.4);
+  }
+
+  .caption {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-muted, #666);
+  }
+</style>
+
+<script>
+  import * as THREE from 'three'
+
+  const vertexShader = `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `
+
+  const fragmentShader = `
+    uniform sampler2D uTexture;
+    uniform float uTime;
+    uniform float uScanlineIntensity;
+    uniform float uChromaticAberration;
+    uniform float uNoiseIntensity;
+    uniform float uCurvature;
+    uniform float uGlitchIntensity;
+    uniform bool uFlicker;
+    uniform vec2 uResolution;
+    varying vec2 vUv;
+
+    // 隨機雜訊
+    float random(vec2 st) {
+      return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+    }
+
+    // 平滑雜訊
+    float noise(vec2 st) {
+      vec2 i = floor(st);
+      vec2 f = fract(st);
+      float a = random(i);
+      float b = random(i + vec2(1.0, 0.0));
+      float c = random(i + vec2(0.0, 1.0));
+      float d = random(i + vec2(1.0, 1.0));
+      vec2 u = f * f * (3.0 - 2.0 * f);
+      return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+    }
+
+    // 桶形扭曲
+    vec2 barrelDistortion(vec2 uv, float amt) {
+      vec2 cc = uv - 0.5;
+      float dist = dot(cc, cc);
+      return uv + cc * dist * amt;
+    }
+
+    void main() {
+      vec2 uv = vUv;
+      float time = uTime;
+
+      // ===== VHS 訊號干擾效果 =====
+
+      // 1. 大型水平撕裂 (偶爾發生)
+      float tearTrigger = step(0.97, random(vec2(floor(time * 2.0), 0.0))) * uGlitchIntensity;
+      if (tearTrigger > 0.0) {
+        float tearY = random(vec2(floor(time * 2.0), 1.0));
+        float tearHeight = 0.05 + random(vec2(floor(time * 2.0), 2.0)) * 0.15;
+        if (uv.y > tearY && uv.y < tearY + tearHeight) {
+          uv.x += (random(vec2(floor(time * 30.0), uv.y * 10.0)) - 0.5) * 0.15 * uGlitchIntensity;
+        }
+      }
+
+      // 2. 畫面垂直滾動/跳動 (偶爾發生)
+      float rollTrigger = step(0.985, random(vec2(floor(time * 1.5), 3.0))) * uGlitchIntensity;
+      if (rollTrigger > 0.0) {
+        float rollAmount = (random(vec2(floor(time * 1.5), 4.0)) - 0.5) * 0.1;
+        uv.y = fract(uv.y + rollAmount);
+      }
+
+      // 3. 水平抖動 (持續性的微小抖動)
+      float jitter = (noise(vec2(time * 50.0, uv.y * 100.0)) - 0.5) * 0.003 * uGlitchIntensity;
+      uv.x += jitter;
+
+      // 4. 隨機區塊位移 (glitch blocks)
+      float blockTrigger = step(0.98, random(vec2(floor(time * 8.0), 5.0))) * uGlitchIntensity;
+      if (blockTrigger > 0.0) {
+        float blockY = floor(uv.y * 20.0) / 20.0;
+        float blockRand = random(vec2(floor(time * 8.0), blockY));
+        if (blockRand > 0.7) {
+          uv.x += (blockRand - 0.7) * 0.3 * uGlitchIntensity;
+        }
+      }
+
+      // 桶形扭曲 (CRT 螢幕彎曲)
+      uv = barrelDistortion(uv, uCurvature * 0.5);
+
+      // 檢查是否超出邊界
+      if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) {
+        gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+        return;
+      }
+
+      // 6. 動態色差 (glitch 時加強)
+      float dynamicChroma = uChromaticAberration;
+      float chromaGlitch = step(0.96, random(vec2(floor(time * 15.0), 6.0))) * uGlitchIntensity;
+      if (chromaGlitch > 0.0) {
+        dynamicChroma += random(vec2(floor(time * 15.0), 7.0)) * 2.0 * uGlitchIntensity;
+      }
+
+      // 色差偏移
+      float chromaOffset = dynamicChroma * 0.005;
+      float r = texture2D(uTexture, vec2(uv.x - chromaOffset, uv.y)).r;
+      float g = texture2D(uTexture, uv).g;
+      float b = texture2D(uTexture, vec2(uv.x + chromaOffset, uv.y)).b;
+      vec3 color = vec3(r, g, b);
+
+      // 7. 雪花爆發 (突然大量雜訊)
+      float snowTrigger = step(0.99, random(vec2(floor(time * 3.0), 8.0))) * uGlitchIntensity;
+      if (snowTrigger > 0.0) {
+        float snow = random(uv + time);
+        color = mix(color, vec3(snow), 0.5 * uGlitchIntensity);
+      }
+
+      // 掃描線
+      float scanline = sin(uv.y * uResolution.y * 2.0) * 0.5 + 0.5;
+      scanline = pow(scanline, 1.5);
+      color *= 1.0 - (scanline * uScanlineIntensity * 0.3);
+
+      // RGB 磷光點模擬
+      float pixelX = mod(uv.x * uResolution.x, 3.0);
+      if (pixelX < 1.0) {
+        color.r *= 1.1;
+        color.gb *= 0.95;
+      } else if (pixelX < 2.0) {
+        color.g *= 1.1;
+        color.rb *= 0.95;
+      } else {
+        color.b *= 1.1;
+        color.rg *= 0.95;
+      }
+
+      // 閃爍效果
+      if (uFlicker) {
+        float flicker = 0.97 + random(vec2(time * 0.1, 0.0)) * 0.06;
+        color *= flicker;
+      }
+
+      // 靜態雜訊
+      float staticNoise = (random(uv + time) - 0.5) * uNoiseIntensity;
+      color += staticNoise;
+
+      // 7. 水平干擾線 (VHS tracking lines) - 偶爾出現
+      float trackingTrigger = step(0.97, random(vec2(floor(time * 2.0), 9.0)));
+      if (trackingTrigger > 0.0) {
+        float trackingLine = step(0.99, random(vec2(floor(time * 15.0), floor(uv.y * 30.0))));
+        color += trackingLine * 0.2 * uGlitchIntensity;
+      }
+
+      // 邊緣暗角
+      float vignette = 1.0 - length((vUv - 0.5) * 1.2);
+      vignette = smoothstep(0.0, 0.7, vignette);
+      color *= vignette * 0.3 + 0.7;
+
+      // 輕微的綠色色調（老舊 CRT 特徵）
+      color.g *= 1.02;
+
+      gl_FragColor = vec4(color, 1.0);
+    }
+  `
+
+  interface CRTConfig {
+    scanlineIntensity: number
+    chromaticAberration: number
+    noiseIntensity: number
+    curvature: number
+    flicker: boolean
+    glitchIntensity: number
+  }
+
+  class CRTEffect {
+    container: HTMLElement
+    canvas: HTMLCanvasElement
+    config: CRTConfig
+    renderer!: THREE.WebGLRenderer
+    scene!: THREE.Scene
+    camera!: THREE.OrthographicCamera
+    material!: THREE.ShaderMaterial
+    raf: number | null = null
+    isInView = false
+    startTime = 0
+
+    constructor(container: HTMLElement) {
+      this.container = container
+      this.canvas = container.querySelector('.crt-canvas')!
+      this.config = {
+        scanlineIntensity: Number.parseFloat(container.dataset.scanline || '0.3'),
+        chromaticAberration: Number.parseFloat(container.dataset.chromatic || '0.5'),
+        noiseIntensity: Number.parseFloat(container.dataset.noise || '0.15'),
+        curvature: Number.parseFloat(container.dataset.curvature || '0.3'),
+        flicker: container.dataset.flicker !== 'false',
+        glitchIntensity: Number.parseFloat(container.dataset.glitch || '0.3'),
+      }
+      this.startTime = performance.now()
+      this.init()
+    }
+
+    async init() {
+      const src = this.container.dataset.src || ''
+
+      // 載入圖片
+      const loader = new THREE.TextureLoader()
+      const texture = await new Promise<THREE.Texture>((resolve) => {
+        loader.load(src, resolve)
+      })
+
+      const img = texture.image as HTMLImageElement
+      const aspect = img.width / img.height
+
+      // 設定 renderer
+      this.renderer = new THREE.WebGLRenderer({
+        canvas: this.canvas,
+        antialias: false,
+      })
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+      // 設定場景
+      this.scene = new THREE.Scene()
+      this.camera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, 0.1, 10)
+      this.camera.position.z = 1
+
+      // 設定 shader material
+      this.material = new THREE.ShaderMaterial({
+        vertexShader,
+        fragmentShader,
+        uniforms: {
+          uTexture: { value: texture },
+          uTime: { value: 0 },
+          uScanlineIntensity: { value: this.config.scanlineIntensity },
+          uChromaticAberration: { value: this.config.chromaticAberration },
+          uNoiseIntensity: { value: this.config.noiseIntensity },
+          uCurvature: { value: this.config.curvature },
+          uGlitchIntensity: { value: this.config.glitchIntensity },
+          uFlicker: { value: this.config.flicker },
+          uResolution: { value: new THREE.Vector2(img.width, img.height) },
+        },
+      })
+
+      // 建立 mesh
+      const geometry = new THREE.PlaneGeometry(1, 1)
+      const mesh = new THREE.Mesh(geometry, this.material)
+      this.scene.add(mesh)
+
+      // 設定大小
+      this.resize(aspect)
+
+      // 設定事件
+      window.addEventListener('resize', () => this.resize(aspect))
+
+      // 開始觀察可見性
+      this.setupObserver()
+    }
+
+    resize(aspect: number) {
+      const width = this.container.clientWidth
+      const height = width / aspect
+      this.canvas.style.aspectRatio = `${aspect}`
+      this.renderer.setSize(width, height)
+    }
+
+    setupObserver() {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            this.isInView = entry.isIntersecting
+            if (this.isInView) {
+              this.startAnimation()
+            }
+ else {
+              this.stopAnimation()
+            }
+          })
+        },
+        { threshold: 0.1 },
+      )
+      observer.observe(this.container)
+    }
+
+    startAnimation() {
+      if (!this.raf) {
+        this.animate()
+      }
+    }
+
+    stopAnimation() {
+      if (this.raf) {
+        cancelAnimationFrame(this.raf)
+        this.raf = null
+      }
+    }
+
+    animate = () => {
+      const time = (performance.now() - this.startTime) * 0.001
+      this.material.uniforms.uTime.value = time
+      this.renderer.render(this.scene, this.camera)
+      this.raf = requestAnimationFrame(this.animate)
+    }
+  }
+
+  // 初始化所有 CRT 組件
+  function initCRTImages() {
+    document.querySelectorAll<HTMLElement>('.crt-image').forEach((el) => {
+      if (!el.dataset.initialized) {
+        el.dataset.initialized = 'true'
+        new CRTEffect(el)
+      }
+    })
+  }
+
+  // 初始載入
+  initCRTImages()
+
+  // Swup 頁面轉換後重新初始化
+  document.addEventListener('swup:contentReplaced', initCRTImages)
+</script>
