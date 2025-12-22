@@ -2,13 +2,13 @@
 import { Image } from 'astro:assets'
 import type { Post } from '~/types'
 import { formatDate, getPostDescription } from '~/utils'
+import PostPreviewCard from './PostPreviewCard.astro'
 
 interface Props {
   post: Post
 }
 
 const { post } = Astro.props
-const { translate: t } = Astro.locals
 
 const categoryList = post.data.categories ?? []
 const isDraft = post.data.draft === true
@@ -17,8 +17,8 @@ const isNotes = categoryList.some((cat) => cat.toLowerCase() === 'notes')
 const banner = post.data.banner
 ---
 
-<header>
-  <a class="flex gap-4 not-prose not-underline-hover" href={`/posts/${post.id}/`}>
+<header class="post-item-wrapper">
+  <a class="flex gap-4 not-prose not-underline-hover post-link" href={`/posts/${post.id}/`}>
     <div class="flex flex-col gap-1 flex-1 min-w-0 md:gap-2">
       <h1 class="post-title">
         {post.data.title}
@@ -33,10 +33,22 @@ const banner = post.data.banner
         </span>
       </div>
     </div>
-    {
-      banner
-        ? <Image src={banner} alt={post.data.title} class="shrink-0 rounded w-[80px] h-[60px] md:w-[120px] md:h-[80px]" />
-        : <div class="shrink-0 w-[80px] h-[60px] md:w-[120px] md:h-[80px]" />
-    }
+    <!-- 手機版顯示縮圖，桌面版隱藏（因為 hover 卡片有大圖） -->
+    <div class="post-thumbnail md:hidden">
+      {
+        banner
+          ? <Image src={banner} alt={post.data.title} class="shrink-0 rounded w-[80px] h-[60px]" />
+          : <div class="shrink-0 w-[80px] h-[60px]" />
+      }
+    </div>
   </a>
+
+  <!-- 桌面版 hover 預覽卡片 -->
+  <PostPreviewCard post={post} />
 </header>
+
+<style>
+  .post-item-wrapper {
+    position: relative;
+  }
+</style>
