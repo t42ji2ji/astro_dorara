@@ -1,8 +1,6 @@
 ---
 import { Image } from 'astro:assets'
 import type { Post } from '~/types'
-import MarkdownIt from 'markdown-it'
-import sanitizeHtml from 'sanitize-html'
 
 interface Props {
   post: Post
@@ -11,27 +9,41 @@ interface Props {
 const { post } = Astro.props
 const banner = post.data.banner
 
-// 取得文章前言內容
-const parser = new MarkdownIt()
+// 取得文章前言內容（直接處理 markdown 原文，保留段落結構）
 function getPreviewContent(post: Post): string {
   let body = post.body || ''
 
-  // 移除 MDX import 語句
+  // 移除 MDX import/export 語句
   body = body.replace(/^import\s+.*$/gm, '')
-  // 移除 export 語句
   body = body.replace(/^export\s+.*$/gm, '')
   // 移除 JSX/MDX 組件標籤
   body = body.replace(/<[A-Z][a-zA-Z]*[^>]*\/>/g, '')
   body = body.replace(/<[A-Z][a-zA-Z]*[^>]*>[\s\S]*?<\/[A-Z][a-zA-Z]*>/g, '')
-  // 移除 frontmatter（如果有的話）
+  // 移除 frontmatter
   body = body.replace(/^---[\s\S]*?---/m, '')
+  // 移除 markdown 標題
+  body = body.replace(/^#{1,6}\s+.*$/gm, '')
+  // 移除 blockquote
+  body = body.replace(/^>\s+.*$/gm, '')
+  // 移除水平線
+  body = body.replace(/^---+$/gm, '')
+  // 移除 markdown 連結，保留文字
+  body = body.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+  // 移除粗體/斜體標記
+  body = body.replace(/\*\*([^*]+)\*\*/g, '$1')
+  body = body.replace(/\*([^*]+)\*/g, '$1')
+  // 移除 inline code
+  body = body.replace(/`([^`]+)`/g, '$1')
 
-  const html = parser.render(body)
-  const sanitized = sanitizeHtml(html, { allowedTags: [] })
-  // 取前 300 字作為預覽，並清理多餘空白
-  const cleaned = sanitized.replace(/\s+/g, ' ').trim()
-  const trimmed = cleaned.slice(0, 300)
-  return trimmed + (cleaned.length > 300 ? '...' : '')
+  // 保留段落間的空行
+  const cleaned = body
+    .split(/\n{2,}/)
+    .map(p => p.replace(/\s+/g, ' ').trim())
+    .filter(p => p.length > 0)
+    .join('\n\n')
+
+  const trimmed = cleaned.slice(0, 200)
+  return trimmed + (cleaned.length > 200 ? '...' : '')
 }
 
 const previewContent = getPreviewContent(post)
@@ -136,6 +148,7 @@ const previewContent = getPreviewContent(post)
     font-size: 0.875rem;
     line-height: 1.7;
     color: #57534e;
+    white-space: pre-line;
   }
 
   :global(.dark) .preview-text {
