@@ -36,9 +36,11 @@ const banner = post.data.banner
     <!-- 手機版顯示縮圖，桌面版隱藏（因為 hover 卡片有大圖） -->
     <div class="post-thumbnail md:hidden">
       {
-        banner
-          ? <Image src={banner} alt={post.data.title} class="shrink-0 rounded w-[80px] h-[60px]" />
-          : <div class="shrink-0 w-[80px] h-[60px]" />
+        banner ? (
+          <Image src={banner} alt={post.data.title} class="shrink-0 rounded w-[80px] h-[60px]" />
+        ) : (
+          <div class="shrink-0 w-[80px] h-[60px]" />
+        )
       }
     </div>
   </a>

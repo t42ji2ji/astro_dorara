@@ -195,7 +195,7 @@ import InteractiveContainer from '../InteractiveContainer.astro'
 <script>
   function initScapegoatTrial() {
     const container = document.getElementById('scapegoat-trial')
-    if (!container) 
+    if (!container)
 return
 
     // Elements
@@ -246,7 +246,7 @@ return
     // Add a new reaction (slide down effect in fixed container)
     const lineHeight = 24 // px per line
     function addReaction() {
-      if (!reactionsContainer) 
+      if (!reactionsContainer)
 return
 
       // Loop back if we've used all reactions
@@ -269,7 +269,7 @@ return
       // Create new item at top
       const div = document.createElement('div')
       div.className
-       = 'reaction-item absolute left-0 right-0 text-stone-600 dark:text-stone-400 transition-all duration-300'
+        = 'reaction-item absolute left-0 right-0 text-stone-600 dark:text-stone-400 transition-all duration-300'
       div.style.top = '0px'
       div.style.opacity = '0'
       div.innerHTML = `「${reaction.text}」<span class="text-red-400 ml-1">+${reaction.votes}</span>`
@@ -320,7 +320,7 @@ return
       startTime = Date.now()
       timerInterval = window.setInterval(() => {
         const elapsed = Math.floor((Date.now() - startTime) / 1000)
-        if (timerValue) 
+        if (timerValue)
 timerValue.textContent = elapsed.toString()
 
         // Update progress bar
@@ -356,7 +356,7 @@ timerValue.textContent = elapsed.toString()
       const elapsed = Math.floor((Date.now() - startTime) / 1000)
 
       // Update reveal stats
-      if (revealTime) 
+      if (revealTime)
 revealTime.textContent = elapsed.toString()
       if (revealContext) {
         revealContext.textContent = checkedContext ? '是' : '否'
@@ -431,7 +431,7 @@ revealTime.textContent = elapsed.toString()
         timerValue.textContent = '0'
         timerValue.classList.remove('text-orange-500', 'text-red-500')
       }
-      if (timerBar) 
+      if (timerBar)
 timerBar.style.width = '0%'
 
       // Reset context button

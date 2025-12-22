@@ -17,7 +17,8 @@
 
     function updateViewCount(finalCount: number) {
       const el = document.querySelector('.views-count') as HTMLElement & { update?: (value: number) => void }
-      if (!el || !el.update) return
+      if (!el || !el.update) 
+return
 
       // 隨機數字跳動後再顯示正確數字
       let iterations = 0

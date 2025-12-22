@@ -10,7 +10,6 @@ import InteractiveContainer from '../InteractiveContainer.astro'
   <div class="mimetic-stage">
     <!-- Two parallel scenarios -->
     <div class="grid md:grid-cols-2 gap-6">
-
       <!-- Scenario A: Alone -->
       <div class="scenario-box p-4">
         <div class="text-xs text-stone-400 mb-4 text-center">獨自一人</div>
@@ -57,7 +56,10 @@ import InteractiveContainer from '../InteractiveContainer.astro'
               <span class="text-xl">👜</span>
             </div>
             <!-- Desire indicator from mediator -->
-            <div class="absolute -top-1 -right-1 text-xs opacity-0 scale-0 transition-all duration-300" id="mediator-want">
+            <div
+              class="absolute -top-1 -right-1 text-xs opacity-0 scale-0 transition-all duration-300"
+              id="mediator-want"
+            >
               ❤️
             </div>
           </div>
@@ -81,7 +83,12 @@ import InteractiveContainer from '../InteractiveContainer.astro'
     <!-- Timeline indicator -->
     <div class="mt-6 relative">
       <div class="h-px bg-stone-200 dark:bg-stone-700 overflow-hidden">
-        <div class="h-full bg-stone-400 dark:bg-stone-500 transition-all duration-1000 ease-linear" id="timeline-bar" style="width: 0%"></div>
+        <div
+          class="h-full bg-stone-400 dark:bg-stone-500 transition-all duration-1000 ease-linear"
+          id="timeline-bar"
+          style="width: 0%"
+        >
+        </div>
       </div>
       <div class="mt-2 text-xs text-stone-400 text-center" id="phase-label">觀察物品</div>
     </div>
@@ -89,14 +96,17 @@ import InteractiveContainer from '../InteractiveContainer.astro'
     <!-- Insight -->
     <div class="mt-6 opacity-0 transition-all duration-500" id="insight-box">
       <p class="text-sm text-stone-500 dark:text-stone-400 text-center">
-        同樣的物品，同樣的人。<br>
+        同樣的物品，同樣的人。<br />
         唯一的差別是<span class="text-stone-700 dark:text-stone-300">別人的慾望</span>。
       </p>
     </div>
 
     <!-- Controls -->
     <div class="mt-4 text-center">
-      <button class="text-xs text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 transition-colors" id="replay-btn">
+      <button
+        class="text-xs text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 transition-colors"
+        id="replay-btn"
+      >
         重播
       </button>
     </div>
@@ -104,98 +114,123 @@ import InteractiveContainer from '../InteractiveContainer.astro'
 </InteractiveContainer>
 
 <script>
-function initMimeticDesire() {
-  const container = document.getElementById('mimetic-desire-demo')
-  if (!container) return
+  function initMimeticDesire() {
+    const container = document.getElementById('mimetic-desire-demo')
+    if (!container) 
+return
 
-  // Elements
-  const thoughtA = container.querySelector('#thought-a')
-  const thoughtB = container.querySelector('#thought-b')
-  const mediator = container.querySelector('#mediator')
-  const mediatorWant = container.querySelector('#mediator-want')
-  const personAStatus = container.querySelector('#person-a-status')
-  const personBStatus = container.querySelector('#person-b-status')
-  const timelineBar = container.querySelector('#timeline-bar') as HTMLElement
-  const phaseLabel = container.querySelector('#phase-label')
-  const insightBox = container.querySelector('#insight-box')
-  const replayBtn = container.querySelector('#replay-btn')
+    // Elements
+    const thoughtA = container.querySelector('#thought-a')
+    const thoughtB = container.querySelector('#thought-b')
+    const mediator = container.querySelector('#mediator')
+    const mediatorWant = container.querySelector('#mediator-want')
+    const personAStatus = container.querySelector('#person-a-status')
+    const personBStatus = container.querySelector('#person-b-status')
+    const timelineBar = container.querySelector('#timeline-bar') as HTMLElement
+    const phaseLabel = container.querySelector('#phase-label')
+    const insightBox = container.querySelector('#insight-box')
+    const replayBtn = container.querySelector('#replay-btn')
 
-  let animationTimeout: number[] = []
+    let animationTimeout: number[] = []
 
-  function clearAnimations() {
-    animationTimeout.forEach(t => clearTimeout(t))
-    animationTimeout = []
+    function clearAnimations() {
+      animationTimeout.forEach((t) => clearTimeout(t))
+      animationTimeout = []
+    }
+
+    function runAnimation() {
+      clearAnimations()
+
+      // Reset all states
+      thoughtA?.classList.add('opacity-0')
+      thoughtB?.classList.add('opacity-0')
+      mediator?.classList.add('opacity-0')
+      mediatorWant?.classList.add('opacity-0', 'scale-0')
+      mediatorWant?.classList.remove('opacity-100', 'scale-100')
+      insightBox?.classList.add('opacity-0')
+      if (timelineBar) 
+timelineBar.style.width = '0%'
+      if (personAStatus) 
+personAStatus.textContent = '看著...'
+      if (personBStatus) 
+personBStatus.textContent = '看著...'
+      if (phaseLabel) 
+phaseLabel.textContent = '觀察物品'
+
+      // Phase 1: Both looking (0-1.5s)
+      animationTimeout.push(
+        window.setTimeout(() => {
+          if (timelineBar) 
+timelineBar.style.width = '25%'
+        }, 500),
+      )
+
+      // Phase 2: A indifferent, mediator appears (1.5-3s)
+      animationTimeout.push(
+        window.setTimeout(() => {
+          if (timelineBar) 
+timelineBar.style.width = '50%'
+          if (phaseLabel) 
+phaseLabel.textContent = '中介者出現'
+
+          thoughtA?.classList.remove('opacity-0')
+          if (personAStatus) 
+personAStatus.textContent = '無感'
+
+          mediator?.classList.remove('opacity-0')
+        }, 1500),
+      )
+
+      // Phase 3: Mediator shows desire (3-4s)
+      animationTimeout.push(
+        window.setTimeout(() => {
+          if (timelineBar) 
+timelineBar.style.width = '75%'
+          if (phaseLabel) 
+phaseLabel.textContent = '他想要'
+
+          mediatorWant?.classList.remove('opacity-0', 'scale-0')
+          mediatorWant?.classList.add('opacity-100', 'scale-100')
+
+          if (personBStatus) 
+personBStatus.textContent = '...'
+        }, 3000),
+      )
+
+      // Phase 4: B catches desire (4-5s)
+      animationTimeout.push(
+        window.setTimeout(() => {
+          if (timelineBar) 
+timelineBar.style.width = '100%'
+          if (phaseLabel) 
+phaseLabel.textContent = '慾望傳染'
+
+          thoughtB?.classList.remove('opacity-0')
+          if (personBStatus) 
+personBStatus.textContent = '想要'
+        }, 4000),
+      )
+
+      // Phase 5: Show insight (5s)
+      animationTimeout.push(
+        window.setTimeout(() => {
+          insightBox?.classList.remove('opacity-0')
+        }, 5000),
+      )
+    }
+
+    // Auto-start animation
+    runAnimation()
+
+    // Replay button
+    replayBtn?.addEventListener('click', runAnimation)
+
+    // Cleanup on page transition
+    const cleanup = () => clearAnimations()
+    document.addEventListener('swup:willReplaceContent', cleanup, { once: true })
   }
 
-  function runAnimation() {
-    clearAnimations()
-
-    // Reset all states
-    thoughtA?.classList.add('opacity-0')
-    thoughtB?.classList.add('opacity-0')
-    mediator?.classList.add('opacity-0')
-    mediatorWant?.classList.add('opacity-0', 'scale-0')
-    mediatorWant?.classList.remove('opacity-100', 'scale-100')
-    insightBox?.classList.add('opacity-0')
-    if (timelineBar) timelineBar.style.width = '0%'
-    if (personAStatus) personAStatus.textContent = '看著...'
-    if (personBStatus) personBStatus.textContent = '看著...'
-    if (phaseLabel) phaseLabel.textContent = '觀察物品'
-
-    // Phase 1: Both looking (0-1.5s)
-    animationTimeout.push(window.setTimeout(() => {
-      if (timelineBar) timelineBar.style.width = '25%'
-    }, 500))
-
-    // Phase 2: A indifferent, mediator appears (1.5-3s)
-    animationTimeout.push(window.setTimeout(() => {
-      if (timelineBar) timelineBar.style.width = '50%'
-      if (phaseLabel) phaseLabel.textContent = '中介者出現'
-
-      thoughtA?.classList.remove('opacity-0')
-      if (personAStatus) personAStatus.textContent = '無感'
-
-      mediator?.classList.remove('opacity-0')
-    }, 1500))
-
-    // Phase 3: Mediator shows desire (3-4s)
-    animationTimeout.push(window.setTimeout(() => {
-      if (timelineBar) timelineBar.style.width = '75%'
-      if (phaseLabel) phaseLabel.textContent = '他想要'
-
-      mediatorWant?.classList.remove('opacity-0', 'scale-0')
-      mediatorWant?.classList.add('opacity-100', 'scale-100')
-
-      if (personBStatus) personBStatus.textContent = '...'
-    }, 3000))
-
-    // Phase 4: B catches desire (4-5s)
-    animationTimeout.push(window.setTimeout(() => {
-      if (timelineBar) timelineBar.style.width = '100%'
-      if (phaseLabel) phaseLabel.textContent = '慾望傳染'
-
-      thoughtB?.classList.remove('opacity-0')
-      if (personBStatus) personBStatus.textContent = '想要'
-    }, 4000))
-
-    // Phase 5: Show insight (5s)
-    animationTimeout.push(window.setTimeout(() => {
-      insightBox?.classList.remove('opacity-0')
-    }, 5000))
-  }
-
-  // Auto-start animation
-  runAnimation()
-
-  // Replay button
-  replayBtn?.addEventListener('click', runAnimation)
-
-  // Cleanup on page transition
-  const cleanup = () => clearAnimations()
-  document.addEventListener('swup:willReplaceContent', cleanup, { once: true })
-}
-
-// Initialize
-initMimeticDesire()
-document.addEventListener('swup:contentReplaced', initMimeticDesire)
+  // Initialize
+  initMimeticDesire()
+  document.addEventListener('swup:contentReplaced', initMimeticDesire)
 </script>

@@ -16,10 +16,12 @@
     const toggle = document.getElementById('theme-toggle')
     const icon = document.getElementById('theme-icon')
 
-    if (!toggle || !icon) return
+    if (!toggle || !icon) 
+return
 
     function updateIcon() {
-      if (!icon) return
+      if (!icon) 
+return
 
       const isDark = document.documentElement.classList.contains('dark')
       // Show the icon for what it will become on click

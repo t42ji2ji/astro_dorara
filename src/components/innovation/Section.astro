@@ -1,13 +1,19 @@
 ---
 interface Props {
-  class?: string;
-  id?: string;
+  class?: string
+  id?: string
 }
 
-const { class: className, id } = Astro.props;
+const { class: className, id } = Astro.props
 ---
 
-<section id={id} class:list={["relative z-10 py-24 px-6 md:px-12 max-w-7xl mx-auto opacity-0 translate-y-10 transition-all duration-1000 ease-out reveal-section", className]}>
+<section
+  id={id}
+  class:list={[
+    'relative z-10 py-24 px-6 md:px-12 max-w-7xl mx-auto opacity-0 translate-y-10 transition-all duration-1000 ease-out reveal-section',
+    className,
+  ]}
+>
   <slot />
 </section>
 
@@ -15,20 +21,20 @@ const { class: className, id } = Astro.props;
   const observerOptions = {
     root: null,
     rootMargin: '0px',
-    threshold: 0.1
-  };
+    threshold: 0.1,
+  }
 
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        entry.target.classList.remove('opacity-0', 'translate-y-10');
-        entry.target.classList.add('opacity-100', 'translate-y-0');
-        observer.unobserve(entry.target);
+        entry.target.classList.remove('opacity-0', 'translate-y-10')
+        entry.target.classList.add('opacity-100', 'translate-y-0')
+        observer.unobserve(entry.target)
       }
-    });
-  }, observerOptions);
+    })
+  }, observerOptions)
 
-  document.querySelectorAll('.reveal-section').forEach(section => {
-    observer.observe(section);
-  });
+  document.querySelectorAll('.reveal-section').forEach((section) => {
+    observer.observe(section)
+  })
 </script>

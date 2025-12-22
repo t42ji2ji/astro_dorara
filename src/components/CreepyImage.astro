@@ -1,0 +1,187 @@
+---
+import type { ImageMetadata } from 'astro'
+
+interface Props {
+  /** 正常圖片 */
+  src: string | ImageMetadata
+  /** 嚇人圖片 */
+  scarySrc: string | ImageMetadata
+  alt: string
+  caption?: string
+  class?: string
+  /** 最少等待幾秒後才可能換圖 (預設 5) */
+  minDelay?: number
+  /** 最多等待幾秒後換圖 (預設 15) */
+  maxDelay?: number
+  /** 嚇人圖片顯示時間（毫秒，預設 150） */
+  scaryDuration?: number
+  /** 換圖機率 0-1 (預設 0.3) */
+  probability?: number
+}
+
+const {
+  src,
+  scarySrc,
+  alt,
+  caption,
+  class: className,
+  minDelay = 2,
+  maxDelay = 2.3,
+  scaryDuration = 200,
+  probability = 0.6,
+} = Astro.props
+
+const displayCaption = caption ?? alt
+const normalSrc = typeof src === 'string' ? src : src.src
+const scaryImgSrc = typeof scarySrc === 'string' ? scarySrc : scarySrc.src
+---
+
+<div
+  class:list={['creepy-image', className]}
+  data-normal-src={normalSrc}
+  data-scary-src={scaryImgSrc}
+  data-min-delay={minDelay}
+  data-max-delay={maxDelay}
+  data-scary-duration={scaryDuration}
+  data-probability={probability}
+>
+  <div class="creepy-container">
+    <img class="creepy-img" src={normalSrc} alt={alt} loading="lazy" />
+  </div>
+  {displayCaption && <p class="caption">{displayCaption}</p>}
+</div>
+
+<style>
+  .creepy-image {
+    margin: 1.5rem 0;
+  }
+
+  .creepy-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+
+  .creepy-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: none;
+  }
+
+  .caption {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-muted, #666);
+  }
+</style>
+
+<script>
+  class CreepyEffect {
+    container: HTMLElement
+    img: HTMLImageElement
+    normalSrc: string
+    scarySrc: string
+    minDelay: number
+    maxDelay: number
+    scaryDuration: number
+    probability: number
+    isInView = false
+    timeoutId: number | null = null
+    observer: IntersectionObserver | null = null
+
+    constructor(container: HTMLElement) {
+      this.container = container
+      this.img = container.querySelector('.creepy-img')!
+      this.normalSrc = container.dataset.normalSrc || ''
+      this.scarySrc = container.dataset.scarySrc || ''
+      this.minDelay = Number.parseFloat(container.dataset.minDelay || '5')
+      this.maxDelay = Number.parseFloat(container.dataset.maxDelay || '15')
+      this.scaryDuration = Number.parseFloat(container.dataset.scaryDuration || '150')
+      this.probability = Number.parseFloat(container.dataset.probability || '0.3')
+
+      // 預載嚇人圖片
+      const preload = new Image()
+      preload.src = this.scarySrc
+
+      this.init()
+    }
+
+    init() {
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            this.isInView = entry.isIntersecting
+            if (this.isInView) {
+              this.scheduleScarySwap()
+            }
+ else {
+              this.cancelSchedule()
+            }
+          })
+        },
+        { threshold: 0.2 },
+      )
+      this.observer.observe(this.container)
+    }
+
+    scheduleScarySwap() {
+      // 如果已經有排程就不重複
+      if (this.timeoutId) 
+return
+
+      // 隨機延遲
+      const delay = (this.minDelay + Math.random() * (this.maxDelay - this.minDelay)) * 1000
+
+      this.timeoutId = window.setTimeout(() => {
+        this.timeoutId = null
+        if (!this.isInView) 
+return
+
+        // 根據機率決定是否換圖
+        if (Math.random() < this.probability) {
+          this.showScary()
+        }
+ else {
+          // 沒觸發就重新排程
+          this.scheduleScarySwap()
+        }
+      }, delay)
+    }
+
+    cancelSchedule() {
+      if (this.timeoutId) {
+        clearTimeout(this.timeoutId)
+        this.timeoutId = null
+      }
+    }
+
+    showScary() {
+      // 換成嚇人圖片
+      this.img.src = this.scarySrc
+
+      // 一段時間後換回來
+      setTimeout(() => {
+        this.img.src = this.normalSrc
+
+        // 繼續排程下一次
+        if (this.isInView) {
+          this.scheduleScarySwap()
+        }
+      }, this.scaryDuration)
+    }
+  }
+
+  function initCreepyImages() {
+    document.querySelectorAll<HTMLElement>('.creepy-image').forEach((el) => {
+      if (!el.dataset.initialized) {
+        el.dataset.initialized = 'true'
+        new CreepyEffect(el)
+      }
+    })
+  }
+
+  initCreepyImages()
+  document.addEventListener('swup:contentReplaced', initCreepyImages)
+</script>

@@ -240,7 +240,8 @@ const webWorks = [
     const filterBtns = document.querySelectorAll('.filter-btn')
     const workCards = document.querySelectorAll('.web-work-card')
 
-    if (!filterBtns.length || !workCards.length) return
+    if (!filterBtns.length || !workCards.length) 
+return
 
     filterBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -259,7 +260,8 @@ const webWorks = [
   }
 
   function filterItems(category: string | null) {
-    if (!category) return
+    if (!category) 
+return
 
     const workCards = document.querySelectorAll('.web-work-card')
     workCards.forEach((card) => {

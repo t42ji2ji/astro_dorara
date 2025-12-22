@@ -15,7 +15,8 @@ async function getImageFiles(dir) {
       const fullPath = join(currentDir, entry.name)
       if (entry.isDirectory()) {
         await walk(fullPath)
-      } else if (IMAGE_EXTENSIONS.includes(extname(entry.name).toLowerCase())) {
+      }
+      else if (IMAGE_EXTENSIONS.includes(extname(entry.name).toLowerCase())) {
         files.push(fullPath)
       }
     }
@@ -62,9 +63,11 @@ async function processImage(filePath) {
       quality: 80,
       effort: 10,
     })
-  } else if (ext === '.jpg' || ext === '.jpeg') {
+  }
+  else if (ext === '.jpg' || ext === '.jpeg') {
     pipeline = pipeline.jpeg({ quality: 85, mozjpeg: true })
-  } else if (ext === '.webp') {
+  }
+  else if (ext === '.webp') {
     pipeline = pipeline.webp({ quality: 85, effort: 6 })
   }
 
@@ -88,10 +91,11 @@ async function processImage(filePath) {
       `✓ ${filePath}`,
       sizeInfo,
       `saved ${savings}%`,
-      `(${formatBytes(originalSize)} → ${formatBytes(tempStats.size)})`
+      `(${formatBytes(originalSize)} → ${formatBytes(tempStats.size)})`,
     )
     return { processed: true, saved: originalSize - tempStats.size }
-  } else {
+  }
+  else {
     await unlink(tempPath)
     console.log(`✓ ${filePath} (${width}x${height}) - keeping original (already optimal)`)
     return { skipped: true }
@@ -99,8 +103,10 @@ async function processImage(filePath) {
 }
 
 function formatBytes(bytes) {
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+  if (bytes < 1024)
+    return `${bytes} B`
+  if (bytes < 1024 * 1024)
+    return `${(bytes / 1024).toFixed(1)} KB`
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
@@ -119,10 +125,12 @@ async function main() {
       if (result.processed) {
         processedCount++
         totalSaved += result.saved || 0
-      } else {
+      }
+      else {
         skippedCount++
       }
-    } catch (err) {
+    }
+    catch (err) {
       console.error(`✗ ${file}: ${err.message}`)
     }
   }

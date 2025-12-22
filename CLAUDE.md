@@ -103,28 +103,33 @@ Or use `pnpm theme:create` to create interactively.
 When creating interactive components:
 
 ### Colors
+
 - **Use stone palette only** (stone-100 to stone-900) for most UI elements
 - Avoid colorful gradients, shadows, and decorative borders
 - Dark mode: use `dark:bg-stone-800`, `dark:text-stone-400` etc.
 - Accent colors sparingly: only for critical emphasis (e.g., a single red button for danger action)
 
 ### Typography
+
 - Keep text minimal and concise
 - Use `text-xs` for labels, `text-sm` for body text
 - Avoid uppercase tracking-widest labels except for very subtle section dividers
 
 ### Layout
+
 - Prefer simple layouts over complex nested containers
 - Use minimal padding and margins
 - Avoid decorative boxes, cards with multiple borders, or layered backgrounds
 - Let whitespace do the work
 
 ### Interactive Elements
+
 - Buttons: simple, no shadows, minimal hover states
 - Animations: subtle opacity/transform transitions (300-500ms)
 - Avoid flashy effects, pulsing, or attention-grabbing animations
 
 ### General Principles
+
 - **Less is more** - remove decorative elements when possible
 - **Content first** - UI should not distract from the content
 - **Functional** - every element should have a purpose

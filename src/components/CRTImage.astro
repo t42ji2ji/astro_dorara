@@ -18,6 +18,16 @@ interface Props {
   flicker?: boolean
   /** 訊號干擾強度 0-1 (VHS 風格的扭曲) */
   glitchIntensity?: number
+  /** 替換圖片 (偷偷換圖效果) */
+  scarySrc?: string | ImageMetadata
+  /** 替換圖片最少延遲秒數 */
+  scaryMinDelay?: number
+  /** 替換圖片最大延遲秒數 */
+  scaryMaxDelay?: number
+  /** 替換圖片顯示時間（毫秒） */
+  scaryDuration?: number
+  /** 替換圖片觸發機率 0-1 */
+  scaryProbability?: number
 }
 
 const {
@@ -31,10 +41,16 @@ const {
   curvature = 0.2,
   flicker = false,
   glitchIntensity = 0.3,
+  scarySrc,
+  scaryMinDelay = 2,
+  scaryMaxDelay = 4,
+  scaryDuration = 200,
+  scaryProbability = 0.6,
 } = Astro.props
 
 const displayCaption = caption ?? alt
 const imageSrc = typeof src === 'string' ? src : src.src
+const scaryImgSrc = scarySrc ? (typeof scarySrc === 'string' ? scarySrc : scarySrc.src) : null
 ---
 
 <div
@@ -46,6 +62,11 @@ const imageSrc = typeof src === 'string' ? src : src.src
   data-curvature={curvature}
   data-flicker={flicker}
   data-glitch={glitchIntensity}
+  data-scary-src={scaryImgSrc}
+  data-scary-min-delay={scaryMinDelay}
+  data-scary-max-delay={scaryMaxDelay}
+  data-scary-duration={scaryDuration}
+  data-scary-probability={scaryProbability}
 >
   <div class="crt-container">
     <canvas class="crt-canvas"></canvas>
@@ -261,10 +282,19 @@ const imageSrc = typeof src === 'string' ? src : src.src
     glitchIntensity: number
   }
 
+  interface ScaryConfig {
+    src: string | null
+    minDelay: number
+    maxDelay: number
+    duration: number
+    probability: number
+  }
+
   class CRTEffect {
     container: HTMLElement
     canvas: HTMLCanvasElement
     config: CRTConfig
+    scaryConfig: ScaryConfig
     renderer!: THREE.WebGLRenderer
     scene!: THREE.Scene
     camera!: THREE.OrthographicCamera
@@ -272,6 +302,9 @@ const imageSrc = typeof src === 'string' ? src : src.src
     raf: number | null = null
     isInView = false
     startTime = 0
+    normalTexture!: THREE.Texture
+    scaryTexture: THREE.Texture | null = null
+    scaryTimeoutId: number | null = null
 
     constructor(container: HTMLElement) {
       this.container = container
@@ -283,6 +316,13 @@ const imageSrc = typeof src === 'string' ? src : src.src
         curvature: Number.parseFloat(container.dataset.curvature || '0.3'),
         flicker: container.dataset.flicker !== 'false',
         glitchIntensity: Number.parseFloat(container.dataset.glitch || '0.3'),
+      }
+      this.scaryConfig = {
+        src: container.dataset.scarySrc || null,
+        minDelay: Number.parseFloat(container.dataset.scaryMinDelay || '2'),
+        maxDelay: Number.parseFloat(container.dataset.scaryMaxDelay || '4'),
+        duration: Number.parseFloat(container.dataset.scaryDuration || '200'),
+        probability: Number.parseFloat(container.dataset.scaryProbability || '0.6'),
       }
       this.startTime = performance.now()
       this.init()
@@ -296,6 +336,14 @@ const imageSrc = typeof src === 'string' ? src : src.src
       const texture = await new Promise<THREE.Texture>((resolve) => {
         loader.load(src, resolve)
       })
+      this.normalTexture = texture
+
+      // 預載嚇人圖片
+      if (this.scaryConfig.src) {
+        this.scaryTexture = await new Promise<THREE.Texture>((resolve) => {
+          loader.load(this.scaryConfig.src!, resolve)
+        })
+      }
 
       const img = texture.image as HTMLImageElement
       const aspect = img.width / img.height
@@ -358,9 +406,11 @@ const imageSrc = typeof src === 'string' ? src : src.src
             this.isInView = entry.isIntersecting
             if (this.isInView) {
               this.startAnimation()
+              this.scheduleScarySwap()
             }
  else {
               this.stopAnimation()
+              this.cancelScarySchedule()
             }
           })
         },
@@ -387,6 +437,52 @@ const imageSrc = typeof src === 'string' ? src : src.src
       this.material.uniforms.uTime.value = time
       this.renderer.render(this.scene, this.camera)
       this.raf = requestAnimationFrame(this.animate)
+    }
+
+    // 換圖相關方法
+    scheduleScarySwap() {
+      if (!this.scaryTexture || this.scaryTimeoutId) 
+return
+
+      const { minDelay, maxDelay, probability } = this.scaryConfig
+      const delay = (minDelay + Math.random() * (maxDelay - minDelay)) * 1000
+
+      this.scaryTimeoutId = window.setTimeout(() => {
+        this.scaryTimeoutId = null
+        if (!this.isInView) 
+return
+
+        if (Math.random() < probability) {
+          this.showScary()
+        }
+ else {
+          this.scheduleScarySwap()
+        }
+      }, delay)
+    }
+
+    cancelScarySchedule() {
+      if (this.scaryTimeoutId) {
+        clearTimeout(this.scaryTimeoutId)
+        this.scaryTimeoutId = null
+      }
+    }
+
+    showScary() {
+      if (!this.scaryTexture) 
+return
+
+      // 換成嚇人圖片
+      this.material.uniforms.uTexture.value = this.scaryTexture
+
+      // 一段時間後換回來
+      setTimeout(() => {
+        this.material.uniforms.uTexture.value = this.normalTexture
+
+        if (this.isInView) {
+          this.scheduleScarySwap()
+        }
+      }, this.scaryConfig.duration)
     }
   }
 

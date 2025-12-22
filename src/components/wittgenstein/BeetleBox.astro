@@ -101,14 +101,12 @@ import InteractiveContainer from '../InteractiveContainer.astro'
     const beetlesCanvas = document.getElementById('beetles-canvas') as HTMLCanvasElement | null
     const matrixCanvas = document.getElementById('matrix-canvas') as HTMLCanvasElement | null
 
-    if (!beetlesCanvas || !matrixCanvas)
-return
+    if (!beetlesCanvas || !matrixCanvas) return
 
     const beetlesCtx = beetlesCanvas.getContext('2d')
     const matrixCtx = matrixCanvas.getContext('2d')
 
-    if (!beetlesCtx || !matrixCtx)
-return
+    if (!beetlesCtx || !matrixCtx) return
 
     // Setup canvas resolution
     function setupCanvas(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
@@ -153,8 +151,7 @@ return
     }
 
     function animateBeetles() {
-      if (!beetlesCtx)
-return
+      if (!beetlesCtx) return
 
       const width = beetlesSize.width
       const height = beetlesSize.height
@@ -175,8 +172,7 @@ return
         let cohCount = 0
 
         beetles.forEach((other, j) => {
-          if (i === j)
-return
+          if (i === j) return
           const dx = other.x - beetle.x
           const dy = other.y - beetle.y
           const dist = Math.sqrt(dx * dx + dy * dy)
@@ -218,14 +214,10 @@ return
 
         // Boundary avoidance
         const margin = 30
-        if (beetle.x < margin)
-beetle.vx += 0.3
-        if (beetle.x > width - margin)
-beetle.vx -= 0.3
-        if (beetle.y < margin)
-beetle.vy += 0.3
-        if (beetle.y > height - margin)
-beetle.vy -= 0.3
+        if (beetle.x < margin) beetle.vx += 0.3
+        if (beetle.x > width - margin) beetle.vx -= 0.3
+        if (beetle.y < margin) beetle.vy += 0.3
+        if (beetle.y > height - margin) beetle.vy -= 0.3
 
         // Limit speed
         const speed = Math.sqrt(beetle.vx * beetle.vx + beetle.vy * beetle.vy)
@@ -242,14 +234,10 @@ beetle.vy -= 0.3
         beetle.y += beetle.vy
 
         // Wrap around edges (with buffer)
-        if (beetle.x < -20)
-beetle.x = width + 20
-        if (beetle.x > width + 20)
-beetle.x = -20
-        if (beetle.y < -20)
-beetle.y = height + 20
-        if (beetle.y > height + 20)
-beetle.y = -20
+        if (beetle.x < -20) beetle.x = width + 20
+        if (beetle.x > width + 20) beetle.x = -20
+        if (beetle.y < -20) beetle.y = height + 20
+        if (beetle.y > height + 20) beetle.y = -20
 
         // Draw beetle
         const angle = Math.atan2(beetle.vy, beetle.vx)
@@ -295,8 +283,7 @@ beetle.y = -20
     initGrid()
 
     function animateMatrix() {
-      if (!matrixCtx)
-return
+      if (!matrixCtx) return
 
       const width = matrixSize.width
       const height = matrixSize.height

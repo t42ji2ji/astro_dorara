@@ -18,20 +18,20 @@ const testimonials = [
     icon: vercelIcon,
     name: 'Guillermo Rauch',
     title: 'CEO at Vercel',
-    quote: 'Asking the LLM to write React code is the ultimate faster horse. It\'s a productivity, not paradigm shift.'
+    quote: "Asking the LLM to write React code is the ultimate faster horse. It's a productivity, not paradigm shift.",
   },
   {
     icon: framerIcon,
     name: 'Koen Bok',
     title: 'Founder at Framer',
-    quote: ''
+    quote: '',
   },
   {
     icon: shopifyIcon,
     name: 'Tobias Lütke',
     title: 'CEO and Co-Founder at Shopify',
-    quote: ''
-  }
+    quote: '',
+  },
 ]
 ---
 
@@ -63,22 +63,20 @@ const testimonials = [
 
         <!-- Testimonial List -->
         <div class="flex-1 overflow-y-auto">
-          {testimonials.map((t, i) => (
-            <TestimonialCard
-              icon={t.icon}
-              name={t.name}
-              title={t.title}
-              quote={t.quote}
-              isActive={i === 0}
-            />
-          ))}
+          {
+            testimonials.map((t, i) => (
+              <TestimonialCard icon={t.icon} name={t.name} title={t.title} quote={t.quote} isActive={i === 0} />
+            ))
+          }
         </div>
 
         <!-- Quote Display -->
         <div class="p-6 border-t border-white/10 bg-white/[0.02]">
           <p class="text-xs uppercase tracking-[0.15em] text-white/40 mb-3">Featured Quote</p>
           <blockquote class="text-sm leading-relaxed text-white/70 font-light">
-            <span class="text-white/90 uppercase tracking-wide">Asking the LLM to write React code is the ultimate faster horse.</span>
+            <span class="text-white/90 uppercase tracking-wide"
+              >Asking the LLM to write React code is the ultimate faster horse.</span
+            >
             <span class="block mt-2 text-white/50">It's a productivity, not paradigm shift.</span>
           </blockquote>
         </div>
@@ -89,7 +87,10 @@ const testimonials = [
         <SvgParticles class="absolute inset-0" />
 
         <!-- Overlay gradient -->
-        <div class="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-[#0a0a0a]/30 pointer-events-none"></div>
+        <div
+          class="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-[#0a0a0a]/30 pointer-events-none"
+        >
+        </div>
 
         <!-- Corner decorations -->
         <div class="absolute top-6 right-6 w-16 h-16 border-t border-r border-white/10"></div>
@@ -104,7 +105,11 @@ const testimonials = [
       }
 
       body {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family:
+          'Inter',
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
       }
 
       /* Custom scrollbar */

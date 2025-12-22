@@ -227,11 +227,9 @@ import InteractiveContainer from '../InteractiveContainer.astro'
     const hintText = document.getElementById('hint-text')
     const meaningLabel = document.getElementById('meaning-label')
 
-    if (!canvas)
-return
+    if (!canvas) return
     const ctx = canvas.getContext('2d')!
-    if (!ctx)
-return
+    if (!ctx) return
 
     // 設定 canvas 尺寸
     let width = 0
@@ -269,13 +267,11 @@ return
 
     // 變形到新形狀
     function morphToShape(key: string) {
-      if (key === currentKey)
-return
+      if (key === currentKey) return
       currentKey = key
 
       const data = svgPaths[key]
-      if (!data)
-return
+      if (!data) return
 
       const targetPoints = samplePointsFromPaths(data.paths, data.viewBox, width, height, PARTICLE_COUNT)
 
@@ -317,8 +313,7 @@ return
     buttons.forEach((btn) => {
       btn.addEventListener('click', () => {
         const key = btn.getAttribute('data-context')
-        if (!key || !svgPaths[key])
-return
+        if (!key || !svgPaths[key]) return
 
         // 隱藏提示文字
         if (hintText) {
