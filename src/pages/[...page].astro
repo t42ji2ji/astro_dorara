@@ -24,14 +24,8 @@ const { page } = Astro.props
 ---
 
 <LayoutDefault>
-  <section contain-layout flex="~ col gap-7.5">
-    {
-      page.data.map((post) => (
-        <LayoutPostList post={post} class:list={[{ 'draft-post hidden': post.data.draft }]}>
-          <p class="line-clamp-4">{getPostDescription(post)}</p>
-        </LayoutPostList>
-      ))
-    }
+  <section contain-layout flex="~ col gap-10 md:gap-24">
+    {page.data.map((post) => <LayoutPostList post={post} class:list={[{ 'draft-post': post.data.draft }]} />)}
   </section>
   <Pagination
     showLeft={Boolean(page.url.prev)}
@@ -44,12 +38,3 @@ const { page } = Astro.props
     totalPage={page.lastPage}
   />
 </LayoutDefault>
-
-<script>
-  document.addEventListener('astro:page-load', () => {
-    const showDraft = new URLSearchParams(window.location.search).has('draft')
-    if (showDraft) {
-      document.querySelectorAll('.draft-post').forEach((el) => el.classList.remove('hidden'))
-    }
-  })
-</script>

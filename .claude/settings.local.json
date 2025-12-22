@@ -17,7 +17,8 @@
       "Bash(node scripts/optimize-images.mjs:*)",
       "Bash(git checkout:*)",
       "Bash(pnpm optimize-images:*)",
-      "Bash(sips:*)"
+      "Bash(sips:*)",
+      "Bash(git diff:*)"
     ],
     "deny": [],
     "ask": []

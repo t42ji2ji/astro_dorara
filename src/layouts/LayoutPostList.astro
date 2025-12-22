@@ -10,9 +10,8 @@ interface Props {
 const { post, class: className } = Astro.props
 ---
 
-<div class:list={['flex gap-4 relative', className]}>
-  <div class="w-1.5 rounded-full bg-gray-200 dark:bg-gray-700 shrink-0"></div>
-  <article class="prose w-full">
+<div class:list={['relative', className]}>
+  <article class="prose max-w-[calc(100%)] md:max-w-[calc(100%-80px)]">
     <PostMetaList post={post} />
     <slot />
   </article>
