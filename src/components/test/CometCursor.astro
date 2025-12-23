@@ -1,23 +1,18 @@
 ---
-// CometCursor - A textarea with animated comet tail cursor effect
+// CometCursor - A textarea with smooth animated comet tail cursor effect
+// Uses canvas for particle effects and lerp for silky smooth movement
 ---
 
 <div class="comet-cursor-container">
-  <div class="editor-wrapper">
+  <div class="editor-wrapper" id="editor-wrapper">
+    <canvas id="comet-canvas" class="comet-canvas"></canvas>
     <textarea
       id="comet-textarea"
       class="comet-textarea"
-      placeholder="開始輸入..."
+      placeholder="開始輸入，試試刪除看看彗星效果..."
       spellcheck="false"
       autocomplete="off"
     ></textarea>
-    <div class="caret-layer">
-      <div class="fake-caret">
-        <div class="caret-head"></div>
-        <div class="comet-tail"></div>
-      </div>
-    </div>
-    <div class="mirror-text" id="mirror-text"></div>
   </div>
 </div>
 
@@ -36,6 +31,16 @@
     overflow: hidden;
   }
 
+  .comet-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+  }
+
   .comet-textarea {
     width: 100%;
     min-height: 200px;
@@ -48,7 +53,9 @@
     border: none;
     outline: none;
     resize: vertical;
-    caret-color: transparent; /* Hide native caret */
+    caret-color: transparent;
+    position: relative;
+    z-index: 1;
   }
 
   :global(.dark) .comet-textarea {
@@ -58,281 +65,327 @@
   .comet-textarea::placeholder {
     color: rgb(168 162 158 / 0.5);
   }
-
-  .caret-layer {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-    overflow: hidden;
-  }
-
-  .fake-caret {
-    position: absolute;
-    top: 16px;
-    left: 16px;
-    pointer-events: none;
-    transition: transform 0.08s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
-  }
-
-  .caret-head {
-    width: 2px;
-    height: 1.2em;
-    background: rgb(245 158 11);
-    border-radius: 1px;
-    animation: blink 1s step-end infinite;
-    box-shadow:
-      0 0 4px rgb(245 158 11 / 0.8),
-      0 0 8px rgb(245 158 11 / 0.4);
-  }
-
-  .fake-caret.moving .caret-head {
-    animation: none;
-  }
-
-  .comet-tail {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 40px;
-    height: 1.2em;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.15s ease-out;
-  }
-
-  .fake-caret.moving .comet-tail {
-    opacity: 1;
-  }
-
-  .fake-caret.moving-left .comet-tail {
-    right: auto;
-    left: 0;
-    transform: scaleX(-1);
-  }
-
-  .comet-tail::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      to left,
-      rgb(245 158 11 / 0.6) 0%,
-      rgb(245 158 11 / 0.3) 30%,
-      rgb(251 191 36 / 0.1) 60%,
-      transparent 100%
-    );
-    border-radius: 2px;
-    filter: blur(2px);
-    animation: tail-shimmer 0.3s ease-out;
-  }
-
-  /* Particle effects for the comet */
-  .comet-tail::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    width: 4px;
-    height: 4px;
-    background: rgb(251 191 36 / 0.8);
-    border-radius: 50%;
-    transform: translateY(-50%);
-    box-shadow:
-      8px -3px 3px rgb(251 191 36 / 0.4),
-      15px 2px 2px rgb(245 158 11 / 0.3),
-      22px -1px 2px rgb(251 191 36 / 0.2),
-      28px 1px 2px rgb(245 158 11 / 0.1);
-    animation: particles-scatter 0.2s ease-out;
-  }
-
-  .fake-caret.moving-left .comet-tail::after {
-    right: auto;
-    left: 10px;
-    box-shadow:
-      -8px -3px 3px rgb(251 191 36 / 0.4),
-      -15px 2px 2px rgb(245 158 11 / 0.3),
-      -22px -1px 2px rgb(251 191 36 / 0.2),
-      -28px 1px 2px rgb(245 158 11 / 0.1);
-  }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
-
-  @keyframes tail-shimmer {
-    0% {
-      opacity: 0.8;
-      transform: scaleX(1.2);
-    }
-    100% {
-      opacity: 1;
-      transform: scaleX(1);
-    }
-  }
-
-  @keyframes particles-scatter {
-    0% {
-      opacity: 1;
-      transform: translateY(-50%) translateX(5px);
-    }
-    100% {
-      opacity: 0.6;
-      transform: translateY(-50%) translateX(0);
-    }
-  }
-
-  /* Mirror text for calculating caret position */
-  .mirror-text {
-    position: absolute;
-    top: 16px;
-    left: 16px;
-    font-family: 'SF Mono', 'Fira Code', monospace;
-    font-size: 16px;
-    line-height: 1.6;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    visibility: hidden;
-    pointer-events: none;
-    max-width: calc(100% - 32px);
-  }
 </style>
 
 <script>
+  interface Particle {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    life: number;
+    maxLife: number;
+    size: number;
+    hue: number;
+  }
+
+  interface TrailPoint {
+    x: number;
+    y: number;
+    age: number;
+  }
+
   function initCometCursor() {
+    const wrapper = document.getElementById('editor-wrapper');
     const textarea = document.getElementById('comet-textarea') as HTMLTextAreaElement;
-    const fakeCaret = document.querySelector('.fake-caret') as HTMLElement;
-    const mirrorText = document.getElementById('mirror-text') as HTMLElement;
+    const canvas = document.getElementById('comet-canvas') as HTMLCanvasElement;
 
-    if (!textarea || !fakeCaret || !mirrorText) return;
+    if (!wrapper || !textarea || !canvas) return;
 
-    let lastPosition = { x: 0, y: 0 };
-    let moveTimeout: number | null = null;
+    const ctx = canvas.getContext('2d')!;
+    let dpr = window.devicePixelRatio || 1;
+
+    // Resize canvas
+    function resizeCanvas() {
+      const rect = wrapper.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+      ctx.scale(dpr, dpr);
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Caret state
+    let targetX = 16;
+    let targetY = 16;
+    let currentX = 16;
+    let currentY = 16;
+    let lastX = 16;
+    let lastY = 16;
+    let velocityX = 0;
+    let velocityY = 0;
+    let isMoving = false;
+    let isFocused = false;
+    let blinkPhase = 0;
     let lastSelectionStart = 0;
 
-    function getCaretCoordinates(selectionStart: number) {
-      // Create a temporary span to measure text
+    // Particles and trail
+    const particles: Particle[] = [];
+    const trail: TrailPoint[] = [];
+    const maxTrailLength = 20;
+
+    // Measure text helper
+    const measureCanvas = document.createElement('canvas');
+    const measureCtx = measureCanvas.getContext('2d')!;
+
+    function getCaretCoordinates(selectionStart: number): { x: number; y: number } {
       const textBeforeCaret = textarea.value.substring(0, selectionStart);
-
-      // Use a more accurate measurement
-      mirrorText.textContent = textBeforeCaret;
-
-      // Add a zero-width space to get accurate position
-      const measureSpan = document.createElement('span');
-      measureSpan.textContent = '\u200B';
-      mirrorText.appendChild(measureSpan);
-
       const textareaStyle = window.getComputedStyle(textarea);
-      mirrorText.style.width = `${textarea.clientWidth - 32}px`;
-      mirrorText.style.font = textareaStyle.font;
-      mirrorText.style.letterSpacing = textareaStyle.letterSpacing;
+      const lineHeight = parseFloat(textareaStyle.lineHeight) || 25.6;
+      const maxWidth = textarea.clientWidth - 32;
 
-      // Get position
-      const rect = measureSpan.getBoundingClientRect();
-      const containerRect = textarea.parentElement!.getBoundingClientRect();
+      measureCtx.font = textareaStyle.font;
 
-      // Account for scroll
-      const scrollTop = textarea.scrollTop;
-
-      // Calculate position relative to container
-      let x = rect.left - containerRect.left;
-      let y = rect.top - containerRect.top + scrollTop;
-
-      // Simple fallback using line count
       if (textBeforeCaret === '') {
-        x = 16;
-        y = 16;
-      } else {
-        // Calculate based on text metrics
-        const lines = textBeforeCaret.split('\n');
-        const currentLine = lines[lines.length - 1];
-        const lineHeight = parseFloat(textareaStyle.lineHeight) || 25.6;
-
-        // Measure the width of the current line
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d')!;
-        ctx.font = textareaStyle.font;
-
-        x = 16 + ctx.measureText(currentLine).width;
-        y = 16 + (lines.length - 1) * lineHeight - scrollTop;
-
-        // Handle line wrapping
-        const maxWidth = textarea.clientWidth - 32;
-        if (x > maxWidth) {
-          const wrapCount = Math.floor(ctx.measureText(currentLine).width / maxWidth);
-          x = 16 + (ctx.measureText(currentLine).width % maxWidth);
-          y += wrapCount * lineHeight;
-        }
+        return { x: 16, y: 16 };
       }
+
+      const lines = textBeforeCaret.split('\n');
+      let totalLines = 0;
+
+      // Calculate wrapped lines
+      for (let i = 0; i < lines.length - 1; i++) {
+        const lineWidth = measureCtx.measureText(lines[i]).width;
+        totalLines += Math.max(1, Math.ceil(lineWidth / maxWidth));
+      }
+
+      const currentLine = lines[lines.length - 1];
+      const currentLineWidth = measureCtx.measureText(currentLine).width;
+      const wrapCount = Math.floor(currentLineWidth / maxWidth);
+
+      const x = 16 + (currentLineWidth % maxWidth || (wrapCount > 0 ? maxWidth : 0));
+      const y = 16 + (totalLines + wrapCount) * lineHeight - textarea.scrollTop;
 
       return { x, y };
     }
 
-    function updateCaretPosition() {
-      const selectionStart = textarea.selectionStart;
-      const newPos = getCaretCoordinates(selectionStart);
+    function updateCaretTarget() {
+      const pos = getCaretCoordinates(textarea.selectionStart);
+      const dx = pos.x - targetX;
+      const dy = pos.y - targetY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
 
-      // Determine direction of movement
-      const movingLeft = selectionStart < lastSelectionStart;
-      const isMoving = newPos.x !== lastPosition.x || newPos.y !== lastPosition.y;
+      // Track if selection moved backward (deletion)
+      const movingBackward = textarea.selectionStart < lastSelectionStart;
+      lastSelectionStart = textarea.selectionStart;
 
-      if (isMoving) {
-        fakeCaret.classList.add('moving');
-        if (movingLeft) {
-          fakeCaret.classList.add('moving-left');
-        } else {
-          fakeCaret.classList.remove('moving-left');
+      if (distance > 0.5) {
+        targetX = pos.x;
+        targetY = pos.y;
+        isMoving = true;
+
+        // Spawn more particles when deleting (moving backward)
+        if (movingBackward && distance > 2) {
+          spawnParticles(currentX, currentY, dx, dy, Math.min(distance * 0.8, 15));
         }
+      }
+    }
 
-        // Clear previous timeout
-        if (moveTimeout) {
-          clearTimeout(moveTimeout);
-        }
+    function spawnParticles(x: number, y: number, dx: number, dy: number, count: number) {
+      const caretHeight = 20;
+      const angle = Math.atan2(dy, dx);
 
-        // Remove moving class after animation
-        moveTimeout = window.setTimeout(() => {
-          fakeCaret.classList.remove('moving');
-        }, 150);
+      for (let i = 0; i < count; i++) {
+        const spread = (Math.random() - 0.5) * Math.PI * 0.6;
+        const speed = 1 + Math.random() * 3;
+        const oppositeAngle = angle + Math.PI + spread;
+
+        particles.push({
+          x: x + (Math.random() - 0.5) * 4,
+          y: y + Math.random() * caretHeight,
+          vx: Math.cos(oppositeAngle) * speed,
+          vy: Math.sin(oppositeAngle) * speed + (Math.random() - 0.5) * 1.5,
+          life: 1,
+          maxLife: 0.4 + Math.random() * 0.4,
+          size: 1.5 + Math.random() * 3,
+          hue: 35 + Math.random() * 15, // Orange to yellow
+        });
+      }
+    }
+
+    function lerp(a: number, b: number, t: number): number {
+      return a + (b - a) * t;
+    }
+
+    function animate() {
+      const rect = wrapper.getBoundingClientRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
+
+      if (!isFocused) {
+        requestAnimationFrame(animate);
+        return;
       }
 
-      // Apply smooth transform
-      fakeCaret.style.transform = `translate(${newPos.x - 16}px, ${newPos.y - 16}px)`;
+      // Smooth interpolation for caret position
+      const lerpFactor = 0.25;
+      const prevX = currentX;
+      const prevY = currentY;
 
-      lastPosition = newPos;
-      lastSelectionStart = selectionStart;
+      currentX = lerp(currentX, targetX, lerpFactor);
+      currentY = lerp(currentY, targetY, lerpFactor);
+
+      // Calculate velocity
+      velocityX = currentX - prevX;
+      velocityY = currentY - prevY;
+      const speed = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
+
+      // Update moving state
+      if (speed < 0.1) {
+        isMoving = false;
+      }
+
+      // Add to trail when moving
+      if (speed > 0.3) {
+        trail.unshift({ x: currentX, y: currentY + 10, age: 0 });
+        if (trail.length > maxTrailLength) {
+          trail.pop();
+        }
+
+        // Spawn trail particles
+        if (Math.random() < speed * 0.3) {
+          spawnParticles(currentX, currentY, velocityX, velocityY, 1);
+        }
+      }
+
+      // Age and remove old trail points
+      for (let i = trail.length - 1; i >= 0; i--) {
+        trail[i].age += 0.08;
+        if (trail[i].age > 1) {
+          trail.splice(i, 1);
+        }
+      }
+
+      // Draw trail (comet tail)
+      if (trail.length > 1) {
+        ctx.save();
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        for (let i = 1; i < trail.length; i++) {
+          const t = trail[i];
+          const prev = trail[i - 1];
+          const alpha = (1 - t.age) * 0.6 * (1 - i / trail.length);
+          const width = (1 - t.age) * 8 * (1 - i / trail.length);
+
+          if (alpha > 0.01 && width > 0.1) {
+            const gradient = ctx.createLinearGradient(prev.x, prev.y, t.x, t.y);
+            gradient.addColorStop(0, `hsla(40, 95%, 55%, ${alpha})`);
+            gradient.addColorStop(1, `hsla(35, 90%, 50%, ${alpha * 0.5})`);
+
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = width;
+            ctx.beginPath();
+            ctx.moveTo(prev.x, prev.y);
+            ctx.lineTo(t.x, t.y);
+            ctx.stroke();
+          }
+        }
+        ctx.restore();
+      }
+
+      // Update and draw particles
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+
+        // Physics
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vx *= 0.96;
+        p.vy *= 0.96;
+        p.vy += 0.02; // Slight gravity
+        p.life -= 1 / 60 / p.maxLife;
+
+        if (p.life <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        // Draw particle
+        const alpha = p.life * 0.8;
+        const size = p.size * p.life;
+
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = `hsl(${p.hue}, 90%, 60%)`;
+        ctx.shadowColor = `hsl(${p.hue}, 100%, 50%)`;
+        ctx.shadowBlur = size * 2;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Draw caret
+      const caretHeight = 20;
+      blinkPhase += 0.05;
+
+      // Glow effect
+      const glowAlpha = isMoving ? 0.8 : 0.4 + Math.sin(blinkPhase * 2) * 0.1;
+      ctx.save();
+      ctx.shadowColor = 'hsl(40, 100%, 50%)';
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = `hsla(40, 95%, 55%, ${glowAlpha})`;
+      ctx.fillRect(currentX - 1, currentY, 2, caretHeight);
+      ctx.restore();
+
+      // Caret body
+      const caretAlpha = isMoving ? 1 : (Math.sin(blinkPhase) > 0 ? 1 : 0);
+      ctx.fillStyle = `hsla(40, 95%, 55%, ${caretAlpha})`;
+      ctx.fillRect(currentX - 1, currentY, 2, caretHeight);
+
+      // Caret head glow when moving fast
+      if (speed > 1) {
+        ctx.save();
+        const headGlow = Math.min(speed * 0.15, 0.6);
+        ctx.fillStyle = `hsla(45, 100%, 70%, ${headGlow})`;
+        ctx.shadowColor = 'hsl(45, 100%, 60%)';
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.arc(currentX, currentY + caretHeight / 2, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      lastX = currentX;
+      lastY = currentY;
+
+      requestAnimationFrame(animate);
     }
 
     // Event listeners
-    textarea.addEventListener('input', updateCaretPosition);
-    textarea.addEventListener('click', updateCaretPosition);
-    textarea.addEventListener('keyup', updateCaretPosition);
-    textarea.addEventListener('keydown', updateCaretPosition);
-    textarea.addEventListener('scroll', updateCaretPosition);
-    textarea.addEventListener('select', updateCaretPosition);
+    textarea.addEventListener('input', updateCaretTarget);
+    textarea.addEventListener('click', updateCaretTarget);
+    textarea.addEventListener('keydown', () => setTimeout(updateCaretTarget, 0));
+    textarea.addEventListener('keyup', updateCaretTarget);
+    textarea.addEventListener('scroll', updateCaretTarget);
+    textarea.addEventListener('select', updateCaretTarget);
 
-    // Focus handling
     textarea.addEventListener('focus', () => {
-      fakeCaret.style.opacity = '1';
-      updateCaretPosition();
+      isFocused = true;
+      updateCaretTarget();
+      // Jump to position immediately on focus
+      currentX = targetX;
+      currentY = targetY;
     });
 
     textarea.addEventListener('blur', () => {
-      fakeCaret.style.opacity = '0';
+      isFocused = false;
+      trail.length = 0;
+      particles.length = 0;
     });
 
-    // Initial position
-    updateCaretPosition();
+    // Start animation loop
+    animate();
   }
 
-  // Initialize on page load
-  document.addEventListener('DOMContentLoaded', initCometCursor);
+  // Initialize
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCometCursor);
+  } else {
+    initCometCursor();
+  }
 
   // Re-initialize on Astro page transitions
   document.addEventListener('astro:page-load', initCometCursor);
