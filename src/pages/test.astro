@@ -1,0 +1,32 @@
+---
+import LayoutMinimal from '~/layouts/LayoutMinimal.astro'
+import CometCursor from '~/components/test/CometCursor.astro'
+---
+
+<LayoutMinimal>
+  <div class="test-page">
+    <h1 class="text-2xl font-medium mb-2 text-stone-800 dark:text-stone-200">
+      Component Playground
+    </h1>
+    <p class="text-sm text-stone-500 dark:text-stone-400 mb-8">
+      測試各種有趣的互動效果
+    </p>
+
+    <section class="mb-12">
+      <h2 class="text-lg font-medium mb-4 text-stone-700 dark:text-stone-300">
+        Comet Cursor Effect
+      </h2>
+      <p class="text-sm text-stone-500 dark:text-stone-400 mb-4">
+        輸入文字試試看，刪除時光標會有彗星尾巴效果 ✨
+      </p>
+      <CometCursor />
+    </section>
+  </div>
+</LayoutMinimal>
+
+<style>
+  .test-page {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+</style>

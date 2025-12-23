@@ -1,0 +1,339 @@
+---
+// CometCursor - A textarea with animated comet tail cursor effect
+---
+
+<div class="comet-cursor-container">
+  <div class="editor-wrapper">
+    <textarea
+      id="comet-textarea"
+      class="comet-textarea"
+      placeholder="開始輸入..."
+      spellcheck="false"
+      autocomplete="off"
+    ></textarea>
+    <div class="caret-layer">
+      <div class="fake-caret">
+        <div class="caret-head"></div>
+        <div class="comet-tail"></div>
+      </div>
+    </div>
+    <div class="mirror-text" id="mirror-text"></div>
+  </div>
+</div>
+
+<style>
+  .comet-cursor-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .editor-wrapper {
+    position: relative;
+    background: transparent;
+    border: 1px solid rgb(168 162 158 / 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .comet-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 16px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 16px;
+    line-height: 1.6;
+    color: rgb(87 83 78);
+    background: transparent;
+    border: none;
+    outline: none;
+    resize: vertical;
+    caret-color: transparent; /* Hide native caret */
+  }
+
+  :global(.dark) .comet-textarea {
+    color: rgb(214 211 209);
+  }
+
+  .comet-textarea::placeholder {
+    color: rgb(168 162 158 / 0.5);
+  }
+
+  .caret-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .fake-caret {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    pointer-events: none;
+    transition: transform 0.08s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+
+  .caret-head {
+    width: 2px;
+    height: 1.2em;
+    background: rgb(245 158 11);
+    border-radius: 1px;
+    animation: blink 1s step-end infinite;
+    box-shadow:
+      0 0 4px rgb(245 158 11 / 0.8),
+      0 0 8px rgb(245 158 11 / 0.4);
+  }
+
+  .fake-caret.moving .caret-head {
+    animation: none;
+  }
+
+  .comet-tail {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 1.2em;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease-out;
+  }
+
+  .fake-caret.moving .comet-tail {
+    opacity: 1;
+  }
+
+  .fake-caret.moving-left .comet-tail {
+    right: auto;
+    left: 0;
+    transform: scaleX(-1);
+  }
+
+  .comet-tail::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to left,
+      rgb(245 158 11 / 0.6) 0%,
+      rgb(245 158 11 / 0.3) 30%,
+      rgb(251 191 36 / 0.1) 60%,
+      transparent 100%
+    );
+    border-radius: 2px;
+    filter: blur(2px);
+    animation: tail-shimmer 0.3s ease-out;
+  }
+
+  /* Particle effects for the comet */
+  .comet-tail::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    width: 4px;
+    height: 4px;
+    background: rgb(251 191 36 / 0.8);
+    border-radius: 50%;
+    transform: translateY(-50%);
+    box-shadow:
+      8px -3px 3px rgb(251 191 36 / 0.4),
+      15px 2px 2px rgb(245 158 11 / 0.3),
+      22px -1px 2px rgb(251 191 36 / 0.2),
+      28px 1px 2px rgb(245 158 11 / 0.1);
+    animation: particles-scatter 0.2s ease-out;
+  }
+
+  .fake-caret.moving-left .comet-tail::after {
+    right: auto;
+    left: 10px;
+    box-shadow:
+      -8px -3px 3px rgb(251 191 36 / 0.4),
+      -15px 2px 2px rgb(245 158 11 / 0.3),
+      -22px -1px 2px rgb(251 191 36 / 0.2),
+      -28px 1px 2px rgb(245 158 11 / 0.1);
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  @keyframes tail-shimmer {
+    0% {
+      opacity: 0.8;
+      transform: scaleX(1.2);
+    }
+    100% {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+  }
+
+  @keyframes particles-scatter {
+    0% {
+      opacity: 1;
+      transform: translateY(-50%) translateX(5px);
+    }
+    100% {
+      opacity: 0.6;
+      transform: translateY(-50%) translateX(0);
+    }
+  }
+
+  /* Mirror text for calculating caret position */
+  .mirror-text {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 16px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    visibility: hidden;
+    pointer-events: none;
+    max-width: calc(100% - 32px);
+  }
+</style>
+
+<script>
+  function initCometCursor() {
+    const textarea = document.getElementById('comet-textarea') as HTMLTextAreaElement;
+    const fakeCaret = document.querySelector('.fake-caret') as HTMLElement;
+    const mirrorText = document.getElementById('mirror-text') as HTMLElement;
+
+    if (!textarea || !fakeCaret || !mirrorText) return;
+
+    let lastPosition = { x: 0, y: 0 };
+    let moveTimeout: number | null = null;
+    let lastSelectionStart = 0;
+
+    function getCaretCoordinates(selectionStart: number) {
+      // Create a temporary span to measure text
+      const textBeforeCaret = textarea.value.substring(0, selectionStart);
+
+      // Use a more accurate measurement
+      mirrorText.textContent = textBeforeCaret;
+
+      // Add a zero-width space to get accurate position
+      const measureSpan = document.createElement('span');
+      measureSpan.textContent = '\u200B';
+      mirrorText.appendChild(measureSpan);
+
+      const textareaStyle = window.getComputedStyle(textarea);
+      mirrorText.style.width = `${textarea.clientWidth - 32}px`;
+      mirrorText.style.font = textareaStyle.font;
+      mirrorText.style.letterSpacing = textareaStyle.letterSpacing;
+
+      // Get position
+      const rect = measureSpan.getBoundingClientRect();
+      const containerRect = textarea.parentElement!.getBoundingClientRect();
+
+      // Account for scroll
+      const scrollTop = textarea.scrollTop;
+
+      // Calculate position relative to container
+      let x = rect.left - containerRect.left;
+      let y = rect.top - containerRect.top + scrollTop;
+
+      // Simple fallback using line count
+      if (textBeforeCaret === '') {
+        x = 16;
+        y = 16;
+      } else {
+        // Calculate based on text metrics
+        const lines = textBeforeCaret.split('\n');
+        const currentLine = lines[lines.length - 1];
+        const lineHeight = parseFloat(textareaStyle.lineHeight) || 25.6;
+
+        // Measure the width of the current line
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d')!;
+        ctx.font = textareaStyle.font;
+
+        x = 16 + ctx.measureText(currentLine).width;
+        y = 16 + (lines.length - 1) * lineHeight - scrollTop;
+
+        // Handle line wrapping
+        const maxWidth = textarea.clientWidth - 32;
+        if (x > maxWidth) {
+          const wrapCount = Math.floor(ctx.measureText(currentLine).width / maxWidth);
+          x = 16 + (ctx.measureText(currentLine).width % maxWidth);
+          y += wrapCount * lineHeight;
+        }
+      }
+
+      return { x, y };
+    }
+
+    function updateCaretPosition() {
+      const selectionStart = textarea.selectionStart;
+      const newPos = getCaretCoordinates(selectionStart);
+
+      // Determine direction of movement
+      const movingLeft = selectionStart < lastSelectionStart;
+      const isMoving = newPos.x !== lastPosition.x || newPos.y !== lastPosition.y;
+
+      if (isMoving) {
+        fakeCaret.classList.add('moving');
+        if (movingLeft) {
+          fakeCaret.classList.add('moving-left');
+        } else {
+          fakeCaret.classList.remove('moving-left');
+        }
+
+        // Clear previous timeout
+        if (moveTimeout) {
+          clearTimeout(moveTimeout);
+        }
+
+        // Remove moving class after animation
+        moveTimeout = window.setTimeout(() => {
+          fakeCaret.classList.remove('moving');
+        }, 150);
+      }
+
+      // Apply smooth transform
+      fakeCaret.style.transform = `translate(${newPos.x - 16}px, ${newPos.y - 16}px)`;
+
+      lastPosition = newPos;
+      lastSelectionStart = selectionStart;
+    }
+
+    // Event listeners
+    textarea.addEventListener('input', updateCaretPosition);
+    textarea.addEventListener('click', updateCaretPosition);
+    textarea.addEventListener('keyup', updateCaretPosition);
+    textarea.addEventListener('keydown', updateCaretPosition);
+    textarea.addEventListener('scroll', updateCaretPosition);
+    textarea.addEventListener('select', updateCaretPosition);
+
+    // Focus handling
+    textarea.addEventListener('focus', () => {
+      fakeCaret.style.opacity = '1';
+      updateCaretPosition();
+    });
+
+    textarea.addEventListener('blur', () => {
+      fakeCaret.style.opacity = '0';
+    });
+
+    // Initial position
+    updateCaretPosition();
+  }
+
+  // Initialize on page load
+  document.addEventListener('DOMContentLoaded', initCometCursor);
+
+  // Re-initialize on Astro page transitions
+  document.addEventListener('astro:page-load', initCometCursor);
+</script>
