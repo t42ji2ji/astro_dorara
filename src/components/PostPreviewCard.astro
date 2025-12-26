@@ -100,10 +100,11 @@ const previewContent = getPreviewContent(post)
         cardEl.style.top = `${rect.top}px`
         cardEl.style.display = 'block'
 
-        // 觸發動畫
-        requestAnimationFrame(() => {
-          cardEl.classList.add('is-visible')
-        })
+        // 強制 reflow，確保瀏覽器先渲染初始狀態
+        void cardEl.offsetHeight
+
+        // 觸發淡入動畫
+        cardEl.classList.add('is-visible')
       }
 
       const hideCard = () => {
