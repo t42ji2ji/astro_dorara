@@ -67,14 +67,23 @@ details {
   transition: all 0.3s ease;
   padding: 1rem;
   margin: 0.5rem 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.dark details {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 details:hover {
   background: rgba(102, 126, 234, 0.05);
+  border-color: rgba(102, 126, 234, 0.3);
 }
 
 .dark details:hover {
   background: rgba(102, 126, 234, 0.1);
+  border-color: rgba(102, 126, 234, 0.4);
 }
 
 details summary {
@@ -82,6 +91,21 @@ details summary {
   cursor: pointer;
   transition: all 0.2s ease;
   list-style: none;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+details summary::before {
+  content: '▶';
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+  color: #667eea;
+}
+
+details[open] summary::before {
+  transform: rotate(90deg);
 }
 
 details summary::-webkit-details-marker {
