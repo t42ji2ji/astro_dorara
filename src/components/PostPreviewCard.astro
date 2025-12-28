@@ -40,8 +40,8 @@ function getPreviewContent(post: Post): string {
   // 保留段落間的空行
   const cleaned = body
     .split(/\n{2,}/)
-    .map(p => p.replace(/\s+/g, ' ').trim())
-    .filter(p => p.length > 0)
+    .map((p) => p.replace(/\s+/g, ' ').trim())
+    .filter((p) => p.length > 0)
     .join('\n\n')
 
   const trimmed = cleaned.slice(0, 200)
@@ -53,7 +53,7 @@ const previewContent = getPreviewContent(post)
 
 <!-- 預覽卡片的模板，會被 JS 移到 body -->
 <template class="preview-card-template">
-  <a href={`/posts/${post.id}/`} class="preview-card not-prose">
+  <div class="preview-card not-prose">
     <div class="preview-card-inner">
       {
         banner && (
@@ -67,7 +67,7 @@ const previewContent = getPreviewContent(post)
         <span class="preview-hint">點擊閱讀全文 →</span>
       </div>
     </div>
-  </a>
+  </div>
 </template>
 
 <script>
@@ -76,12 +76,14 @@ const previewContent = getPreviewContent(post)
 
     wrappers.forEach((wrapper) => {
       const template = wrapper.querySelector('.preview-card-template') as HTMLTemplateElement
-      if (!template) return
+      if (!template) 
+return
 
       // 複製卡片到 body
       const card = template.content.cloneNode(true) as DocumentFragment
       const cardEl = card.querySelector('.preview-card') as HTMLElement
-      if (!cardEl) return
+      if (!cardEl) 
+return
 
       cardEl.style.display = 'none'
       document.body.appendChild(cardEl)
@@ -89,7 +91,8 @@ const previewContent = getPreviewContent(post)
       let isHovering = false
 
       const showCard = () => {
-        if (window.innerWidth <= 768) return
+        if (window.innerWidth <= 768) 
+return
 
         isHovering = true
         const rect = wrapper.getBoundingClientRect()

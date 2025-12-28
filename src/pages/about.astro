@@ -1,9 +1,12 @@
 ---
 import LayoutDefault from '~/layouts/LayoutDefault.astro'
+import rmsiIcon from '~/assets/resume/rmsi.webp'
+import ziweIcon from '~/assets/resume/ziwe.webp'
+import cardmaIcon from '~/assets/resume/cardma.webp'
+import woodIcon from '~/assets/resume/wood.webp'
 import kryptogoLogo from '~/assets/resume/kryptogo.png'
 import hanamiLogo from '~/assets/resume/hanami.png'
 import WebInteractiveWorks from '~/components/resume/WebInteractiveWorks.astro'
-import AppStoreCards from '~/components/resume/AppStoreCards.astro'
 
 // Web works moved to src/components/resume/WebInteractiveWorks.astro
 ---
@@ -93,45 +96,6 @@ import AppStoreCards from '~/components/resume/AppStoreCards.astro'
       }
     }
 
-    /* Experience collapsible styles */
-    .experience-details {
-      border-radius: 12px;
-      transition: all 0.3s ease;
-      padding: 1rem;
-      margin: -1rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .experience-details:hover {
-      background: rgba(102, 126, 234, 0.05);
-    }
-
-    :global(.dark) .experience-details:hover {
-      background: rgba(102, 126, 234, 0.1);
-    }
-
-    .experience-summary {
-      padding: 0.5rem 0;
-      transition: all 0.2s ease;
-    }
-
-    .experience-summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .expand-icon {
-      transition: transform 0.3s ease;
-      font-size: 0.75rem;
-    }
-
-    .experience-details[open] .expand-icon {
-      transform: rotate(180deg);
-    }
-
-    .experience-content {
-      animation: slideDown 0.3s ease-out;
-    }
-
     @keyframes slideDown {
       from {
         opacity: 0;
@@ -208,27 +172,30 @@ import AppStoreCards from '~/components/resume/AppStoreCards.astro'
     <section class="mb-12">
       <h2 class="text-2xl font-bold mb-4">Experience</h2>
 
-      <details class="experience-details">
-        <summary class="experience-summary cursor-pointer list-none">
-          <div class="flex justify-between items-center mb-2">
+      <details class="">
+        <summary class="cursor-pointer list-none">
+          <div class="flex flex-col justify-between items-center mb-2">
             <div class="flex items-center gap-3">
-              <img src={kryptogoLogo.src} alt="KryptoGO" class="w-10 h-10 rounded-lg object-contain" />
-              <h3 class="text-xl font-semibold m-0">KryptoGO Co., Ltd.</h3>
-            </div>
-            <div class="flex items-center gap-3">
-              <span class="text-sm text-gray-500">2022.05 - <span class="underline">至今</span></span>
-              <span class="expand-icon text-gray-400">▼</span>
+              <img src={kryptogoLogo.src} alt="KryptoGO" class="w-10 h-10 rounded-lg object-contain mb-0" />
+              <div>
+                <h3 class="text-xl font-semibold m-0">KryptoGO Co., Ltd.</h3>
+                <div class="flex flex-row">
+                  <div class="text-gray-600 mr-2">Flutter Lead</div>
+                  <div class="flex items-center gap-3">
+                    <span class="text-sm text-gray-500">2022.05 - <span class="underline">至今</span></span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="text-gray-600">Flutter Lead</div>
         </summary>
         <div class="experience-content mt-4">
           <p class="mb-4">帶領 App 團隊，負責加密貨幣錢包產品的技術架構設計與開發。</p>
 
-          <div class="space-y-6">
+          <div class="space-y-4">
             <div>
               <h4 class="font-bold text-lg mb-2">🏗️ 架構升級：Clean Architecture + Riverpod</h4>
-              <ul class="list-disc pl-5 space-y-2">
+              <ul class="list-disc pl-5 space-y-1">
                 <li>
                   <strong>技術實踐：</strong>導入 Clean Architecture 分層架構，分離 Presentation / Domain / Data
                   層。採用 Riverpod 作為狀態管理方案，取代原有混亂的狀態邏輯。重構核心模組，統一 Controller
@@ -291,19 +258,22 @@ import AppStoreCards from '~/components/resume/AppStoreCards.astro'
           </div>
         </div>
       </details>
-      <details class="experience-details">
-        <summary class="experience-summary cursor-pointer list-none">
-          <div class="flex justify-between items-center mb-2">
+      <details class="">
+        <summary class="cursor-pointer list-none">
+          <div class="flex flex-col justify-between items-center mb-2">
             <div class="flex items-center gap-3">
-              <img src={hanamiLogo.src} alt="花見" class="w-10 h-10 rounded-lg object-contain" />
-              <h3 class="text-xl font-semibold m-0">依賴傳媒娛樂有限公司 (花見-高端社群交友)</h3>
-            </div>
-            <div class="flex items-center gap-3">
-              <span class="text-sm text-gray-500">2020.07 - <span class="underline">2022.05</span></span>
-              <span class="expand-icon text-gray-400">▼</span>
+              <img src={hanamiLogo.src} alt="花見" class="w-10 h-10 rounded-lg object-contain mb-0" />
+              <div>
+                <h3 class="text-xl font-semibold m-0">依賴傳媒娛樂有限公司 (花見-高端社群交友)</h3>
+                <div class="flex flex-row">
+                  <div class="text-gray-600 mr-2">軟體工程師 (Vue | Flutter | Solidity)</div>
+                  <div class="flex items-center gap-3">
+                    <span class="text-sm text-gray-500">2020.07 - <span class="underline">2022.05</span></span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="text-gray-600">軟體工程師 (Vue | Flutter | Solidity)</div>
         </summary>
         <div class="experience-content mt-4">
           <div class="space-y-4">
@@ -346,32 +316,42 @@ import AppStoreCards from '~/components/resume/AppStoreCards.astro'
         </div>
       </details>
 
-      <details class="experience-details">
-        <summary class="experience-summary cursor-pointer list-none">
-          <div class="flex justify-between items-center mb-2">
-            <h3 class="text-xl font-semibold m-0">國立雲林科技大學</h3>
+      <details class="">
+        <summary class="cursor-pointer list-none">
+          <div class="flex flex-col justify-between items-center mb-2">
             <div class="flex items-center gap-3">
-              <span class="text-sm text-gray-500">2020.06 - 2020.08</span>
-              <span class="expand-icon text-gray-400">▼</span>
+              <div>
+                <h3 class="text-xl font-semibold m-0">國立雲林科技大學</h3>
+                <div class="flex flex-row">
+                  <div class="text-gray-600 mr-2">網頁設計課程講師</div>
+                  <div class="flex items-center gap-3">
+                    <span class="text-sm text-gray-500">2020.06 - 2020.08</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="text-gray-600">網頁設計課程講師</div>
         </summary>
         <div class="experience-content mt-4">
           <p>擔任雲林科技大學網頁設計課微學分講師，帶領學生從零開始製作網頁，從入門到踏入網路設計師的領域。</p>
         </div>
       </details>
 
-      <details class="experience-details">
-        <summary class="experience-summary cursor-pointer list-none">
-          <div class="flex justify-between items-center mb-2">
-            <h3 class="text-xl font-semibold m-0">多多設計有限公司</h3>
+      <details class="">
+        <summary class="cursor-pointer list-none">
+          <div class="flex flex-col justify-between items-center mb-2">
             <div class="flex items-center gap-3">
-              <span class="text-sm text-gray-500">2019.10 - 2020.07</span>
-              <span class="expand-icon text-gray-400">▼</span>
+              <div>
+                <h3 class="text-xl font-semibold m-0">多多設計有限公司</h3>
+                <div class="flex flex-row">
+                  <div class="text-gray-600 mr-2">負責人</div>
+                  <div class="flex items-center gap-3">
+                    <span class="text-sm text-gray-500">2019.10 - 2020.07</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="text-gray-600">負責人</div>
         </summary>
         <div class="experience-content mt-4">
           <p class="mb-2">
@@ -440,7 +420,64 @@ import AppStoreCards from '~/components/resume/AppStoreCards.astro'
         </div>
 
         <!-- APP 作品展示 -->
-        <AppStoreCards showTitle={true} />
+        <h4 class="font-bold text-lg mb-4 mt-4">📱 上架應用程式</h4>
+        <div class="cards-grid grid grid-cols-2 gap-4 mb-6">
+          <!-- SMRI -->
+          <a href="https://apps.apple.com/tw/app/smri/id6747955368?l=en-GB" target="_blank" class="app-card">
+            <img src={rmsiIcon.src} alt="SMRI" class="app-icon" />
+            <div class="app-info">
+              <div class="app-name">SMRI</div>
+              <div class="app-desc">能幫你完成計劃的日曆</div>
+              <div class="app-store-badge">
+                <svg class="apple-icon"><use href="#apple-icon"></use></svg>
+                App Store
+              </div>
+            </div>
+          </a>
+
+          <!-- ZIWE -->
+          <a href="https://apps.apple.com/tw/app/ziwe/id6749048766?l=en-GB" target="_blank" class="app-card">
+            <img src={ziweIcon.src} alt="ZIWE" class="app-icon" />
+            <div class="app-info">
+              <div class="app-name">ZIWE</div>
+              <div class="app-desc">AI 紫微斗數專家</div>
+              <div class="app-store-badge">
+                <svg class="apple-icon"><use href="#apple-icon"></use></svg>
+                App Store
+              </div>
+            </div>
+          </a>
+
+          <!-- Cardma -->
+          <a href="https://apps.apple.com/tw/app/cardma/id6747955972?l=en-GB" target="_blank" class="app-card">
+            <img src={cardmaIcon.src} alt="Cardma" class="app-icon" />
+            <div class="app-info">
+              <div class="app-name">Cardma</div>
+              <div class="app-desc">社群幫手，總結影片、PDF 產生小卡</div>
+              <div class="app-store-badge">
+                <svg class="apple-icon"><use href="#apple-icon"></use></svg>
+                App Store
+              </div>
+            </div>
+          </a>
+
+          <!-- 木魚咚咚 -->
+          <a
+            href="https://apps.apple.com/tw/app/%E6%9C%A8%E9%AD%9A%E5%92%9A%E5%92%9A/id6755515199?l=en-GB"
+            target="_blank"
+            class="app-card"
+          >
+            <img src={woodIcon.src} alt="木魚咚咚" class="app-icon" />
+            <div class="app-info">
+              <div class="app-name">木魚咚咚</div>
+              <div class="app-desc">Apple Watch 木魚法器 App</div>
+              <div class="app-store-badge">
+                <svg class="apple-icon"><use href="#apple-icon"></use></svg>
+                App Store
+              </div>
+            </div>
+          </a>
+        </div>
 
         <WebInteractiveWorks />
       </div>
@@ -561,6 +598,113 @@ import AppStoreCards from '~/components/resume/AppStoreCards.astro'
         font-size: 0.75rem;
         color: #999;
         margin-top: 0.25rem;
+      }
+
+      /* APP 卡片 */
+      .app-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 16px;
+        padding: 1rem;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .app-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: var(--accent-gradient);
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .app-card:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: var(--card-shadow-hover);
+      }
+
+      .app-card:hover::before {
+        opacity: 0.05;
+      }
+
+      .app-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 14px;
+        object-fit: cover;
+        flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        transition: transform 0.3s;
+      }
+
+      .app-card:hover .app-icon {
+        transform: scale(1.05);
+      }
+
+      .app-info {
+        flex: 1;
+        min-width: 0;
+        position: relative;
+        z-index: 1;
+      }
+
+      .app-name {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .app-desc {
+        font-size: 0.813rem;
+        color: #666;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      :global(.dark) .app-desc {
+        color: #aaa;
+      }
+
+      .app-store-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        margin-top: 0.5rem;
+        padding: 0.25rem 0.625rem;
+        background: #000;
+        color: #fff;
+        font-size: 0.688rem;
+        font-weight: 500;
+        border-radius: 6px;
+        transition: background 0.2s;
+      }
+
+      :global(.dark) .app-store-badge {
+        background: #333;
+      }
+
+      .app-card:hover .app-store-badge {
+        background: #333;
+      }
+
+      :global(.dark) .app-card:hover .app-store-badge {
+        background: #555;
+      }
+
+      .apple-icon {
+        width: 12px;
+        height: 12px;
       }
 
       /* 連結卡片 */
