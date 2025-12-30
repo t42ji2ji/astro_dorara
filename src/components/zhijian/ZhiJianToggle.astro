@@ -1,0 +1,270 @@
+---
+import InteractiveContainer from '../InteractiveContainer.astro'
+---
+
+<InteractiveContainer title="直人與間人" id="zhijian-toggle">
+  <div class="flex flex-col items-center gap-8">
+    <!-- Toggle Buttons -->
+    <div class="flex gap-3">
+      <button
+        id="btn-zhiren"
+        class="px-5 py-2 text-sm font-serif rounded transition-all duration-300 border border-stone-300 dark:border-stone-600 bg-stone-800 text-stone-100 dark:bg-stone-100 dark:text-stone-800"
+      >
+        直人
+      </button>
+      <button
+        id="btn-jianren"
+        class="px-5 py-2 text-sm font-serif rounded transition-all duration-300 border border-stone-300 dark:border-stone-600 bg-transparent text-stone-500 dark:text-stone-500"
+      >
+        間人
+      </button>
+    </div>
+
+    <!-- Canvas Container -->
+    <div class="relative w-48 h-48 md:w-56 md:h-56" id="zhijian-canvas-container">
+      <canvas id="zhijian-canvas" class="w-full h-full"></canvas>
+    </div>
+
+    <!-- Core Message -->
+    <div class="text-center" id="zhijian-info">
+      <div class="text-base font-serif text-stone-700 dark:text-stone-300 mb-3" id="zhijian-title">
+        散步的人、遊戲的人
+      </div>
+      <div class="text-sm text-stone-500 dark:text-stone-500" id="zhijian-essence">
+        生活本身就是目的
+      </div>
+    </div>
+  </div>
+</InteractiveContainer>
+
+<script>
+  function initZhiJianToggle() {
+    const container = document.getElementById('zhijian-toggle')
+    if (!container) return
+
+    const canvas = document.getElementById('zhijian-canvas') as HTMLCanvasElement
+    const canvasContainer = document.getElementById('zhijian-canvas-container')
+    const btnZhiren = document.getElementById('btn-zhiren')!
+    const btnJianren = document.getElementById('btn-jianren')!
+    const infoArea = document.getElementById('zhijian-info')
+    const titleEl = document.getElementById('zhijian-title')
+    const essenceEl = document.getElementById('zhijian-essence')
+
+    if (!canvas || !canvasContainer || !btnZhiren || !btnJianren) return
+
+    const ctx = canvas.getContext('2d')!
+    if (!ctx) return
+
+    const content = {
+      zhiren: {
+        title: '散步的人、遊戲的人',
+        essence: '生活本身就是目的',
+      },
+      jianren: {
+        title: '趕路的人、競爭的人',
+        essence: '生活是通往某處的手段',
+      },
+    }
+
+    function setupCanvas() {
+      const rect = canvas.getBoundingClientRect()
+      const dpr = window.devicePixelRatio || 1
+      canvas.width = rect.width * dpr
+      canvas.height = rect.height * dpr
+      ctx!.scale(dpr, dpr)
+      return { width: rect.width, height: rect.height }
+    }
+
+    let size = setupCanvas()
+    const resizeObserver = new ResizeObserver(() => {
+      size = setupCanvas()
+    })
+    resizeObserver.observe(canvas)
+
+    let isZhiRen = true
+    let transitionProgress = 1 // 1 = stable, 0->1 = transitioning
+    let isTransitioning = false
+    let animationId: number
+    let time = 0
+
+    function easeInOutCubic(t: number): number {
+      return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
+    }
+
+    function drawShape(
+      cx: number,
+      cy: number,
+      radius: number,
+      circleAmount: number,
+      fillStyle: string,
+      strokeStyle: string,
+      offset: { x: number; y: number } = { x: 0, y: 0 }
+    ) {
+      ctx.beginPath()
+
+      const segments = 100
+      for (let i = 0; i <= segments; i++) {
+        const angle = (i / segments) * Math.PI * 2
+
+        const circleX = Math.cos(angle) * radius
+        const circleY = Math.sin(angle) * radius
+
+        const squareRadius = radius / Math.max(Math.abs(Math.cos(angle)), Math.abs(Math.sin(angle)))
+        const squareX = Math.cos(angle) * squareRadius * 0.85
+        const squareY = Math.sin(angle) * squareRadius * 0.85
+
+        const x = cx + offset.x + circleX * circleAmount + squareX * (1 - circleAmount)
+        const y = cy + offset.y + circleY * circleAmount + squareY * (1 - circleAmount)
+
+        if (i === 0) {
+          ctx.moveTo(x, y)
+        } else {
+          ctx.lineTo(x, y)
+        }
+      }
+
+      ctx.closePath()
+      ctx.fillStyle = fillStyle
+      ctx.fill()
+      ctx.strokeStyle = strokeStyle
+      ctx.lineWidth = 2
+      ctx.stroke()
+    }
+
+    function getColors() {
+      const isDark = document.documentElement.classList.contains('dark')
+      return {
+        outerFill: isDark ? '#292524' : '#f5f5f4',
+        outerStroke: isDark ? '#57534e' : '#a8a29e',
+        innerFill: isDark ? '#1c1917' : '#fafaf9',
+        innerStroke: isDark ? '#78716c' : '#78716c',
+      }
+    }
+
+    function draw() {
+      time += 0.02
+      const { width, height } = size
+      const cx = width / 2
+      const cy = height / 2
+      const baseOuterRadius = Math.min(width, height) * 0.42
+
+      ctx.clearRect(0, 0, width, height)
+      const colors = getColors()
+
+      const t = isTransitioning ? easeInOutCubic(transitionProgress) : 1
+      const currentState = isZhiRen ? t : 1 - t
+
+      // 直人: currentState = 1, 間人: currentState = 0
+
+      // Gap between inner and outer (間人 has gap, 直人 doesn't)
+      const maxGap = baseOuterRadius * 0.25
+      const gap = maxGap * (1 - currentState)
+
+      // Inner radius adapts to gap
+      const innerRadius = (baseOuterRadius - gap) * 0.55
+
+      // Outer shape: circle for 直人, square for 間人
+      const outerCircleAmount = currentState
+
+      // Inner shape: square for 直人, circle for 間人
+      const innerCircleAmount = 1 - currentState
+
+      // Breathing animation for 直人 (outer flows with inner)
+      const breatheAmount = currentState * Math.sin(time * 2) * 3
+      const outerRadius = baseOuterRadius + breatheAmount
+
+      // Inner movement
+      let innerOffset = { x: 0, y: 0 }
+
+      if (currentState < 1) {
+        // 間人: inner jiggles anxiously, trying to break free
+        const anxietyAmount = (1 - currentState)
+        const jitterSpeed = 4
+        const jitterAmount = gap * 0.4 * anxietyAmount
+
+        innerOffset = {
+          x: Math.sin(time * jitterSpeed) * jitterAmount + Math.sin(time * jitterSpeed * 1.7) * jitterAmount * 0.5,
+          y: Math.cos(time * jitterSpeed * 1.3) * jitterAmount + Math.cos(time * jitterSpeed * 2.1) * jitterAmount * 0.3,
+        }
+      } else {
+        // 直人: inner breathes gently with outer
+        innerOffset = {
+          x: Math.sin(time * 0.8) * 1,
+          y: Math.cos(time * 0.6) * 1,
+        }
+      }
+
+      // Draw outer shape (fixed for 間人, breathing for 直人)
+      drawShape(cx, cy, outerRadius, outerCircleAmount, colors.outerFill, colors.outerStroke)
+
+      // Draw inner shape
+      drawShape(cx, cy, innerRadius, innerCircleAmount, colors.innerFill, colors.innerStroke, innerOffset)
+
+      // Continue transition animation
+      if (isTransitioning) {
+        transitionProgress += 0.02
+        if (transitionProgress >= 1) {
+          transitionProgress = 1
+          isTransitioning = false
+        }
+      }
+
+      animationId = requestAnimationFrame(draw)
+    }
+
+    function updateButtonStyles() {
+      const activeClass =
+        'px-5 py-2 text-sm font-serif rounded transition-all duration-300 border border-stone-300 dark:border-stone-600 bg-stone-800 text-stone-100 dark:bg-stone-100 dark:text-stone-800'
+      const inactiveClass =
+        'px-5 py-2 text-sm font-serif rounded transition-all duration-300 border border-stone-300 dark:border-stone-600 bg-transparent text-stone-500 dark:text-stone-500'
+
+      btnZhiren.className = isZhiRen ? activeClass : inactiveClass
+      btnJianren.className = isZhiRen ? inactiveClass : activeClass
+    }
+
+    function updateContent() {
+      if (!infoArea || !titleEl || !essenceEl) return
+
+      infoArea.style.opacity = '0'
+      setTimeout(() => {
+        const c = isZhiRen ? content.zhiren : content.jianren
+        titleEl.textContent = c.title
+        essenceEl.textContent = c.essence
+        infoArea.style.opacity = '1'
+      }, 150)
+    }
+
+    function switchTo(toZhiren: boolean) {
+      if (isTransitioning || isZhiRen === toZhiren) return
+
+      isZhiRen = toZhiren
+      isTransitioning = true
+      transitionProgress = 0
+
+      updateButtonStyles()
+      updateContent()
+    }
+
+    btnZhiren.addEventListener('click', () => switchTo(true))
+    btnJianren.addEventListener('click', () => switchTo(false))
+
+    // Start continuous animation
+    animationId = requestAnimationFrame(draw)
+
+    const cleanup = () => {
+      cancelAnimationFrame(animationId)
+      resizeObserver.disconnect()
+    }
+
+    document.addEventListener('astro:before-swap', cleanup, { once: true })
+  }
+
+  document.addEventListener('DOMContentLoaded', initZhiJianToggle)
+  document.addEventListener('astro:page-load', initZhiJianToggle)
+</script>
+
+<style>
+  #zhijian-info {
+    transition: opacity 0.15s ease;
+  }
+</style>

@@ -14,5 +14,7 @@ const { post } = Astro.props
   <BackToList />
   <PostMeta post={post} />
   <div class="mb-12"></div>
-  <slot />
+  <div class="post-content">
+    <slot />
+  </div>
 </article>

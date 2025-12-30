@@ -33,6 +33,7 @@
     "astro-robots-txt": "^1.0.0",
     "astro-seo": "^0.8.4",
     "giscus": "^1.6.0",
+    "keen-slider": "^6.8.6",
     "lottie-web": "^5.13.0",
     "mermaid": "^11.12.2",
     "number-flow": "^0.5.8",
