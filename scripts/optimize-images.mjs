@@ -1,10 +1,31 @@
-import { readdir, rename, stat, unlink } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
+import { readdir, readFile, rename, stat, unlink, writeFile } from 'node:fs/promises'
 import { extname, join } from 'node:path'
 import sharp from 'sharp'
 
 const ASSETS_DIR = 'src/assets'
 const MAX_SIZE = 800
 const IMAGE_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.webp']
+const OPTIMIZED_CACHE_FILE = 'scripts/.optimized-images.json'
+
+async function loadOptimizedCache() {
+  try {
+    const data = await readFile(OPTIMIZED_CACHE_FILE, 'utf-8')
+    return new Set(JSON.parse(data))
+  }
+  catch {
+    return new Set()
+  }
+}
+
+async function saveOptimizedCache(cache) {
+  await writeFile(OPTIMIZED_CACHE_FILE, JSON.stringify([...cache], null, 2))
+}
+
+async function getFileHash(filePath) {
+  const content = await readFile(filePath)
+  return createHash('md5').update(content).digest('hex')
+}
 
 async function getImageFiles(dir) {
   const files = []
@@ -26,8 +47,17 @@ async function getImageFiles(dir) {
   return files
 }
 
-async function processImage(filePath) {
+async function processImage(filePath, optimizedCache) {
   const ext = extname(filePath).toLowerCase()
+
+  // Check if file was already optimized (by hash)
+  const currentHash = await getFileHash(filePath)
+  if (optimizedCache.has(currentHash)) {
+    const metadata = await sharp(filePath).metadata()
+    console.log(`✓ ${filePath} (${metadata.width}x${metadata.height}) - already optimized (cached)`)
+    return { skipped: true, hash: currentHash }
+  }
+
   const image = sharp(filePath)
   const metadata = await image.metadata()
   const { width, height } = metadata
@@ -37,7 +67,7 @@ async function processImage(filePath) {
 
   if (!needsResize && ext !== '.png') {
     console.log(`✓ ${filePath} (${width}x${height}) - already optimized`)
-    return { skipped: true }
+    return { skipped: true, hash: currentHash }
   }
 
   const originalStats = await stat(filePath)
@@ -93,12 +123,13 @@ async function processImage(filePath) {
       `saved ${savings}%`,
       `(${formatBytes(originalSize)} → ${formatBytes(tempStats.size)})`,
     )
-    return { processed: true, saved: originalSize - tempStats.size }
+    const newHash = await getFileHash(filePath)
+    return { processed: true, saved: originalSize - tempStats.size, hash: newHash }
   }
   else {
     await unlink(tempPath)
     console.log(`✓ ${filePath} (${width}x${height}) - keeping original (already optimal)`)
-    return { skipped: true }
+    return { skipped: true, hash: currentHash }
   }
 }
 
@@ -114,6 +145,9 @@ async function main() {
   console.log(`\n🖼️  Optimizing images in ${ASSETS_DIR}...\n`)
   console.log(`Max size: ${MAX_SIZE}px (longest side)\n`)
 
+  const optimizedCache = await loadOptimizedCache()
+  const newCache = new Set()
+
   const files = await getImageFiles(ASSETS_DIR)
   let totalSaved = 0
   let processedCount = 0
@@ -121,7 +155,10 @@ async function main() {
 
   for (const file of files) {
     try {
-      const result = await processImage(file)
+      const result = await processImage(file, optimizedCache)
+      if (result.hash) {
+        newCache.add(result.hash)
+      }
       if (result.processed) {
         processedCount++
         totalSaved += result.saved || 0
@@ -134,6 +171,9 @@ async function main() {
       console.error(`✗ ${file}: ${err.message}`)
     }
   }
+
+  // Save updated cache
+  await saveOptimizedCache(newCache)
 
   console.log(`\n📊 Summary:`)
   console.log(`   Processed: ${processedCount} files`)

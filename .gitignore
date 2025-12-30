@@ -20,4 +20,7 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
+# image optimization cache
+scripts/.optimized-images.json
+
 Markdown style guide.md
