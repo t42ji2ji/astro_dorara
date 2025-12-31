@@ -101,6 +101,20 @@ draft: true
 
 Or use `pnpm theme:create` to create interactively.
 
+## Writing Guidelines
+
+**IMPORTANT**: Before writing any blog post content, you MUST read `how_to_write.md` first. This contains the writing style guide including:
+
+- **Four-stage narrative structure**: Hook → Context → Friction → Payoff
+- **Micro-techniques**: Paragraph hooks, visual anchors, pacing control
+- **Avoiding AI-ish writing**: Minimize em-dashes (——), use natural sentence structures
+
+Key principles:
+- Never write in a flat, explanatory style - create reading momentum
+- Each paragraph ending should be a "slide" to the next, not a rest point
+- Use concrete imagery instead of abstract descriptions
+- Maintain an unresolved question (information gap) in the reader's mind
+
 ## UI Design Guidelines
 
 When creating interactive components:
