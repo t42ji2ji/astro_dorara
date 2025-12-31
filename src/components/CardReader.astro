@@ -193,8 +193,10 @@
       document.body.style.overflow = 'hidden'
 
       // 初始化主 Slider - 關鍵：使用 selector 只選主層的 slides
+      // 桌面版：水平滑動，手機版：垂直滑動
       mainSlider = new KeenSlider(sliderContainer, {
         selector: '.main-slide',
+        vertical: !state.isDesktop,
         slides: {
           perView: 1,
           spacing: 16
@@ -349,18 +351,44 @@
     // 響應式
     mediaQuery.addEventListener('change', (e) => {
       state.isDesktop = e.matches
-      // 如果正在開啟狀態，需要重建內層 sliders
-      if (state.isOpen && innerSlidersMap.size > 0) {
+      // 如果正在開啟狀態，需要重建 sliders
+      if (state.isOpen) {
         // 記錄當前位置
-        const positions = new Map<string, number>()
+        const mainPosition = mainSlider?.track.details.rel ?? 0
+        const innerPositions = new Map<string, number>()
         innerSlidersMap.forEach((slider, id) => {
-          positions.set(id, slider.track.details.rel)
+          innerPositions.set(id, slider.track.details.rel)
         })
 
-        // 銷毀並重建
+        // 銷毀內層 sliders
         innerSlidersMap.forEach(s => s.destroy())
         innerSlidersMap.clear()
 
+        // 銷毀並重建主 slider
+        if (mainSlider) {
+          mainSlider.destroy()
+          mainSlider = new KeenSlider(sliderContainer, {
+            selector: '.main-slide',
+            vertical: !state.isDesktop,
+            slides: {
+              perView: 1,
+              spacing: 16
+            },
+            rubberband: false,
+            created: (s) => {
+              s.moveToIdx(mainPosition)
+              updateMainDots()
+              updateNavButtons()
+            },
+            slideChanged: (s) => {
+              state.currentIndex = s.track.details.rel
+              updateMainDots()
+              updateNavButtons()
+            }
+          })
+        }
+
+        // 重建內層 sliders
         const innerEls = sliderContainer.querySelectorAll('.inner-slider')
         innerEls.forEach((el) => {
           const innerId = (el as HTMLElement).id
@@ -375,7 +403,7 @@
             rubberband: false,
             created: (s) => {
               // 恢復位置
-              const prevPos = positions.get(innerId)
+              const prevPos = innerPositions.get(innerId)
               if (prevPos !== undefined) {
                 s.moveToIdx(prevPos)
               }
@@ -727,32 +755,33 @@
   /* 手機版 */
   @media (max-width: 767px) {
     .card-reader-container {
-      width: 100%;
-      height: 100vh;
+      width: calc(100% - 2rem);
+      height: calc(100vh - 4rem);
       max-width: 100%;
-      max-height: 100%;
+      max-height: calc(100vh - 4rem);
     }
 
     .card-slider {
-      border-radius: 0;
+      border-radius: 0.75rem;
     }
 
     :global(.main-slide) {
-      border-radius: 0;
+      border-radius: 0.75rem;
     }
 
     .card-reader-close {
-      top: 0.5rem;
-      right: 0.5rem;
+      top: 0.75rem;
+      right: 0.75rem;
     }
 
     .card-reader-dots {
       position: absolute;
-      bottom: 1rem;
-      left: 50%;
-      transform: translateX(-50%);
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      flex-direction: column;
       background: rgba(255, 255, 255, 0.9);
-      padding: 0.5rem 1rem;
+      padding: 0.75rem 0.5rem;
       border-radius: 9999px;
     }
 

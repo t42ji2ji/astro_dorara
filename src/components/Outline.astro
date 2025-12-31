@@ -20,7 +20,7 @@ import CardReader from './CardReader.astro'
       <!-- TOC will be populated by JavaScript -->
     </nav>
   </div>
-  <!-- 卡片模式按鈕 -->
+  <!-- 卡片模式按鈕 (桌面版) -->
   <div class="card-mode-section hidden lg:block">
     <button id="card-mode-btn" class="card-mode-btn">
       <span class="i-mdi-cards-outline"></span>
@@ -30,6 +30,12 @@ import CardReader from './CardReader.astro'
 
   <div class="lg:hidden h-16"></div>
 </aside>
+
+<!-- 卡片模式按鈕 (手機版漂浮) -->
+<button id="card-mode-btn-mobile" class="card-mode-btn-mobile lg:hidden">
+  <span class="i-mdi-cards-outline"></span>
+  <span>卡片瀏覽</span>
+</button>
 
 <!-- CardReader 組件 -->
 <CardReader />
@@ -206,13 +212,47 @@ progressText.textContent = `${Math.round(progress)}%`
 
   // 卡片模式按鈕
   function initCardModeButton() {
-    const cardModeBtn = document.getElementById('card-mode-btn')
-    cardModeBtn?.addEventListener('click', () => {
+    const openCardReaderFn = () => {
       const postContent = document.querySelector('.post-content')
       if (postContent && (window as any).openCardReader) {
         ;(window as any).openCardReader(postContent.innerHTML)
       }
-    })
+    }
+
+    // 桌面版按鈕
+    const cardModeBtn = document.getElementById('card-mode-btn')
+    cardModeBtn?.addEventListener('click', openCardReaderFn)
+
+    // 手機版漂浮按鈕
+    const cardModeBtnMobile = document.getElementById('card-mode-btn-mobile')
+    cardModeBtnMobile?.addEventListener('click', openCardReaderFn)
+
+    // 滾動時隱藏手機版按鈕
+    if (cardModeBtnMobile) {
+      const main = document.querySelector('main')
+      if (main) {
+        let lastScrollTop = 0
+        let scrollTimeout: ReturnType<typeof setTimeout> | null = null
+
+        main.addEventListener('scroll', () => {
+          const scrollTop = main.scrollTop
+          const isScrollingDown = scrollTop > lastScrollTop
+
+          // 向下滾動時隱藏
+          if (isScrollingDown && scrollTop > 50) {
+            cardModeBtnMobile.classList.add('is-hidden')
+          }
+
+          lastScrollTop = scrollTop
+
+          // 停止滾動後顯示
+          if (scrollTimeout) clearTimeout(scrollTimeout)
+          scrollTimeout = setTimeout(() => {
+            cardModeBtnMobile.classList.remove('is-hidden')
+          }, 800)
+        })
+      }
+    }
   }
 
   // Initialize on page load
@@ -461,6 +501,51 @@ progressText.textContent = `${Math.round(progress)}%`
   :global(.dark) .card-mode-btn:hover {
     background: var(--uno-colors-stone-800);
     border-color: var(--uno-colors-stone-500);
+  }
+
+  /* 手機版漂浮按鈕 */
+  :global(.card-mode-btn-mobile) {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(0);
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+    background: rgba(41, 37, 36, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: none;
+    border-radius: 9999px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease, opacity 0.3s ease, background 0.2s;
+    color: #f5f5f4;
+    opacity: 1;
+  }
+
+  :global(.card-mode-btn-mobile.is-hidden) {
+    transform: translateX(-50%) translateY(calc(100% + 2rem));
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  :global(.dark .card-mode-btn-mobile) {
+    background: rgba(245, 245, 244, 0.6);
+    color: #292524;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  :global(.card-mode-btn-mobile:hover) {
+    background: rgba(68, 64, 60, 0.75);
+  }
+
+  :global(.dark .card-mode-btn-mobile:hover) {
+    background: rgba(231, 229, 228, 0.75);
   }
 
   .toc-container {

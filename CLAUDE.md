@@ -93,8 +93,11 @@ title: title
 pubDate: 2021-08-01
 categories: ["article"]
 description: "description"
+draft: true
 ---
 ```
+
+**Important**: Always set `draft: true` when creating new posts to prevent accidental publishing. Remove it only when the post is ready to go live.
 
 Or use `pnpm theme:create` to create interactively.
 
