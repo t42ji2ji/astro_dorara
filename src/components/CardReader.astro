@@ -137,7 +137,7 @@
           innerSliderEl.id = innerId
           innerSliderEl.className = 'keen-slider inner-slider'
 
-          subSections.forEach((subHtml, subIdx) => {
+          subSections.forEach((subHtml) => {
             const innerSlide = document.createElement('div')
             innerSlide.className = 'keen-slider__slide inner-slide'
 
@@ -214,7 +214,7 @@
       })
 
       // 初始化所有內層 Sliders
-      innerSliderConfigs.forEach(({ containerId, sections }, idx) => {
+      innerSliderConfigs.forEach(({ containerId }) => {
         const el = document.getElementById(containerId)
         const dotsEl = document.getElementById(`inner-dots-${containerId.split('-')[2]}`)
 
@@ -226,7 +226,7 @@
               spacing: 0
             },
             rubberband: false,
-            created: (s) => {
+            created: () => {
               updateInnerDots(dotsEl, 0)
             },
             slideChanged: (s) => {
