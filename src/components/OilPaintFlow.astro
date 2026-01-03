@@ -1,0 +1,289 @@
+---
+import type { ImageMetadata } from 'astro'
+
+interface Props {
+  src: string | ImageMetadata
+  alt: string
+  class?: string
+}
+
+const { src, alt, class: className } = Astro.props
+const imageSrc = typeof src === 'string' ? src : src.src
+---
+
+<figure class:list={['oil-paint-flow', className]} data-src={imageSrc} data-alt={alt}>
+  <canvas class="oil-canvas"></canvas>
+  <noscript>
+    <img src={imageSrc} alt={alt} />
+  </noscript>
+</figure>
+
+<style>
+  .oil-paint-flow {
+    position: relative;
+    width: 100%;
+    margin: 2rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .oil-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .oil-paint-flow {
+      display: none;
+    }
+    .oil-paint-flow + noscript {
+      display: block;
+    }
+  }
+</style>
+
+<script>
+  import * as THREE from 'three'
+
+  const vertexShader = `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `
+
+  const fragmentShader = `
+    uniform sampler2D uTexture;
+    uniform float uTime;
+    uniform float uHover;
+    uniform vec2 uMouse;
+
+    varying vec2 vUv;
+
+    #define INTENSITY 0.01
+
+    // Hash function for noise
+    vec2 hash(vec2 p) {
+      p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
+      return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
+    }
+
+    // Gradient noise
+    float noise(vec2 p) {
+      vec2 i = floor(p);
+      vec2 f = fract(p);
+      vec2 u = f * f * (3.0 - 2.0 * f);
+
+      return mix(
+        mix(dot(hash(i + vec2(0.0, 0.0)), f - vec2(0.0, 0.0)),
+            dot(hash(i + vec2(1.0, 0.0)), f - vec2(1.0, 0.0)), u.x),
+        mix(dot(hash(i + vec2(0.0, 1.0)), f - vec2(0.0, 1.0)),
+            dot(hash(i + vec2(1.0, 1.0)), f - vec2(1.0, 1.0)), u.x),
+        u.y
+      );
+    }
+
+    // FBM with derivatives for flow direction
+    vec2 dfbm(vec3 p) {
+      vec2 f = vec2(0.0);
+      float a = 0.5;
+      float freq = 1.0;
+
+      for (int i = 0; i < 5; i++) {
+        vec2 n = vec2(
+          noise(p.xy * freq + p.z),
+          noise(p.xy * freq + p.z + 100.0)
+        );
+        f += a * n;
+        freq *= 2.0;
+        a *= 0.5;
+      }
+      return f;
+    }
+
+    void main() {
+      vec2 uv = vUv;
+
+      // Create 3D position with time for animation
+      vec3 p = vec3(uv * 10.0, uTime * 0.5);
+
+      // Get FBM displacement
+      vec2 n = dfbm(p);
+
+      // Base intensity + hover boost
+      float intensity = INTENSITY + uHover * 0.004;
+
+      // Sample texture with displacement
+      vec4 color = texture2D(uTexture, uv + n * intensity);
+
+      gl_FragColor = color;
+    }
+  `
+
+  class OilPaintEffect {
+    container: HTMLElement
+    canvas: HTMLCanvasElement
+    src: string
+    renderer!: THREE.WebGLRenderer
+    scene!: THREE.Scene
+    camera!: THREE.OrthographicCamera
+    mesh!: THREE.Mesh
+    material!: THREE.ShaderMaterial
+    mouse = { x: 0.5, y: 0.5, targetX: 0.5, targetY: 0.5 }
+    hover = { current: 0, target: 0 }
+    startTime: number
+    raf: number | null = null
+    isInView = false
+
+    constructor(container: HTMLElement) {
+      this.container = container
+      this.canvas = container.querySelector('.oil-canvas')!
+      this.src = container.dataset.src || ''
+      this.startTime = Date.now()
+      this.init()
+    }
+
+    async init() {
+      if (!this.src) {
+        console.error('OilPaintFlow: No image source provided')
+        return
+      }
+
+      this.renderer = new THREE.WebGLRenderer({
+        canvas: this.canvas,
+        alpha: true,
+        antialias: true,
+      })
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+      this.scene = new THREE.Scene()
+      this.camera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, 0.1, 10)
+      this.camera.position.z = 1
+
+      const loader = new THREE.TextureLoader()
+      const texture = await new Promise<THREE.Texture>((resolve, reject) => {
+        loader.load(this.src, resolve, undefined, (err) => {
+          console.error('OilPaintFlow: Failed to load texture', this.src, err)
+          reject(err)
+        })
+      }).catch(() => null)
+
+      if (!texture)
+return
+
+      const img = texture.image as HTMLImageElement
+      const imgAspect = img.width / img.height
+
+      this.material = new THREE.ShaderMaterial({
+        vertexShader,
+        fragmentShader,
+        uniforms: {
+          uTexture: { value: texture },
+          uTime: { value: 0 },
+          uHover: { value: 0 },
+          uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+        },
+        transparent: true,
+      })
+
+      const geometry = new THREE.PlaneGeometry(1, 1)
+      this.mesh = new THREE.Mesh(geometry, this.material)
+      this.scene.add(this.mesh)
+
+      this.resize(imgAspect)
+      this.setupEvents()
+      this.setupObserver()
+
+      // Start animation immediately
+      this.isInView = true
+      this.animate()
+    }
+
+    resize(aspect: number) {
+      const width = this.container.clientWidth
+      const height = width / aspect
+      this.canvas.style.aspectRatio = `${aspect}`
+      this.renderer.setSize(width, height)
+    }
+
+    setupEvents() {
+      this.container.addEventListener('mouseenter', () => {
+        this.hover.target = 1
+      })
+
+      this.container.addEventListener('mouseleave', () => {
+        this.hover.target = 0
+        this.mouse.targetX = 0.5
+        this.mouse.targetY = 0.5
+      })
+
+      this.container.addEventListener('mousemove', (e) => {
+        const rect = this.container.getBoundingClientRect()
+        this.mouse.targetX = (e.clientX - rect.left) / rect.width
+        this.mouse.targetY = 1 - (e.clientY - rect.top) / rect.height
+      })
+
+      window.addEventListener('resize', () => {
+        if (this.material?.uniforms.uTexture.value) {
+          const texture = this.material.uniforms.uTexture.value as THREE.Texture
+          const img = texture.image as HTMLImageElement
+          this.resize(img.width / img.height)
+        }
+      })
+    }
+
+    setupObserver() {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            this.isInView = entry.isIntersecting
+            if (this.isInView && !this.raf) {
+              this.animate()
+            }
+          })
+        },
+        { threshold: 0.1 },
+      )
+      observer.observe(this.container)
+    }
+
+    animate = () => {
+      if (!this.isInView) {
+        this.raf = null
+        return
+      }
+
+      // Smooth mouse lerp
+      this.mouse.x += (this.mouse.targetX - this.mouse.x) * 0.05
+      this.mouse.y += (this.mouse.targetY - this.mouse.y) * 0.05
+
+      // Smooth hover lerp
+      this.hover.current += (this.hover.target - this.hover.current) * 0.06
+
+      // Update uniforms
+      const elapsed = (Date.now() - this.startTime) / 1000
+      this.material.uniforms.uTime.value = elapsed
+      this.material.uniforms.uHover.value = this.hover.current
+      this.material.uniforms.uMouse.value.set(this.mouse.x, this.mouse.y)
+
+      this.renderer.render(this.scene, this.camera)
+      this.raf = requestAnimationFrame(this.animate)
+    }
+  }
+
+  // Initialize on page load and after Swup navigation
+  function initOilPaint() {
+    document.querySelectorAll<HTMLElement>('.oil-paint-flow').forEach((el) => {
+      if (!el.dataset.initialized) {
+        new OilPaintEffect(el)
+        el.dataset.initialized = 'true'
+      }
+    })
+  }
+
+  initOilPaint()
+  document.addEventListener('swup:contentReplaced', initOilPaint)
+</script>
