@@ -63,7 +63,9 @@ const imageSrc = typeof src === 'string' ? src : src.src
 
     varying vec2 vUv;
 
-    #define INTENSITY 0.01
+    #define INTENSITY 0.016
+    #define SPEED 1.56
+    #define SCALE 180.0
 
     // Hash function for noise
     vec2 hash(vec2 p) {
@@ -92,7 +94,7 @@ const imageSrc = typeof src === 'string' ? src : src.src
       float a = 0.5;
       float freq = 1.0;
 
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < 1; i++) {
         vec2 n = vec2(
           noise(p.xy * freq + p.z),
           noise(p.xy * freq + p.z + 100.0)
@@ -108,13 +110,13 @@ const imageSrc = typeof src === 'string' ? src : src.src
       vec2 uv = vUv;
 
       // Create 3D position with time for animation
-      vec3 p = vec3(uv * 10.0, uTime * 0.5);
+      vec3 p = vec3(uv * SCALE, uTime * SPEED);
 
       // Get FBM displacement
       vec2 n = dfbm(p);
 
       // Base intensity + hover boost
-      float intensity = INTENSITY + uHover * 0.004;
+      float intensity = INTENSITY + uHover * 0.005;
 
       // Sample texture with displacement
       vec4 color = texture2D(uTexture, uv + n * intensity);
@@ -171,8 +173,7 @@ const imageSrc = typeof src === 'string' ? src : src.src
         })
       }).catch(() => null)
 
-      if (!texture)
-return
+      if (!texture) return
 
       const img = texture.image as HTMLImageElement
       const imgAspect = img.width / img.height

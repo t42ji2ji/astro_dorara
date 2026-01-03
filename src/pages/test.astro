@@ -1,6 +1,7 @@
 ---
 import LayoutMinimal from '~/layouts/LayoutMinimal.astro'
 import CometCursor from '~/components/test/CometCursor.astro'
+import w4 from '../assets/reading_archetypes/w4.png'
 ---
 
 <LayoutMinimal>
@@ -14,10 +15,41 @@ import CometCursor from '~/components/test/CometCursor.astro'
 
     <section class="mb-12">
       <h2 class="text-lg font-medium mb-4 text-stone-700 dark:text-stone-300">
+        Oil Paint Flow Effect
+      </h2>
+
+      <div class="controls mb-4 p-4 bg-stone-100 dark:bg-stone-800 rounded-lg">
+        <div class="grid grid-cols-2 gap-4">
+          <label class="block">
+            <span class="text-xs text-stone-600 dark:text-stone-400">Intensity: <span id="intensity-val">0.05</span></span>
+            <input type="range" id="intensity" min="0.001" max="0.5" step="0.001" value="0.05" class="w-full">
+          </label>
+          <label class="block">
+            <span class="text-xs text-stone-600 dark:text-stone-400">Speed: <span id="speed-val">0.8</span></span>
+            <input type="range" id="speed" min="0.01" max="5" step="0.01" value="0.8" class="w-full">
+          </label>
+          <label class="block">
+            <span class="text-xs text-stone-600 dark:text-stone-400">Scale: <span id="scale-val">10</span></span>
+            <input type="range" id="scale" min="1" max="500" step="1" value="10" class="w-full">
+          </label>
+          <label class="block">
+            <span class="text-xs text-stone-600 dark:text-stone-400">Octaves: <span id="octaves-val">5</span></span>
+            <input type="range" id="octaves" min="1" max="12" step="1" value="5" class="w-full">
+          </label>
+        </div>
+      </div>
+
+      <figure class="oil-paint-test" data-src={w4.src}>
+        <canvas class="oil-canvas w-full rounded-lg"></canvas>
+      </figure>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="text-lg font-medium mb-4 text-stone-700 dark:text-stone-300">
         Comet Cursor Effect
       </h2>
       <p class="text-sm text-stone-500 dark:text-stone-400 mb-4">
-        輸入文字試試看，刪除時光標會有彗星尾巴效果 ✨
+        輸入文字試試看，刪除時光標會有彗星尾巴效果
       </p>
       <CometCursor />
     </section>
@@ -30,3 +62,178 @@ import CometCursor from '~/components/test/CometCursor.astro'
     margin: 0 auto;
   }
 </style>
+
+<script>
+  import * as THREE from 'three'
+
+  const vertexShader = `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `
+
+  // Shader with configurable parameters
+  function createFragmentShader(octaves: number) {
+    return `
+      uniform sampler2D uTexture;
+      uniform float uTime;
+      uniform float uIntensity;
+      uniform float uSpeed;
+      uniform float uScale;
+
+      varying vec2 vUv;
+
+      vec2 hash(vec2 p) {
+        p = vec2(dot(p, vec2(127.1, 311.7)), dot(p, vec2(269.5, 183.3)));
+        return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
+      }
+
+      float noise(vec2 p) {
+        vec2 i = floor(p);
+        vec2 f = fract(p);
+        vec2 u = f * f * (3.0 - 2.0 * f);
+
+        return mix(
+          mix(dot(hash(i + vec2(0.0, 0.0)), f - vec2(0.0, 0.0)),
+              dot(hash(i + vec2(1.0, 0.0)), f - vec2(1.0, 0.0)), u.x),
+          mix(dot(hash(i + vec2(0.0, 1.0)), f - vec2(0.0, 1.0)),
+              dot(hash(i + vec2(1.0, 1.0)), f - vec2(1.0, 1.0)), u.x),
+          u.y
+        );
+      }
+
+      vec2 dfbm(vec3 p) {
+        vec2 f = vec2(0.0);
+        float a = 0.5;
+        float freq = 1.0;
+
+        for (int i = 0; i < ${octaves}; i++) {
+          vec2 n = vec2(
+            noise(p.xy * freq + p.z),
+            noise(p.xy * freq + p.z + 100.0)
+          );
+          f += a * n;
+          freq *= 2.0;
+          a *= 0.5;
+        }
+        return f;
+      }
+
+      void main() {
+        vec2 uv = vUv;
+        vec3 p = vec3(uv * uScale, uTime * uSpeed);
+        vec2 n = dfbm(p);
+        vec4 color = texture2D(uTexture, uv + n * uIntensity);
+        gl_FragColor = color;
+      }
+    `
+  }
+
+  class OilPaintTest {
+    container: HTMLElement
+    canvas: HTMLCanvasElement
+    renderer: THREE.WebGLRenderer
+    scene: THREE.Scene
+    camera: THREE.OrthographicCamera
+    material!: THREE.ShaderMaterial
+    mesh!: THREE.Mesh
+    startTime: number
+    params = { intensity: 0.05, speed: 0.8, scale: 10, octaves: 5 }
+
+    constructor(container: HTMLElement) {
+      this.container = container
+      this.canvas = container.querySelector('.oil-canvas')!
+      this.startTime = Date.now()
+
+      this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, alpha: true, antialias: true })
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+      this.scene = new THREE.Scene()
+      this.camera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, 0.1, 10)
+      this.camera.position.z = 1
+
+      this.init()
+    }
+
+    async init() {
+      const src = this.container.dataset.src || ''
+      const loader = new THREE.TextureLoader()
+      const texture = await new Promise<THREE.Texture>((resolve, reject) => {
+        loader.load(src, resolve, undefined, reject)
+      })
+
+      const img = texture.image as HTMLImageElement
+      const aspect = img.width / img.height
+
+      this.material = new THREE.ShaderMaterial({
+        vertexShader,
+        fragmentShader: createFragmentShader(this.params.octaves),
+        uniforms: {
+          uTexture: { value: texture },
+          uTime: { value: 0 },
+          uIntensity: { value: this.params.intensity },
+          uSpeed: { value: this.params.speed },
+          uScale: { value: this.params.scale },
+        },
+      })
+
+      const geometry = new THREE.PlaneGeometry(1, 1)
+      this.mesh = new THREE.Mesh(geometry, this.material)
+      this.scene.add(this.mesh)
+
+      const width = this.container.clientWidth
+      this.canvas.style.aspectRatio = `${aspect}`
+      this.renderer.setSize(width, width / aspect)
+
+      this.setupControls()
+      this.animate()
+    }
+
+    setupControls() {
+      const intensityEl = document.getElementById('intensity') as HTMLInputElement
+      const speedEl = document.getElementById('speed') as HTMLInputElement
+      const scaleEl = document.getElementById('scale') as HTMLInputElement
+      const octavesEl = document.getElementById('octaves') as HTMLInputElement
+
+      intensityEl?.addEventListener('input', () => {
+        this.params.intensity = Number.parseFloat(intensityEl.value)
+        this.material.uniforms.uIntensity.value = this.params.intensity
+        document.getElementById('intensity-val')!.textContent = intensityEl.value
+      })
+
+      speedEl?.addEventListener('input', () => {
+        this.params.speed = Number.parseFloat(speedEl.value)
+        this.material.uniforms.uSpeed.value = this.params.speed
+        document.getElementById('speed-val')!.textContent = speedEl.value
+      })
+
+      scaleEl?.addEventListener('input', () => {
+        this.params.scale = Number.parseFloat(scaleEl.value)
+        this.material.uniforms.uScale.value = this.params.scale
+        document.getElementById('scale-val')!.textContent = scaleEl.value
+      })
+
+      octavesEl?.addEventListener('input', () => {
+        this.params.octaves = Number.parseInt(octavesEl.value)
+        document.getElementById('octaves-val')!.textContent = octavesEl.value
+        // Octaves requires shader recompile
+        this.material.fragmentShader = createFragmentShader(this.params.octaves)
+        this.material.needsUpdate = true
+      })
+    }
+
+    animate = () => {
+      const elapsed = (Date.now() - this.startTime) / 1000
+      this.material.uniforms.uTime.value = elapsed
+      this.renderer.render(this.scene, this.camera)
+      requestAnimationFrame(this.animate)
+    }
+  }
+
+  const container = document.querySelector<HTMLElement>('.oil-paint-test')
+  if (container) {
+    const _effect = new OilPaintTest(container)
+  }
+</script>
