@@ -347,9 +347,9 @@ import InteractiveContainer from '../InteractiveContainer.astro'
   initContextualMeaning()
 
   // Swup 頁面轉換後重新初始化
-  document.addEventListener('swup:contentReplaced', () => {
-    initContextualMeaning()
-  })
+  document.addEventListener('swup:contentReplaced', initContextualMeaning)
+  // CardReader 開啟後重新初始化
+  document.addEventListener('cardreader:open', initContextualMeaning)
 </script>
 
 <style>

@@ -76,20 +76,22 @@ import InteractiveContainer from '../InteractiveContainer.astro'
     beam: { shape: 'w-48 h-6', color: 'bg-orange-800', label: '橫樑 BEAM' },
   }
 
-  const statusEl = document.getElementById('assistant-status')
-  const zone = document.getElementById('delivery-zone')
-  const gameBtns = document.querySelectorAll('.game-btn')
+  function initLanguageGame() {
+    const statusEl = document.getElementById('assistant-status')
+    const zone = document.getElementById('delivery-zone')
+    const gameBtns = document.querySelectorAll('.game-btn')
 
-  if (statusEl && zone && gameBtns.length > 0) {
+    if (!statusEl || !zone || gameBtns.length === 0) return
+    if ((statusEl as HTMLElement).dataset.initialized) return
+    ;(statusEl as HTMLElement).dataset.initialized = 'true'
+
     gameBtns.forEach((btn) => {
       btn.addEventListener('click', () => {
         const cmd = btn.getAttribute('data-cmd') as keyof typeof items
-        if (!cmd) 
-return
+        if (!cmd) return
 
         const item = items[cmd]
-        if (!item) 
-return
+        if (!item) return
 
         // Disable buttons
         gameBtns.forEach((b) => ((b as HTMLButtonElement).disabled = true))
@@ -121,6 +123,11 @@ return
       })
     })
   }
+
+  initLanguageGame()
+  document.addEventListener('astro:page-load', initLanguageGame)
+  document.addEventListener('swup:contentReplaced', initLanguageGame)
+  document.addEventListener('cardreader:open', initLanguageGame)
 </script>
 
 <style>

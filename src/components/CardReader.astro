@@ -192,6 +192,18 @@
       reader!.classList.add('is-open')
       document.body.style.overflow = 'hidden'
 
+      // 重新初始化動態插入的互動元件（Three.js 等）
+      // 清除 initialized 標記讓元件重新初始化
+      sliderContainer.querySelectorAll('[data-initialized]').forEach((el) => {
+        delete (el as HTMLElement).dataset.initialized
+      })
+      // 觸發事件讓各元件重新初始化
+      document.dispatchEvent(new CustomEvent('cardreader:open'))
+
+      // 手機版滾動衝突處理：追蹤觸控狀態
+      let touchStartY = 0
+      let isScrollingContent = false
+
       // 初始化主 Slider - 關鍵：使用 selector 只選主層的 slides
       // 桌面版：水平滑動，手機版：垂直滑動
       mainSlider = new KeenSlider(sliderContainer, {
@@ -202,6 +214,11 @@
           spacing: 16
         },
         rubberband: false,
+        // 手機版：根據滾動狀態決定是否允許拖曳
+        dragSpeed: (val) => {
+          if (state.isDesktop) return val
+          return isScrollingContent ? 0 : val
+        },
         created: () => {
           updateMainDots()
           updateNavButtons()
@@ -212,6 +229,46 @@
           updateNavButtons()
         }
       })
+
+      // 手機版：處理滾動內容與卡片切換的衝突
+      if (!state.isDesktop) {
+        sliderContainer.addEventListener('touchstart', (e) => {
+          touchStartY = e.touches[0].clientY
+          isScrollingContent = false
+
+          const target = e.target as HTMLElement
+          const scrollable = target.closest('.card-content, .inner-slide-content') as HTMLElement | null
+          if (scrollable) {
+            const hasScroll = scrollable.scrollHeight > scrollable.clientHeight
+            if (hasScroll) {
+              // 有可滾動內容，預設讓內容滾動
+              isScrollingContent = true
+            }
+          }
+        }, { passive: true })
+
+        sliderContainer.addEventListener('touchmove', (e) => {
+          if (!isScrollingContent) return
+
+          const target = e.target as HTMLElement
+          const scrollable = target.closest('.card-content, .inner-slide-content') as HTMLElement | null
+          if (!scrollable) {
+            isScrollingContent = false
+            return
+          }
+
+          const touchY = e.touches[0].clientY
+          const deltaY = touchY - touchStartY
+          const { scrollTop, scrollHeight, clientHeight } = scrollable
+          const isAtTop = scrollTop <= 0
+          const isAtBottom = scrollTop + clientHeight >= scrollHeight - 1
+
+          // 到達邊界時，允許卡片切換
+          if ((deltaY > 0 && isAtTop) || (deltaY < 0 && isAtBottom)) {
+            isScrollingContent = false
+          }
+        }, { passive: true })
+      }
 
       // 初始化所有內層 Sliders
       innerSliderConfigs.forEach(({ containerId }) => {
