@@ -19,7 +19,8 @@
       "Bash(pnpm optimize-images:*)",
       "Bash(sips:*)",
       "Bash(git diff:*)",
-      "Bash(pnpm remove:*)"
+      "Bash(pnpm remove:*)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []

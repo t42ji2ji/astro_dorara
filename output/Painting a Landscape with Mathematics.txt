@@ -1,0 +1,407 @@
+Hi, welcome back! Certainly glad you could join me today. My name is Inigo Quiles and I thought that
+today we would do a fantastic painting that is a lot of fun, not by using traditional paint or
+brushes or digital ones, but by using mathematics instead. That's right, indeed we will define colors
+and shapes through formulas that when composed together into one large formula will result in
+this mathematical painting that you see. So I tell you what, let me run all the formulas across the
+screen that you will need to do this painting along with me today, and while I do that let me
+assure you that painting with maths is not difficult, if done one step at a time as we are going to do
+today, and it's most definitely lots of fun. So let's erase all this mathematical paint to get
+the canvas ready to go so we can start from the beginning, plotting a 2D surface f that is just
+some linear function of x and z, the two horizontal coordinates of space. As you see I'm using y
+for the up direction today, and I hope I don't annoy the viewers that are in the C up team too much.
+Now such a linear function is a polynomial of degree one, but if we progressively increase the
+degree of the polynomial, we can provide our surface with more and more undulations.
+This is great as a first sketch for the terrain, but to paint a complex terrain with thousands of hills
+and tiny bumps, this polynomial would need thousands of terms of increasing degree, which we need to
+avoid because that's expensive to evaluate and difficult for the computer to plot. So instead,
+we are going to make the terrain a piecewise function, such that we will assign a unique but
+small and manageable polynomial to each one by one square tile of the domain.
+I'm only showing four such tiles here, but the domain of the function is infinite of course.
+Now, in order to ensure that all these polynomial tiles connect nicely to each other,
+we will construct them in this form, which is a polynomial of degree 3 in four parameters,
+a, b, c and d, where each parameter corresponds directly to the function's height
+at each one of the four corners of each tile. So, by sharing the coefficients at the vertices of the
+tiles, we can ensure the connectivity of all the polynomials. We make these coefficients look random
+by taking the integer coordinates of each vertex, i and j, dividing them by some irrational number,
+such as pi, computing the fractional part, and that's what the curly braces mean here,
+multiplying them by 50, and then combining them together and computing their fractional part yet again.
+Now, using this particular expression is not critical, and you can replace it by any function
+that shuffles i and j sufficiently and produces a random enough looking value for each vertex.
+On the other hand, these polynomial components here are intentional, and force the derivatives
+of the surface along the connecting edges to be zero, so they always match across neighboring tiles.
+Without them, we would have a continuous surface, but not a smooth one.
+And speaking of tangents, let me digress a little bit here to talk to you about this S shape that runs
+from 0 to 1, because when we generalize it to run between any arbitrary points A and B, we call it
+smooth step, and becomes one of the most useful mathematical brushes that we have.
+You will see it today applied multiple times in the form of capital S of A, B, X.
+And since I'm talking about useful mathematical brushes, functions like f that undulate both smoothly
+and randomly are usually called noise, and are very important in the making of virtual effects for
+films, which are often based on heavily art directed mathematics. And so, noise shows up everywhere,
+from the creation of clouds and smoke, to vegetation and mountains, surface detail and dirt and almost
+anything. So let's give it a proper name in this video and refer to it with capital N from now on,
+so we can use f for the function of the terrain itself that we are designing, which we are going to
+continue to work on and add some detail to make it more like an actual terrain. So let's pack the x and
+c coordinates of space as a 2D vector p sub xc, and then compress another noise function horizontally
+by multiplying p by 2, and then squashing it vertically by a factor of 2 as well to keep its features undistorted.
+Next, we rotate it so the two functions domains do not align to each other.
+The angle of rotation is arbitrary and not important, so I will just use the Pythagorean triple 345 to
+define one. I often use this triple, or 81517, or some other of the small Pythagorean triples,
+as a way to quickly fill up rotation matrices without resorting to sines and cosines.
+Alright, the last step here is to add this scaled and rotated polynomial back to the original one,
+to create new undulations on it. This is why preventing the alignment of the two functions was important.
+And so, we will repeat this a few times, with larger and larger compression, squashing,
+and rotation factors, in order to get smaller and smaller undulations,
+which provide finer and finer detail for our surface.
+And yes, if this process of summing undulating waves of different frequencies made you think of a
+Fourier series or a discrete cosine transform, then you are definitely having a good intuition here.
+And you should check a link I left in the description of the video to an article where
+I do a frequency analysis of this summation, and explains why it does resemble a terrain.
+In fact, let's start now evaluating the function in its whole domain,
+and scale this domain by 2000, and the range of the function by 600.
+So, from now on, one unit of space equals about one meter, so we can sculpt the terrain in a more intuitive way.
+Also, I will reserve the uppercase F for the canonical non-scaled fractal sum,
+because we are going to be using it so many more times today.
+Okay, with that in place, let's now change gears and paint some lighting,
+starting with our strongest light, or the key light, the Sun.
+We will use the derivatives of F as a way to determine which areas of the surface
+are facing towards or away from the Sun. Concretely, our surface F will have a derivative with respect
+to x, which gives us the slope and tangent in the x direction, and a derivative with respect to z,
+which gives us a slope and a tangent in the z direction.
+Now, the cross product of these two tangents is perpendicular to the surface.
+So, let's call it the normal vector, and note that it is exactly the direction of this vector
+that we should compare to the Sun direction, here in yellow, with a dot product in order to determine
+whether the Sun is illuminating the surface or not.
+Concretely, on the left side of this hill, both are pointing in the same general direction,
+so their dot product is close to 1, which means that this must be the Sun inside of the
+hill. But, as we move towards the right side of the hill, the two vectors agreement, and hence their dot product,
+decreases until it becomes negative, indicating that this portion of the hill is in the shade.
+So, if we take the dot product, and when positive, multiply it by brown,
+then we will get a color within a palette of shades of brown that we can assign to each point
+on the surface, and finally start getting some sense of volume for the terrain.
+And, while this is a great start, the image is still too busy and difficult to read, I think.
+But, painting some shadows will help with that.
+So, let's define a function sh that returns 0 when there is an intersection between the line of sight
+to the Sun that starts at p, and our polynomial surface, and that returns 1 when there isn't any
+such intersection. Then, when we multiply our surface color with it, we can finally see shadows, and with
+them, the larger structures of our terrain, as we wanted, making it easier to understand its overall shape.
+But, let's now replace sh by something better, something that creates a transition zone between 0 and 1 instead.
+We do that by constructing a new function, R that is equal to the signed distance from any point in
+the terrain f to a point in the line t units away from p, all divided by t.
+The minimum of R, smooth stepped to the range 0 to 1, will be a pretty good estimation of the penumbras
+cast by the terrain. See how we get now beautiful soft shadows. Very nice.
+However, like most fractal structures, the physical scale of this terrain is currently a bit ambiguous,
+without any trees or humans for reference. Even after rotating and scaling the domain of our terrain
+function to get a closer look at it, viewers still can't possibly know if these are large hills that are
+very far or tiny bumps that we are very closely looking at. To fix this, we are going to compute
+a decaying exponential of the distance to any point on the surface, t, and use it to mix in some gray into
+our surface color. So that we gradually reduce the contrast and saturation in the most distant parts
+of the painting, which is what happens when you look at a real landscape. And indeed, we finally do have
+a sense of scale for the terrain, don't we? Now, of course, we can and should play with the attenuation
+factor of our exponential brush and decide how hazy or clear we want our landscape to be today.
+All options are open and will look beautiful. And actually, that's no coincidence. Exponentials do model
+the transmittance of light in the real atmosphere very well. And while our paintings don't need to
+be faithful to reality, sometimes it's just convenient to learn from nature itself.
+Alright, something fun now. Let's replace this exponential with three different exponentials,
+one for each of our red, green, and blue color channels. That way, by adjusting the three damping
+constants independently, we just gave the atmosphere a beautiful blue tint in the medial range distance
+of the pieces before it becomes gray or monochrome here at the back.
+Great, now that we have the terrain math done, let's lock the composition of the piece by choosing
+a good section of this infinite terrain to frame into. After scouting for a bit, by rotating and
+translating the surface, I found this location with only two depth layers, with this hill popping out as
+a foreground element, well separated from the background, which I think makes it very photogenic.
+But the choice of location is totally up to you. Choose one that you like. And don't fall for advice
+about mystical spirals and perfect compositions that only work by moving and stretching the spiral after
+the fact, or most irrationally, sacred golden ratios supposedly linked to the beauty of the universe or
+whatever. All I'm saying is just go with what feels right to you. For example, even though I like the
+location, I think I want something a bit more dramatic. So let's sculpt a cliff in it by using the function C,
+which takes everything above 500 meters with a smooth step, and then pulls it up by some extra 90 meters.
+But of course, doing so changes the derivatives of the terrain, which in turn we needed for lighting.
+So we will compute the derivatives of the new surface by using the chain rule, which involves
+the derivative of the smooth step sculpt operation and the derivatives of the terrain itself before we
+applied it. Okie dokie. So now that we have our framing locked, we can continue working on the painting's
+composition, which means we have to make more decisions. And the most important decision of all
+is where the sun is in the sky and what we want the lighting to look like. So first, if we describe
+the sun's direction or position in the sky s in spherical coordinates, let's push theta close to pi
+halves so the sun is low and gives us long dramatic shadows. From there, let's now explore how different
+values of phi affect the composition. For example, at this very moment, the light comes from the left
+and a bit to the front. But if we rotate it to the right side, then we have a different set of shadows.
+Although in this case, we lose the nice separation that we had between the front hill and the background
+cliffs. If on the other hand, we rotate the light to the back, we split the painting in a dark and a bright
+area, which I don't like personally. So I settled on a sun coming from the back left side. This illuminates both
+parts of the foreground and the background, but still keeps them separated thanks to the atmospheric
+coloring that we painted. It also creates these very cool silhouettes in the front hills here and in the
+background cliffs here. But again, this is all up to you. This is your little mathematical world and you can do
+anything you want in it. So just have fun. And so next we will paint a pretty sky for our world.
+We start by making the background of the canvas blue and then we use a linear function of the
+vertical component of the direction of each point in the canvas, phi, so that the upper part of the sky
+get darker and more saturated than those closer to the horizon. Then we are going to place a horizontal
+plane at about 2.5 kilometers in altitude and evaluate the same polynomial function that we used for the
+terrain surface on it, but with a different scale. Then we remap its negative 1 to positive 1 range
+into 0 to 1 with a smooth step and display it as shades of gray.
+Now we use the value of the polynomial to drive a weighted color average where small values of the
+polynomial map to blue and large values map to white, which creates some happy little clouds in the sky.
+Pretty cool, although a sky this hazy would never produce the strong light and shadows that we painted
+in the terrain. So let's clear up the sky a bit, just like so, which is very easy since we can control
+both how large the clouds are and also how fuzzy or sharp their edges are by changing the parameters of
+the smooth step. And as you can see, we keep coming back to our friend the smooth step function.
+But anyway, let's now soften these clouds by reducing their contribution to 40% in the color mixing formula.
+And lastly, we scale the domain of the function by 2 so the clouds become twice smaller, just like that.
+And since we know that we will be painting more layers of cloud on top, I don't think we need to add more
+details to this one. So let's stop there, move on and quickly adjust the overall contrast and saturation
+of the painting before adding any more lighting and details. That's because I feel the image is a bit
+too flat right now. So I'm going to make it more vibrant and contrasty by using, well wait for it,
+a smooth step again. The smooth step makes the dark colors darker and the bright ones brighter, pretty much
+like you would do when adjusting color curves in a photo editing program.
+Very cool. Now let's take care of these large patches of flat color here, because even though
+these areas can't be reached by the sun, they shouldn't be in complete darkness, but partially
+illuminated by the sky's blue light, an effect that should be strongest when the surfaces are facing
+directly to the sky. So let's capture that idea and the light by taking the normal's vertical component,
+scaling and biasing it by a half, and then multiplying it by the sky's blue color, and finally
+adding it to our lighting formula. So much better indeed. By the way, the 10 factor here in the formula
+is because over time I've realized that this ratio of sunlight to skylight produces realistic lighting.
+Now, while we finally see some detail in the shadows, I still think we don't have enough definition,
+especially in the cliffs here. So let's brighten the map even more by considering not only the light
+coming from the sun, but also that coming from the nearby areas of the terrain that are strongly
+illuminated by the sun. In that bouncing effect, the sunlight not only has changed to approximately the
+opposite direction, let's call it B, but also has gotten multiplied or tinted if you want by the brown
+color of the terrain itself. So there we are. See again the difference between before and after applying
+this warm bounce light coloring. Very nice.
+Alright, with the composition locked, now it's when we start making this painting pretty.
+So I'll tell you what. Let's split the color formula between material and lighting colors for convenience,
+and now add some basic grass layer to the material by mixing some green into the current brown color
+that we have with our usual color mixing formula, that is driven by the vertical component of the
+terrain's normal composed with a smooth step in order to isolate flat areas where the grass can grow.
+It is that easy. And of course, we can and should experiment with changing the parameters of the
+smooth step to control how much grass coverage we want. But today, let's actually not spend too much
+time tweaking that, because once we cover most of the terrain with trees, this layer of green will be
+there only as a vague indication of a grassy ground. But before we paint trees, I think I wouldn't actually
+expect trees to grow in such a rocky terrain like the one we have here. So what about we filter out some of
+these undulations, say those in the range of 64 to half a meter, which is approximately the scale at
+which vegetation happens. And because the series that we used to construct the surface F doubled frequency
+with each term, all we need to do really is just omit the right seven terms that span that 64 to half a
+meter wavelength range. There we go. The effect is similar to bandpass filtering the terrain signal,
+but we are doing it at synthesis time, which is easier than doing it after the fact.
+Anyway, now we are finally ready to plant our trees. So let's start by dividing the x and z coordinates of
+space by 2 and rounding the result down to the closest integer. This tiles space into squares of 2 meters,
+where m is the two-dimensional index of each tile. With it, we can compute the center of the tile,
+and with the terrain surface evaluated at that center, we can create a unique local coordinate
+system for each tile, w. And finally, in this coordinate system, we can evaluate a sphere's
+sine distance function with a radius close to 1.
+Now, let me talk about what just happened here. Because even though we just painted millions of
+spheres in the canvas, unlike traditional painting, or even unlike traditional computer graphics, where
+each tree needs to be painted one at a time, here we are only evaluating one sphere as part of our large
+mathematical painting. But because of the tiling of the coordinates, this one sphere function has become
+periodic and covers the whole space, creating infinite detail. But while that's fantastic,
+nature is rarely as perfectly periodic and regular as what we have here now. So let's add some variation
+similarly to how we randomized our terrain polynomial. We take the two-dimensional index of each tile,
+make it one-dimensional, take the fractional part of their division by two irrational numbers,
+multiply that by itself, and take the fractional parts again. This is clearly a bit of an arbitrary
+function again, so feel free to design your own. All we need is something that feels random, because
+with it, we are going to shift the center of the sphere by plus minus half meter within its 2x2 tile,
+in order to make this field of trees look less regular.
+Great! Now let's stretch the spheres vertically into ellipsoids, so we get something that looks less
+like big bushes and more like trees. This seems simple, but there is an interesting technical catch
+here. The implicit equation of an ellipsoid that is most natural is not a distance field, making it
+very inconvenient for rendering. On the other hand, the actual SDF of an ellipsoid requires solving a
+degree 6 equation, which has no closed form in radicals, and numerical solvers have problems with.
+But the SDF of symmetric ellipsoids, like the ones we probably need today, can however be solved analytically,
+with a quartic equation, but that turns out to be too slow for us. So, in this painting, I'm using this
+other approximation that I developed, that is completely robust and efficient enough.
+In any case, let's now move the center of the ellipsoids up, so their lowest part sits on the ground,
+so we get to see more of a tree shape. However, this introduces some problems here in the cliffs,
+because all the ellipsoids that were hidden under them are now poking out. Can you see them?
+That feels wrong, but we won't erase them yet and let them be instead. We can take care of them later
+when we have finalized painting the trees. And instead, let's go fix another thing that is really
+bothering me, which is that the ground here between the trees feels too bright, given that in such a dense
+forest, I would expect very little of the ambient light to make it down there.
+So, let's bring up the color formula again and compute a smooth step of the altitude,
+to isolate the valleys from the cliffs, and multiply it by the ambient light to reduce it by 80%.
+And in fact, for the same reason, we will also modify the lighting formula of the trees,
+but with a linear function that goes from 0 at the bottom of the ellipsoid to 1 at its center.
+And with it, we also indicate that not much of the light makes it to the lowest parts of the forest.
+And yeah, indeed, this looks so much better now.
+So, now let's work on giving this forest a more organic feel to it.
+As a first step, we will change the height and the width of each tree by using the same
+pseudo-random function that we designed earlier, but with a different offset, so we decorrelate the
+random sizes from the random tree positions. Indeed, different offsets produce different sets of random
+values, but they are all equally good, as you can see, so it doesn't matter much which values we pick.
+However, once we have chosen some, it can be crucial to commit to them.
+I learned this the very hard way when I was working at Pixar, generating mathematical art for the movies.
+So, the story is that I based the look of the vegetation of the film that we were making,
+on the randomness generated by such an arbitrary number, like we just did,
+which I made equal to my phone number, because why not?
+Now, that was all fine and dandy until the day I changed to a new carrier and phone number with it,
+and I felt the urge to update the formula accordingly.
+This should have not been any problem, since the new randomness generated from it was as valid of a
+randomness as the old one. But well, the truth is everyone freaked out when tens of film shots that
+had been approved already for the big screen suddenly looked all different overnight. It was crisis time,
+and while in the end we did actually and unexpectedly keep the new phone number, the moral of the story is
+still to always be extremely careful if you play with arbitrary formulas and numbers in a
+professional context. Anyways, back to our painting, and to finish sculpting the trees,
+we will now use a noise function like the one we designed for the terrain surface but in 3D,
+and we will define it over the whole space P, rather than just in the local coordinate of each tree W.
+Then we square it to make it a bit more spiky, and we add it back to the ellipsoid function.
+This distorts its silhouette into something more organic and no longer perfectly smooth and
+geometrical. And with the right scaling for it, it will make all these ellipsoids look like happy
+little trees, just like that. Actually the fact that we don't need to recreate botanically accurate
+trees, but only get something that looks like trees, is really important here. Please don't miss the
+forest for the trees, and don't fall into the rabbit hole of painting with super detailed mathematical or
+procedural branch systems or anything like that. All we need really is just the illusion of trees.
+But because they cover the whole terrain like a carpet, we no longer get to make out the shape
+of the terrain and the hills and the valleys in it. So let's improve this by tweaking the lighting on
+the trees, which is currently happening through their SDF's gradient or surface normal N sub t.
+The tweak is to linearly combine it with the normal of the terrain on which the tree grows, N sub f,
+say in a 2 to 1 ratio. This makes the normals of the trees partially reflect the orientation of the terrain.
+And now, because the dot product at the core of our lighting equations is a linear operator,
+linearly combining the normals of the tree and the terrain in this way is equivalent to linearly
+combining the terrain's and trees individual lighting in the same 2 to 1 ratio. Or in other words, the
+lighting on the trees now will partially look like that of the underlying terrain, revealing its shape.
+Check indeed how much better it looks now.
+And while we are at it, let's also take the dot product of the normal and the view direction to
+select the tree's silhouettes, raise it to the fist power to make the selection sharper, multiply it by light
+yellow and by the vertical ramp lambda that we created earlier so the selection fades at the bottom of the trees.
+And finally, we add it to the tree color to create these beautiful highlights.
+The cool thing is that because we are letting some of the terrain's surface normal leak into the trees,
+these highlights are also capturing some of the beautiful silhouettes of our hills,
+giving us a better understanding of the different layers of depth that we have in the painting.
+So, I'm going to start to see how we can see the green light.
+Lovely! This is going really great! But now it is time for us to make some big decisions.
+Indeed, when I was at this point in the painting, I realized that I had to pick a season for it.
+I quickly sketched some winter colors, which looked beautiful, and also some fall colors,
+which were also very nice. But that's when I thought that these ellipsoidal trees
+really feel like the trees you would find in a rainforest more than alpine trees.
+And because I didn't want to paint new trees over, I decided to stick to vibrant rainforest greens and move on.
+But once it's decided that we go with greens, it's also clear that it can't all be just the same green everywhere.
+Nature uses rich color palettes, so let's do the same and add some color variation to our forest.
+So, we start by generating a random number again by dividing the index of each tree in the grid by pi,
+and shuffling its fractional parts a bit. Then we compose it with a smooth step, and use it in our usual
+linear color combination formula, such that we give some of our happy little trees a yellow tint.
+Now, let's keep adding color richness and invoke the fractal noise function that we created earlier,
+but limited to 4 terms, so it is smooth. Then we tune its sharpness with a smooth step,
+and let it drive the mix of the base green color with some ochre. And let me put a magnifying glass
+here so we can see this change better. Beautiful! Lastly, we will use the same fractal noise, but scale
+differently, make it almost binary with a very sharp smooth step, and then use it to make some of the
+trees dark green, and also taller and thinner, indicating that there is a second species of tree
+here competing for space. Great! But what I'm noticing now is that here in the background,
+these patches of dark trees became too distracting. So, let's smoothly undo the effects of the last
+brush, lambda 3, by multiplying it by 1 minus a smooth step of the distance to each tree.
+That looks much better now, doesn't it?
+Okay, now we have to switch gears and do some computer graphics, but bear with me, it will be short
+and definitely worth it. So, the thing is, we need to add some highlights to our painting so it feels
+more realistic. Because all real surfaces behave a bit like a mirror and reflect the sunlight back to us
+when the orientation of the surface, the sun, and we the viewers are correctly aligned relative to each
+other. For example, when the incoming sunlight hits our cliffs, it will bounce along its normal in the
+reflected direction R, which we can compute with a dot product and some geometry. We can then measure
+how much of that light is actually coming straight to us, the viewers V, with another dot product,
+informing us of how much white paint we should add to the canvas. We also raised it to the ninth power
+so that the white fades rapidly away when the alignment is not perfect. Then we make all these
+highlights more intense when the sunlight is mirrored at a shallow angle, much like the road can blind
+you when you are driving and the sun is low in front of you. We do this with another dot product
+and the square root raised to the fifth power and letting as much as 95% of the highlighting density
+depend on it. Now, these formulas and values are not arbitrary, but common practice in contemporary
+computer graphics because they are really great approximations to how real light and materials
+behave in nature. And while following them is definitely not mandatory for making beautiful
+images, I wanted to give you a bit of a sneak peek to the kind of math you would be programming if you
+were a rendering engineer working on films or computer games. But also, look indeed at these
+gorgeous highlights that we just got for our trees and cliffs. And speaking of cliffs, let's go revisit
+those trees that were under the cliffs that were creating some ugly and distracting patterns earlier.
+Because it seems to me now that after we randomized their sizes and positions, everything looks now
+pretty organic to me and pretty much like vegetation. So why not pretend these are some little bushes that
+live up there in the cliffs and welcome them to our painting? Because we don't make mistakes here,
+we just have happy accidents.
+Alright, let's work now on fixing and finalizing the overall look of the painting.
+For example, I feel the vegetation above the cliffs is too bright. So let's select the highest elevation
+points in the terrain with a smooth step of Y and then multiply the color of our trees by 1 minus half
+of that. So that we darken them by 50%. I also feel I want to adjust the lighting of the foreground trees
+and separate a bit the parts under the sun from those in the shadow. So we will take a smooth step
+of the distance to each point in the painting and subtract it from 2 and multiply it by the sun's
+contribution. See the difference? Now, these were very localized tweaks. But now let's do some global
+color adjustment like taking the painting as a whole and raising its red, green and blue color channels to
+the powers of 1, 0.9 and 1. Or in other words, we leave the red and the blue channels of our painting
+unchanged, but we pull the middle greens up which makes our vegetation feel a bit more translucent and lush.
+We also add a little bit of blue to create a sense of a thicker atmosphere, which also desaturates and
+makes the image feel a bit more natural. Although this is totally up to you and your own taste.
+Speaking of taste, I often like adding a bit of a photographic feel to the painting, like this.
+We consider the vector that points towards each element on the canvas and compute its dot product
+with the sun's direction to get a sense of the proximity of the sun to each point on the canvas.
+If the dot product is positive, we raise it to the fourth power and multiply it by orange over 4
+before adding it to the canvas color. This simulates the sun glare that often happens in real photographs
+and film, although I'm keeping it soft in intensity and hence the division by 4 because I don't want
+to overdo it and grab too much of the viewer's attention. And on the topic of attention, let's guide
+the viewer's eye a bit towards the center of the image, like this. We multiply the painting by a parabola
+that has its zeroes at the edges of the picture and reaches a maximum of 1 at the center. Then we
+multiply it by a similar parabola that runs vertically across the screen. Then we take its 20th root,
+so we flatten it towards 1, and finally we scale and offset it by a half, darkening the borders of
+the painting as we wanted. Here's the difference before and after applying this effect.
+And now, to finish the landscape, let's paint some new and more realistic clouds on top of the ones
+that we already have. Or rather than paint, let's sculpt them so we convey volume more easily.
+So, let's start by building a solid block of clouds through a thin but infinitely wide box at 900 meters of altitude.
+Then we add three-dimensional noise to it, which will open big holes in the cloud volume,
+just like we did open gaps in the tree ellipsoids. The cloud colors right now are a direct black to
+white mapping of the dot product between the sunlight direction and the gradient of the cloud density.
+And yes, we will improve this in a moment, but regardless, the clouds won't feel well integrated
+with the rest of the scene until we compose them with the same atmospheric coloring and the three
+color exponentials that we used for the terrain and the trees.
+Also, before we continue sculpting, we need to make sure that the clouds feel fluffy.
+We do this by changing the plotting algorithm, which currently finds the zero level set or
+isosurface of our cloud density function and then applies our coloring and lighting formulas to it.
+So, instead, we will accumulate cloud density and color along all the level sets as our line of
+side crosses them. And this is what that looks like. Beautiful, isn't it?
+But still, Mandelbrot noticed that clouds are not spheres and that their silhouettes are not smooth,
+but fractal. And he was right. That's exactly why we are now going to increase the realism of these
+adorable clouds through the same techniques that we used for the terrain, where we add multiple layers
+of noise of increasingly higher frequencies and lower amplitudes. Beautiful! However, as I painted this
+on the canvas, I've applied a trick that I need to disclose. So, let me explain. This is what our
+fractal clouds look like without the trick, when we use their density gradient straight for illumination
+purposes as we have done for trees and terrain. Indeed, clouds in reality look much softer than this,
+because the light inside of them bounces around and scatters multiple times, smoothing out all the
+features and leaving only the overall shape of the cloud for us to see. But we won't simulate any of
+that, and instead, the trick will be to kind of low-pass filter the cloud density gradient.
+We do this by only using four components of the fractal noise when computing the gradient,
+instead of using all the components that we are using when we compute the shape.
+This softens the gradient and with it the lighting, and makes the clouds look so much better indeed.
+And I also think they look better when we change the scale of their domain to make them twice as large.
+And with that, let's go and work now on the lighting.
+First, we increase the contrast by changing the scale and the bias in the dot product.
+Then, for every point in the cloud, we will evaluate the density field at a second point, a few units
+away, towards the sun, in search of negative density values that indicate the presence of a cloud at that
+location that could be obscuring the sun. We capture such negative densities with a smooth step, which also
+helps us control the sharpness of the transition between light and shadows. And then, we multiply it with
+the sun's contribution. And look at that! It's starting to look really sweet!
+Great! It's time to think about what other light sources, besides the sun, could be illuminating
+our clouds. And the sky comes to mind right away, naturally. So, let's take the vertical component
+of the normalized cloud gradient, map it linearly to the 0 to 1 range, multiply it by blue, and add it to
+our cloud color, because we want the up-facing areas of the clouds to be most exposed to the skylight.
+We will also tint the bottom of the clouds in green, since the trees on the terrain should reflect
+some green light upwards. So, we can just reuse the same formula and modify it for downwards pointing
+gradients and for green color. Lastly, we multiply the color of the clouds by a linearly decreasing
+function of their density. So, we darken their interior. And I think we should also add some glare to the
+clouds that are closest to the sun. So, let's use again a dot product, raise it to a big power, and
+modulate the amount of orange that we add to the cloud color. And because I think that these happy clouds
+look beautiful already, I think we should move on and finish off the painting with some cloud shadows on the
+terrain. Now, honestly, we could just paint some dark arbitrary blobs over the terrain, and that would
+definitely work. But instead, this time, we are going to let the mathematics that we already developed
+do the painting for us. So, first, we construct the line going from each point p in the landscape towards
+the sun, and we intersect it with a horizontal plane placed at the same height as the clouds.
+Then, at that intersection point, q, we compute the cloud density function and pass it through a smooth
+step to isolate negative values, which we can then multiply with the sun coloring function of the
+trees and rocks in order to cast the shadows on them. Of course, we can control the size and the
+softness of the penumbras with the parameters of the smooth step. And I personally like the painting
+best with only a gentle shadow effect. So, I will leave the parameters there. Now, because these shadows
+are planar projections of the actual cloud density function, if we shift its domain, either horizontally
+to displace the clouds or vertically to change their shape, then the shadows on the terrain will follow
+and do the right thing automatically, which is super cool. And with that, we finished the painting.
+And while clearly this isn't the most masterful landscape painting that you have ever seen,
+I find the fact that we painted it all with mass quite beautiful in itself, if you ask me.
+Remember that all the individual color, lighting, and shape formulas that we designed
+are actually composed into one large and singular function that is responsible for returning a red, green,
+and blue color triple for any xy point in the canvas. Actually, besides the painting itself,
+all the explanatory diagrams and plots and animations that you have seen in the video are also painted
+with mass and part of the painting's formula, making it a mathematical video more than a mathematical
+painting, perhaps. Except for my face and the text overlays, of course. Also, there is a whole other
+layer of mathematics going on in order to get the computer to plot all these formulas into the screen,
+which has to do with computer graphics, so we won't touch on that today. But all of this to say that it
+took me quite some work to make this video, so thank you so much to all the fine people who support me
+on Patreon, and since you made it this far, thanks to you too for sticking around until the end and
+spending this time with me. I really appreciate it. And finally, I'd like to wish you happy painting with
+maths and be well my friend.

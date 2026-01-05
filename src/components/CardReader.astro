@@ -215,7 +215,7 @@
         },
         rubberband: false,
         // 手機版：根據滾動狀態決定是否允許拖曳
-        dragSpeed: (val) => {
+        dragSpeed: (val: number) => {
           if (state.isDesktop) return val
           return isScrollingContent ? 0 : val
         },
