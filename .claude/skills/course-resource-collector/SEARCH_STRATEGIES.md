@@ -4,6 +4,41 @@
 
 ---
 
+## 通用：找高評價資源
+
+不論什麼主題，先用這些搜尋找出「公認最好」的資源：
+
+**找書籍**：
+```
+"{主題}" best book recommendation
+"{主題}" book review Goodreads
+"{主題}" "must read" book
+"{主題}" definitive book
+```
+
+**找原創者/專家**：
+```
+"{主題}" creator founder inventor
+"{主題}" expert interview podcast
+"{主題}" thought leader
+"who created {主題}"
+```
+
+**驗證品質**：
+```
+"{書名/作者}" review
+"{書名/作者}" criticism  （找批評，了解弱點）
+"{概念}" research evidence  （找學術支撐）
+```
+
+**評價指標**：
+- Goodreads 4.0+ 或 Amazon 4.5+
+- 被 3+ 個獨立來源推薦
+- 作者有相關背景可查證
+- 內容被後續作品廣泛引用
+
+---
+
 ## 技術工具類（Claude Code、Cursor、Excel）
 
 **搜尋關鍵字組合**：

@@ -120,6 +120,24 @@ Key principles:
 - Use concrete imagery instead of abstract descriptions
 - Maintain an unresolved question (information gap) in the reader's mind
 
+### Formatting Guidelines
+
+When formatting blog post content, follow these conventions:
+
+**Section Structure**:
+- Add a horizontal rule (`---`) before each section heading
+- Use numbered sections in Chinese: `## 一、标题名称`, `## 二、标题名称`, etc.
+- Use "结语" (Conclusion) as the final section title
+
+**Text Formatting**:
+- Use `> Blockquote` for emphasizing key quotes and important statements
+- Use bullet lists (`-`) for presenting parallel items
+- Use **bold** (`**text**`) to emphasize key concepts and terms
+
+**Frontmatter Categories**:
+- For philosophy/personal growth content: `categories: ["Philosophy", "Self-Growth"]`
+- Use English category names for consistency
+
 ## UI Design Guidelines
 
 When creating interactive components:

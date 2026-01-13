@@ -1,0 +1,241 @@
+Dropic has been shipping fast lately and
+today they actually introduce a brand
+new agentic tool that&#39;s called co-work
+and essentially it kind of mimics what
+an AI operating system does cuz it can
+control your desktop and manipulate
+different tasks off of it. It&#39;s
+basically cloud code but for
+non-technical users. Coarkwork is an AI
+that acts like a real teammate, one that
+can actually work inside your files, not
+just chat with you. Right now, it&#39;s
+currently in research preview on Mac OS,
+available for Claude Max subscribers,
+and if you do not have that, you can
+access it through a limited weight list.
+You can think of co-work as the moment
+Claude actually turns from a chatbot
+into a true autonomous virtual co-orker,
+something that you can delegate real
+work to. Same underlying AI and agent
+SDK as Cloud Code, but wrapped in a much
+simpler UI that&#39;s designed for everyday
+users. What makes this more impressive
+is that co-work can actually automate
+desktop work. You can point Claude at a
+specific folder on your computer and it
+can actually read it, edit, create, and
+organize files using nothing but natural
+language instructions. But can handle
+tasks like organizing messy directories.
+You can tell it to extract data from
+screenshots, create reports from
+scattered notes, all without a single
+line of code. Just take a look at it
+live in action. In co-work, you can give
+Claude access to a folder like your
+desktop. And from there, it can read,
+edit, and create files inside that
+space. You can even ask it to build a
+spreadsheet from a pile of screenshots
+or generate a first draft from scattered
+notes while you can work on another
+task. You can leave this task running in
+the background, and it is going to
+execute that for you while you&#39;re away.
+Once the task is set, Claude can create
+a plan and steadily work through it,
+looping you in along the way, as well as
+asking for confirmation before taking
+any major actions so that you stay in
+control the entire time. Co-work can
+also use your existing connectors to
+pull in external information. You can
+have it paired with Claude in Chrome for
+tasks that require browser access. Now,
+like I mentioned, this is still
+currently in preview, so not everyone
+will be able to access it due to beta
+testing. But say if you do have the Max
+plan with Claude, you can actually
+access it with the Claude desktop app
+only if you have it on Mac OS. Once you
+have it enabled, you&#39;re going to be able
+to start using it off of your own
+device. But if you do not have the Max
+plan, you can join the wait list for
+future access, which should take a
+couple of weeks to get access. and you
+just need to simply provide uh your
+details within this form which I&#39;ll also
+leave in the description below so that
+you can join the weight list. Before we
+get started, I just want to mention that
+you should definitely go ahead and
+subscribe to the world of AI newsletter.
+I&#39;m constantly posting different
+newsletters on a weekly basis. So, this
+is where you can easily get up-to-date
+knowledge about what is happening in the
+AI space. So, definitely go ahead and
+subscribe as this is completely for
+free. Here is another preview of
+coowwork in action. This is where cloud
+co-work is actually powerful at file
+editing. And in this case, you don&#39;t
+even need to know the file names,
+formats, or even tools involved. You can
+just simply instruct Cowwork to actually
+describe what you&#39;re looking for.
+Something like a video of a squirrel and
+co-work can actually find that file for
+you. It can understand what the needs
+are. It can even run the necessary tools
+like ffmpeg based off of a simple
+natural language instruction. From
+there, you can see that there&#39;s no
+command line knowledge needed. There&#39;s
+no video editing experience needed and
+no conversation workflows to learn. You
+just describe the outcome and co-work
+handles the technical steps behind the
+scenes. And this is where Coowork really
+starts to feel like an assistant, more
+like a junior operator inside your OS
+that is able to convert effects as well
+as add different sorts of styles to your
+video in this particular example. Now,
+I&#39;m going to play a small snippet, a
+part of this live stream with a couple
+of Enthropic employees hosted by Dan
+Shipper, which I&#39;ll also leave in the
+description below. And what they state
+is pretty interesting about co-work. The
+differences are a bit subtle, but I
+think that it does make a big
+difference. So instead of a chat, you
+have tasks. And when you look at this
+query, for example,
+you&#39;ll see that co-work ran for a really
+long time. If I asked the same query, I
+wanted to go to our every agent native
+guide and walk through it to do a UX
+review.
+Cloud would have stopped after a couple
+turns and given me a pretty good answer.
+But this does a lot more research. So
+because it&#39;s working on your computer,
+it&#39;s going to be able to work for a long
+time. And I think that&#39;s sort of the key
+thing that you can take away from when
+you might want to use co-work and and
+how co-work might work differently than
+regular claude which is um for the first
+time if you&#39;re non-technical you can ask
+uh your computer to do something and
+walk away for a while. Uh and then you
+can also ask it to do many things in
+parallel. So this is an experience that
+if you&#39;re using cloud code, you have a
+lot with programming. But I think most
+nontechnical people are still in the
+kind of like turnbyturn era of using
+using chat and just expecting a response
+almost immediately. And this is much
+more of an async experience for
+non-coding tasks like data analysis or
+research or writing documents like all
+that kind of stuff. Like Felix said,
+they built this in a week and a half
+&gt;&gt; which is crazy.
+&gt;&gt; Crazy. which is the new normal by the
+way. So anyone who&#39;s like coming up with
+the PRD in two weeks, nope. You ship the
+whole thing a week and a half%.
+&gt;&gt; Just a side note, the creator of Cloud
+Code, Boris, had stated that all of
+co-work was fully developed and coded
+out by Claude Code itself, which is kind
+of insane to think of. And the custom
+connectors that I was talking about
+basically helps you power coowork to use
+these different apps that can help you
+in different cases. Whether that is
+something that lets you connect to AWS&#39;s
+marketplace or a back-end system. This
+is going to give you more flexibility
+and more plugins to get the best out of
+co-work. Based off of what I&#39;ve seen
+from examples, I believe that claude
+co-works best in longunning sessions and
+it is something that can also run
+asynchronously with multiple sub agents
+which is really great for local desktop
+tasks. This is where in this particular
+example by the name of Lenny, I&#39;ll leave
+a link to in the description below, who
+had given access to a folder of 320
+podcast transcripts. And he had
+basically requested co-work to extract
+the top 10 most important lessons for
+product builders and the top most
+counterintuitive truths about those
+podcasts. And it was able to actually
+immediately flag the scope. And it was
+able to also do this task in 15 minutes
+by scouring 320 different transcripts,
+which is incredible. And this is a
+podcast we&#39;re talking about, a lengthy
+podcast of multiple people conversing
+off of a topic. And you can see how much
+text it is that an AI would need to
+process. This is just one podcast
+transcript. There is 320. So, think
+about how fast it needs to actually
+process these 20 different themes to get
+out of 320. If you like this video and
+would love to support the channel, you
+can consider donating to my channel
+through the super thanks option below.
+Or you can consider joining our private
+Discord where you can access multiple
+subscriptions to different AI tools for
+free on a monthly basis, plus daily AI
+news and exclusive content, plus a lot
+more. Now, unfortunately, guys, I am
+sincerely apologizing for not testing
+out my own demos. It&#39;s cuz I wasn&#39;t
+actually tested for the pre-BA test,
+which is unfortunate. But in the future,
+I would really appreciate if you guys
+can tag me under many of these different
+new releases. So, it is going to bring
+more awareness to the Enthropic team to
+allow me to be testing these different
+products. But that is basically it,
+guys. I&#39;m really sorry for not testing
+out my own things. I will try my best to
+test it out whenever I do get access and
+post it on the second channel or the
+main channel depending on the timing.
+But that is basically it guys. Thank you
+guys so much for watching. I hope you
+enjoyed today&#39;s video. I do recommend
+that you do sign up for this weight list
+so that you can get access. I&#39;ll leave
+all these links that I used in today&#39;s
+video in the description below,
+including the demos. Make sure you go
+ahead and subscribe to the second
+channel if you haven&#39;t already. Join the
+newsletter, join our Discord, follow me
+on Twitter, and lastly, make sure you
+guys subscribe, turn on the notification
+bell, like this video, and please take a
+look at our previous videos, cuz there
+is a lot of content that you will truly
+benefit from. But with that thought,
+guys, have an amazing day, spread
+positivity, and I&#39;ll see you guys fairly
+shortly. He suffers.
