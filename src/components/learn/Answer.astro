@@ -1,0 +1,31 @@
+---
+/**
+ * Answer 組件 - 可折疊的參考答案
+ *
+ * 用法：
+ * <Answer>
+ *   參考答案內容...
+ * </Answer>
+ *
+ * <Answer title="參考設計">
+ *   自訂標題的答案...
+ * </Answer>
+ */
+
+interface Props {
+  title?: string
+  open?: boolean
+}
+
+const { title = '參考答案', open = false } = Astro.props
+---
+
+<details class="my-4 group" open={open}>
+  <summary class="cursor-pointer list-none flex items-center gap-2 py-2 text-sm text-stone-500 dark:text-stone-500 hover:text-stone-700 dark:hover:text-stone-300 transition-colors">
+    <span class="transform transition-transform group-open:rotate-90">▶</span>
+    <span>{title}</span>
+  </summary>
+  <div class="mt-2 pl-5 text-sm text-stone-600 dark:text-stone-400 border-l border-stone-200 dark:border-stone-700">
+    <slot />
+  </div>
+</details>

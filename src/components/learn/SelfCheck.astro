@@ -1,0 +1,44 @@
+---
+/**
+ * SelfCheck 組件 - 自我檢核清單
+ *
+ * 用法：
+ * <SelfCheck title="你的目標行為">
+ *   <li>是動詞開頭嗎？</li>
+ *   <li>別人看得到你在做這件事嗎？</li>
+ *   <li>能判斷做得對不對嗎？</li>
+ * </SelfCheck>
+ */
+
+interface Props {
+  title: string
+  passMessage?: string
+  failMessage?: string
+}
+
+const {
+  title,
+  passMessage = '如果都打勾，你做得夠好了。',
+  failMessage = '如果有沒打勾的，回去調整那個部分。'
+} = Astro.props
+---
+
+<div class="my-6 p-4 bg-stone-50 dark:bg-stone-800/50 rounded-lg">
+  <div class="text-sm font-medium text-stone-700 dark:text-stone-300 mb-3">
+    自我檢核：{title}
+  </div>
+  <ul class="space-y-2 text-sm text-stone-600 dark:text-stone-400 [&>li]:flex [&>li]:items-start [&>li]:gap-2">
+    <slot />
+  </ul>
+  <div class="mt-4 pt-3 border-t border-stone-200 dark:border-stone-700 text-xs text-stone-500 dark:text-stone-500">
+    <p>{passMessage}</p>
+    <p>{failMessage}</p>
+  </div>
+</div>
+
+<style>
+  ul :global(li)::before {
+    content: '☐';
+    flex-shrink: 0;
+  }
+</style>

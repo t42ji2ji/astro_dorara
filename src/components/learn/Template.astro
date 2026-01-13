@@ -1,0 +1,31 @@
+---
+/**
+ * Template 組件 - 可填寫的模板
+ *
+ * 用法：
+ * <Template title="你的課程第一個單元">
+ *   1. 目標行為：上完這個單元，學員能夠 _______________
+ *   2. 練習情境：_______________
+ *   3. 最少知識（不超過 5 點）：
+ *      - _______________
+ *      - _______________
+ * </Template>
+ */
+
+interface Props {
+  title?: string
+}
+
+const { title } = Astro.props
+---
+
+<div class="my-6 border border-dashed border-stone-300 dark:border-stone-600 rounded-lg overflow-hidden">
+  {title && (
+    <div class="px-4 py-2 bg-stone-50 dark:bg-stone-800/50 border-b border-dashed border-stone-300 dark:border-stone-600">
+      <span class="text-xs font-medium text-stone-500 dark:text-stone-500">{title}</span>
+    </div>
+  )}
+  <div class="p-4 font-mono text-sm text-stone-600 dark:text-stone-400 whitespace-pre-wrap [&_input]:border-b [&_input]:border-stone-400 [&_input]:bg-transparent [&_input]:outline-none [&_input]:min-w-[200px]">
+    <slot />
+  </div>
+</div>

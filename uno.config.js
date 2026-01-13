@@ -80,6 +80,19 @@ const cssExtend = {
     'border-radius': '4px',
   },
 
+  '.dark :where(:not(pre):not(a) > code)': {
+    'color': '#f472b6',
+    'background-color': '#3f3f46',
+  },
+
+  'pre': {
+    'background-color': '#1e1e1e !important',
+  },
+
+  'pre code': {
+    'color': '#d4d4d4',
+  },
+
   'li': {
     'white-space': 'normal',
     'word-wrap': 'break-word',

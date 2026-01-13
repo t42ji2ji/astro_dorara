@@ -1,0 +1,55 @@
+---
+import { getCollection, render } from 'astro:content'
+import LayoutLearn from '~/layouts/LayoutLearn.astro'
+import { getPrevNext } from '~/utils/learn'
+
+export async function getStaticPaths() {
+  const entries = await getCollection('learn')
+  const isProd = import.meta.env.PROD
+
+  return entries
+    .filter((entry) => !isProd || !entry.data.draft)
+    .map((entry) => {
+      // entry.id is like "vibecoding/getting-started/index" or "vibecoding/getting-started/setup"
+      const parts = entry.id.split('/')
+      const fileName = parts[parts.length - 1].replace(/\.(md|mdx)$/, '')
+
+      // Build the slug
+      let slug: string
+      if (fileName === 'index') {
+        // For index files, slug is the folder path
+        slug = parts.slice(0, -1).join('/')
+      } else {
+        // For regular files, include the filename
+        slug = [...parts.slice(0, -1), fileName].join('/')
+      }
+
+      return {
+        params: { slug },
+        props: { entry },
+      }
+    })
+}
+
+const { entry } = Astro.props
+const { Content } = await render(entry)
+
+// Extract course name from entry id
+const course = entry.id.split('/')[0]
+const currentPath = `/learn/${Astro.params.slug}`
+
+// Get prev/next navigation
+const { prev, next } = await getPrevNext(course, currentPath)
+---
+
+<LayoutLearn
+  title={entry.data.title}
+  description={entry.data.description}
+  course={course}
+  currentPath={currentPath}
+  prev={prev}
+  next={next}
+>
+  <h1>{entry.data.title}</h1>
+  <Content />
+</LayoutLearn>

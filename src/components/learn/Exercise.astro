@@ -1,0 +1,64 @@
+---
+/**
+ * Exercise 組件 - 練習題容器
+ *
+ * 用法：
+ * <Exercise title="練習：定義目標行為">
+ *   <Fragment slot="scenario">情境描述...</Fragment>
+ *   <Fragment slot="task">任務說明...</Fragment>
+ *   <Fragment slot="answer">參考答案...</Fragment>
+ * </Exercise>
+ */
+
+interface Props {
+  title?: string
+  level?: 1 | 2 | 3  // 1=填空, 2=改寫, 3=從頭設計
+}
+
+const { title = '練習', level } = Astro.props
+
+const levelLabels = {
+  1: '填空題',
+  2: '改寫題',
+  3: '設計題'
+}
+---
+
+<div class="my-8 border border-stone-200 dark:border-stone-700 rounded-lg overflow-hidden">
+  <!-- Header -->
+  <div class="px-4 py-3 bg-stone-50 dark:bg-stone-800 border-b border-stone-200 dark:border-stone-700">
+    <div class="flex items-center justify-between">
+      <span class="text-sm font-medium text-stone-700 dark:text-stone-300">{title}</span>
+      {level && (
+        <span class="text-xs px-2 py-0.5 bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-400 rounded">
+          {levelLabels[level]}
+        </span>
+      )}
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="p-4 space-y-4">
+    <!-- Scenario -->
+    <div class="scenario">
+      <div class="text-xs font-medium text-stone-500 dark:text-stone-500 mb-2">情境</div>
+      <div class="text-sm text-stone-600 dark:text-stone-400 pl-3 border-l-2 border-stone-200 dark:border-stone-700">
+        <slot name="scenario" />
+      </div>
+    </div>
+
+    <!-- Task -->
+    <div class="task">
+      <div class="text-xs font-medium text-stone-500 dark:text-stone-500 mb-2">任務</div>
+      <div class="text-sm text-stone-700 dark:text-stone-300 pl-3 border-l-2 border-stone-400 dark:border-stone-500">
+        <slot name="task" />
+      </div>
+    </div>
+
+    <!-- Input Area (default slot) -->
+    <slot />
+  </div>
+</div>
+
+<!-- Answer (collapsible) -->
+<slot name="answer" />

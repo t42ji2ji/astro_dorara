@@ -1,0 +1,25 @@
+---
+interface Props {
+  current: number
+  total: number
+  showLabel?: boolean
+}
+
+const { current, total, showLabel = true } = Astro.props
+const percentage = Math.round((current / total) * 100)
+---
+
+<div class="my-4">
+  {showLabel && (
+    <div class="flex justify-between text-xs text-stone-500 dark:text-stone-400 mb-1">
+      <span>進度</span>
+      <span>{current} / {total}</span>
+    </div>
+  )}
+  <div class="w-full h-2 bg-stone-200 dark:bg-stone-700 rounded-full overflow-hidden">
+    <div
+      class="h-full bg-stone-500 dark:bg-stone-400 rounded-full transition-all duration-300"
+      style={`width: ${percentage}%`}
+    />
+  </div>
+</div>

@@ -1,0 +1,133 @@
+---
+import { themeConfig } from '~/.config'
+import SiteSeo from '~/components/SiteSeo.astro'
+import Analytics from '~/components/Analytics.astro'
+import ThemeScript from '~/components/ThemeScript.astro'
+import ThemeToggle from '~/components/ThemeToggle.astro'
+import LearnSidebar from '~/components/learn/LearnSidebar.astro'
+import LearnNavigation from '~/components/learn/LearnNavigation.astro'
+import Outline from '~/components/Outline.astro'
+import '~/styles/global.css'
+
+interface Props {
+  title: string
+  description?: string
+  course: string
+  currentPath: string
+  prev?: { title: string; href: string } | null
+  next?: { title: string; href: string } | null
+}
+
+const { title, description, course, currentPath, prev, next } = Astro.props
+const lang = themeConfig.appearance.locale ?? 'en-us'
+const dark = themeConfig.appearance.theme === 'dark'
+---
+
+<html lang={lang} class:list={['animation-prepared', { dark }]}>
+  <head>
+    <SiteSeo title={`${title} | ${themeConfig.site.title}`} desc={description} />
+    <Analytics />
+    <ThemeScript />
+  </head>
+
+  <body class="min-h-screen bg-background text-primary">
+    <!-- Mobile Header -->
+    <header class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-background border-b border-stone-200 dark:border-stone-700">
+      <div class="flex items-center justify-between px-4 h-14">
+        <button
+          id="menu-toggle"
+          class="p-2 -ml-2 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100"
+          aria-label="Toggle menu"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <a href="/learn" class="text-sm font-medium">Learn</a>
+        <ThemeToggle />
+      </div>
+    </header>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay" class="lg:hidden fixed inset-0 z-40 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+    <!-- Sidebar -->
+    <aside
+      id="sidebar"
+      class="fixed top-0 left-0 z-50 h-screen w-72 bg-background border-r border-stone-200 dark:border-stone-700 transform -translate-x-full lg:translate-x-0 transition-transform duration-300"
+    >
+      <div class="flex flex-col h-full">
+        <!-- Sidebar Header -->
+        <div class="hidden lg:flex items-center justify-between px-4 h-14 border-b border-stone-200 dark:border-stone-700">
+          <a href="/learn" class="text-sm font-medium hover:text-stone-600 dark:hover:text-stone-400 transition-colors">
+            ← Learn
+          </a>
+          <ThemeToggle />
+        </div>
+
+        <!-- Mobile close button area -->
+        <div class="lg:hidden h-14 flex items-center justify-end px-4 border-b border-stone-200 dark:border-stone-700">
+          <button
+            id="menu-close"
+            class="p-2 -mr-2 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100"
+            aria-label="Close menu"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-4">
+          <LearnSidebar course={course} currentPath={currentPath} />
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lg:ml-72 pt-14 lg:pt-0 h-screen overflow-y-auto">
+      <div class="max-w-6xl mx-auto px-6 py-8 lg:py-12">
+        <div class="flex gap-8">
+          <!-- Article Content -->
+          <div class="flex-1 min-w-0 max-w-3xl">
+            <article class="prose prose-stone dark:prose-invert max-w-none post-content">
+              <slot />
+            </article>
+
+            <!-- Prev/Next Navigation -->
+            <LearnNavigation prev={prev} next={next} />
+          </div>
+
+          <!-- Right Sidebar: Outline -->
+          <div class="hidden xl:block w-64 flex-shrink-0">
+            <Outline />
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const menuToggle = document.getElementById('menu-toggle')
+      const menuClose = document.getElementById('menu-close')
+      const sidebar = document.getElementById('sidebar')
+      const overlay = document.getElementById('sidebar-overlay')
+
+      function openSidebar() {
+        sidebar?.classList.remove('-translate-x-full')
+        overlay?.classList.remove('opacity-0', 'pointer-events-none')
+        document.body.classList.add('overflow-hidden')
+      }
+
+      function closeSidebar() {
+        sidebar?.classList.add('-translate-x-full')
+        overlay?.classList.add('opacity-0', 'pointer-events-none')
+        document.body.classList.remove('overflow-hidden')
+      }
+
+      menuToggle?.addEventListener('click', openSidebar)
+      menuClose?.addEventListener('click', closeSidebar)
+      overlay?.addEventListener('click', closeSidebar)
+    </script>
+  </body>
+</html>

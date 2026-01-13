@@ -36,7 +36,7 @@ Defined in `src/content.config.ts`:
 - **posts**: Blog posts in `src/content/posts/` (supports `.md` and `.mdx`)
 - **spec**: Specification content in `src/content/spec/`
 
-Post frontmatter schema: `title`, `pubDate`, `categories[]`, `description?`, `draft?`, `banner?`, `pin?`, `modDate?`
+Post frontmatter schema: `title`, `pubDate`, `categories[]`, `description?`, `slug`, `draft?`, `banner?`, `pin?`, `modDate?`
 
 ### Layout Hierarchy
 
@@ -93,9 +93,14 @@ title: title
 pubDate: 2021-08-01
 categories: ["article"]
 description: "description"
+slug: my-post-slug
 draft: true
 ---
 ```
+
+**File naming convention**: Use date prefix format `YYYY-MM-DD-slug.mdx` (e.g., `2025-12-31-my-post.mdx`). This makes it easier to manage files chronologically. The date in the filename should match `pubDate`.
+
+**Slug requirement**: Always set `slug` in frontmatter to define the URL path. The slug should match the filename slug part (e.g., filename `2025-12-31-my-post.mdx` → `slug: my-post`). This ensures URLs remain stable even if filenames change.
 
 **Important**: Always set `draft: true` when creating new posts to prevent accidental publishing. Remove it only when the post is ready to go live.
 

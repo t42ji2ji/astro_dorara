@@ -1,0 +1,59 @@
+---
+/**
+ * Callout 組件 - 用於提示、警告、重點標示
+ *
+ * 用法：
+ * <Callout type="tip">這是一個提示</Callout>
+ * <Callout type="warning">這是一個警告</Callout>
+ * <Callout type="info">這是補充資訊</Callout>
+ */
+
+interface Props {
+  type?: 'tip' | 'warning' | 'info' | 'check'
+  title?: string
+}
+
+const { type = 'info', title } = Astro.props
+
+const styles = {
+  tip: {
+    border: 'border-l-stone-400 dark:border-l-stone-500',
+    bg: 'bg-stone-50 dark:bg-stone-800/50',
+    icon: '💡',
+    defaultTitle: '提示'
+  },
+  warning: {
+    border: 'border-l-stone-600 dark:border-l-stone-400',
+    bg: 'bg-stone-100 dark:bg-stone-800',
+    icon: '⚠',
+    defaultTitle: '注意'
+  },
+  info: {
+    border: 'border-l-stone-300 dark:border-l-stone-600',
+    bg: 'bg-stone-50/50 dark:bg-stone-800/30',
+    icon: 'ℹ',
+    defaultTitle: '補充'
+  },
+  check: {
+    border: 'border-l-stone-500 dark:border-l-stone-400',
+    bg: 'bg-stone-50 dark:bg-stone-800/50',
+    icon: '✓',
+    defaultTitle: '檢查點'
+  }
+}
+
+const style = styles[type]
+const displayTitle = title || style.defaultTitle
+---
+
+<div class={`my-6 pl-4 py-3 pr-4 border-l-4 ${style.border} ${style.bg}`}>
+  {displayTitle && (
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-sm">{style.icon}</span>
+      <span class="text-sm font-medium text-stone-700 dark:text-stone-300">{displayTitle}</span>
+    </div>
+  )}
+  <div class="text-sm text-stone-600 dark:text-stone-400 [&>p]:m-0">
+    <slot />
+  </div>
+</div>

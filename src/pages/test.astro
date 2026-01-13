@@ -6,35 +6,31 @@ import w4 from '../assets/reading_archetypes/w4.png'
 
 <LayoutMinimal>
   <div class="test-page">
-    <h1 class="text-2xl font-medium mb-2 text-stone-800 dark:text-stone-200">
-      Component Playground
-    </h1>
-    <p class="text-sm text-stone-500 dark:text-stone-400 mb-8">
-      測試各種有趣的互動效果
-    </p>
+    <h1 class="text-2xl font-medium mb-2 text-stone-800 dark:text-stone-200">Component Playground</h1>
+    <p class="text-sm text-stone-500 dark:text-stone-400 mb-8">測試各種有趣的互動效果</p>
 
     <section class="mb-12">
-      <h2 class="text-lg font-medium mb-4 text-stone-700 dark:text-stone-300">
-        Oil Paint Flow Effect
-      </h2>
+      <h2 class="text-lg font-medium mb-4 text-stone-700 dark:text-stone-300">Oil Paint Flow Effect</h2>
 
       <div class="controls mb-4 p-4 bg-stone-100 dark:bg-stone-800 rounded-lg">
         <div class="grid grid-cols-2 gap-4">
           <label class="block">
-            <span class="text-xs text-stone-600 dark:text-stone-400">Intensity: <span id="intensity-val">0.05</span></span>
-            <input type="range" id="intensity" min="0.001" max="0.5" step="0.001" value="0.05" class="w-full">
+            <span class="text-xs text-stone-600 dark:text-stone-400"
+              >Intensity: <span id="intensity-val">0.05</span></span
+            >
+            <input type="range" id="intensity" min="0.001" max="0.5" step="0.001" value="0.05" class="w-full" />
           </label>
           <label class="block">
             <span class="text-xs text-stone-600 dark:text-stone-400">Speed: <span id="speed-val">0.8</span></span>
-            <input type="range" id="speed" min="0.01" max="5" step="0.01" value="0.8" class="w-full">
+            <input type="range" id="speed" min="0.01" max="5" step="0.01" value="0.8" class="w-full" />
           </label>
           <label class="block">
             <span class="text-xs text-stone-600 dark:text-stone-400">Scale: <span id="scale-val">10</span></span>
-            <input type="range" id="scale" min="1" max="500" step="1" value="10" class="w-full">
+            <input type="range" id="scale" min="1" max="500" step="1" value="10" class="w-full" />
           </label>
           <label class="block">
             <span class="text-xs text-stone-600 dark:text-stone-400">Octaves: <span id="octaves-val">5</span></span>
-            <input type="range" id="octaves" min="1" max="12" step="1" value="5" class="w-full">
+            <input type="range" id="octaves" min="1" max="12" step="1" value="5" class="w-full" />
           </label>
         </div>
       </div>
@@ -45,12 +41,8 @@ import w4 from '../assets/reading_archetypes/w4.png'
     </section>
 
     <section class="mb-12">
-      <h2 class="text-lg font-medium mb-4 text-stone-700 dark:text-stone-300">
-        Comet Cursor Effect
-      </h2>
-      <p class="text-sm text-stone-500 dark:text-stone-400 mb-4">
-        輸入文字試試看，刪除時光標會有彗星尾巴效果
-      </p>
+      <h2 class="text-lg font-medium mb-4 text-stone-700 dark:text-stone-300">Comet Cursor Effect</h2>
+      <p class="text-sm text-stone-500 dark:text-stone-400 mb-4">輸入文字試試看，刪除時光標會有彗星尾巴效果</p>
       <CometCursor />
     </section>
   </div>

@@ -1,0 +1,47 @@
+---
+/**
+ * Comparison 組件 - 好壞對比
+ *
+ * 用法：
+ * <Comparison>
+ *   <Fragment slot="bad">壞的範例...</Fragment>
+ *   <Fragment slot="good">好的範例...</Fragment>
+ * </Comparison>
+ *
+ * 自訂標籤：
+ * <Comparison badLabel="之前" goodLabel="之後">
+ *   ...
+ * </Comparison>
+ */
+
+interface Props {
+  badLabel?: string
+  goodLabel?: string
+}
+
+const { badLabel = '壞的', goodLabel = '好的' } = Astro.props
+---
+
+<div class="my-6 grid md:grid-cols-2 gap-4">
+  <!-- Bad -->
+  <div class="p-4 border border-stone-300 dark:border-stone-600 rounded-lg">
+    <div class="text-xs font-medium text-stone-500 dark:text-stone-500 mb-2 flex items-center gap-1">
+      <span>✗</span>
+      <span>{badLabel}</span>
+    </div>
+    <div class="text-sm text-stone-600 dark:text-stone-400">
+      <slot name="bad" />
+    </div>
+  </div>
+
+  <!-- Good -->
+  <div class="p-4 border border-stone-400 dark:border-stone-500 rounded-lg bg-stone-50/50 dark:bg-stone-800/30">
+    <div class="text-xs font-medium text-stone-600 dark:text-stone-400 mb-2 flex items-center gap-1">
+      <span>✓</span>
+      <span>{goodLabel}</span>
+    </div>
+    <div class="text-sm text-stone-700 dark:text-stone-300">
+      <slot name="good" />
+    </div>
+  </div>
+</div>

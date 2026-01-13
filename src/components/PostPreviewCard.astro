@@ -131,8 +131,18 @@ return
     })
   }
 
+  // 清理所有 preview cards
+  function cleanupPreviewCards() {
+    document.querySelectorAll('body > .preview-card').forEach((card) => {
+      card.remove()
+    })
+  }
+
   // 初始化和 Swup 頁面切換後重新初始化
   initPreviewCards()
+
+  // Swup 頁面切換前先清理舊卡片
+  document.addEventListener('swup:willReplaceContent', cleanupPreviewCards)
   document.addEventListener('swup:contentReplaced', initPreviewCards)
 </script>
 

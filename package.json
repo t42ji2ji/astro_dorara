@@ -33,6 +33,7 @@
     "astro-robots-txt": "^1.0.0",
     "astro-seo": "^0.8.4",
     "giscus": "^1.6.0",
+    "js-yaml": "^4.1.1",
     "keen-slider": "^6.8.6",
     "lottie-web": "^5.13.0",
     "mermaid": "^11.12.2",
@@ -45,6 +46,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^4.17.0",
     "@iconify-json/mdi": "^1.2.3",
+    "@types/js-yaml": "^4.0.9",
     "@types/markdown-it": "^14.1.2",
     "@types/node": "^22.16.4",
     "@types/sanitize-html": "^2.16.0",

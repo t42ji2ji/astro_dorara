@@ -20,9 +20,13 @@
       "Bash(sips:*)",
       "Bash(git diff:*)",
       "Bash(pnpm remove:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(code --version:*)",
+      "Bash(code --install-extension:*)",
+      "Bash(/bin/echo:*)"
     ],
     "deny": [],
     "ask": []
-  }
+  },
+  "outputStyle": "default"
 }

@@ -25,7 +25,18 @@ const spec = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/spec' }),
 })
 
+const learn = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/learn' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    order: z.number().default(999),
+    draft: z.boolean().default(false).optional(),
+  }),
+})
+
 export const collections = {
   posts,
   spec,
+  learn,
 }
