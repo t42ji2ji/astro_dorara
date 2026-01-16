@@ -4,6 +4,12 @@ description: "把模糊的學習目標轉成可驗證的行為"
 order: 2
 ---
 
+import Comparison from '~/components/learn/Comparison.astro'
+import Exercise from '~/components/learn/Exercise.astro'
+import Answer from '~/components/learn/Answer.astro'
+import Template from '~/components/learn/Template.astro'
+import Callout from '~/components/learn/Callout.astro'
+
 ## 這個單元你會學會做什麼
 
 把**學員要學會 X** 這種模糊描述，轉成可觀察、可驗證的行為。
@@ -33,12 +39,20 @@ Action Mapping 的第一步，是把這種模糊目標轉成行為：
 
 ### 好的 vs 壞的目標行為
 
-| 壞的（模糊） | 好的（可觀察） |
-|------------|--------------|
-| 理解 Prompt 的原理 | 寫出讓 AI 完成指定任務的 prompt |
-| 學會 Git 的概念 | 用 Git 建立分支、合併、解決衝突 |
-| 了解專案管理 | 把一個需求拆成可執行的任務清單 |
-| 認識資料分析 | 用 Excel 做出一份銷售趨勢報表 |
+<Comparison badLabel="模糊" goodLabel="可觀察">
+  <Fragment slot="bad">
+    - 理解 Prompt 的原理
+    - 學會 Git 的概念
+    - 了解專案管理
+    - 認識資料分析
+  </Fragment>
+  <Fragment slot="good">
+    - 寫出讓 AI 完成指定任務的 prompt
+    - 用 Git 建立分支、合併、解決衝突
+    - 把一個需求拆成可執行的任務清單
+    - 用 Excel 做出一份銷售趨勢報表
+  </Fragment>
+</Comparison>
 
 ### 為什麼這很重要
 
@@ -57,30 +71,26 @@ Cathy Moore 的核心主張是：**培訓很少是解決問題的最佳或唯一
 
 ## 練習
 
-### 情境
+<Exercise title="練習：定義目標行為" level={2}>
+  <Fragment slot="scenario">
+    你正在規劃一堂「Claude Code 入門」課程。產品經理問你：「上完這堂課，學員能做什麼？」
 
-你正在規劃一堂「Claude Code 入門」課程。產品經理問你：「上完這堂課，學員能做什麼？」
+    你原本想回答：「學員會了解 Claude Code 的功能和使用方式。」
 
-你原本想回答：「學員會了解 Claude Code 的功能和使用方式。」
+    但你知道這樣太模糊了。
+  </Fragment>
+  <Fragment slot="task">
+    把**學員會了解 Claude Code 的功能和使用方式**改寫成可觀察的行為。
 
-但你知道這樣太模糊了。
+    用這個句型：**上完課，學員能夠 _______________。**
+  </Fragment>
+</Exercise>
 
-### 任務
-
-把**學員會了解 Claude Code 的功能和使用方式**改寫成可觀察的行為。
-
-用這個句型：**上完課，學員能夠 _______________。**
-
-**你的答案：**
-
-```
+<Template title="你的答案">
 上完課，學員能夠 ________________________________
-```
+</Template>
 
----
-
-### 參考答案
-
+<Answer>
 好的改寫可能是：
 
 - 用 Claude Code 重構一段現有程式碼
@@ -89,25 +99,28 @@ Cathy Moore 的核心主張是：**培訓很少是解決問題的最佳或唯一
 
 這些都是可觀察、可驗證的。你能看到學員操作，也能判斷結果對不對。
 
-**注意**：不同的目標行為會導向完全不同的課程內容。**重構程式碼**和**寫單元測試**需要的知識不一樣。這就是為什麼第一步這麼重要。
+<Callout type="warning">
+不同的目標行為會導向完全不同的課程內容。**重構程式碼**和**寫單元測試**需要的知識不一樣。這就是為什麼第一步這麼重要。
+</Callout>
+</Answer>
 
 ---
 
 ## 常見問題
 
-### Q：一堂課可以有多個目標行為嗎？
-
+<Callout type="info" title="一堂課可以有多個目標行為嗎？">
 可以，但要小心。太多目標會讓課程失焦。建議：
 - 初級課程：1-2 個核心行為
 - 完整課程：3-5 個核心行為，每個是一個單元
+</Callout>
 
-### Q：如果我教的是「觀念」，不是「技能」呢？
-
+<Callout type="info" title="如果我教的是「觀念」，不是「技能」呢？">
 問自己：學員懂了這個觀念之後，會**做**什麼不一樣的事？
 
 比如你想教**成長心態**，觀念本身無法驗證。但你可以轉成：**遇到挫折時，能說出三個從中學到的東西**。這就是可觀察的行為了。
 
 如果想不出任何行為，可能這個觀念不值得獨立成一堂課。考慮把它融入其他技能課程的**為什麼**段落。
+</Callout>
 
 ---
 

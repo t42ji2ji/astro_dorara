@@ -75,6 +75,19 @@ Custom MDX components in `src/components/`:
 - `customer-success/` - Three.js particle effects
 - `Figure.astro`, `LinkPreview.astro` - Enhanced content components
 
+### Course Components (learn/)
+
+用於課程講義的 MDX 組件，位於 `src/components/learn/`：
+
+- `Callout` - 提示/警告/重點標示 (`type`: tip | warning | info | check)
+- `Exercise` - 練習題容器 (slots: scenario, task, answer; `level`: 1=填空 | 2=改寫 | 3=設計)
+- `Answer` - 可折疊的參考答案
+- `SelfCheck` - 自我檢核清單 (傳入 `<li>` 項目)
+- `Comparison` - 好壞對比 (slots: bad, good; 可自訂 `badLabel`/`goodLabel`)
+- `Template` - 可填寫的模板框
+- `Progress` - 進度條 (`current`, `total`)
+- `Placeholder` - 待放置內容的佔位符 (`type`: image | diagram | video | component)
+
 ### Comment Systems
 
 Supports Disqus, Giscus, and Twikoo. Configure in `src/.config/default.ts` under `comment`. Only the first configured service is displayed.

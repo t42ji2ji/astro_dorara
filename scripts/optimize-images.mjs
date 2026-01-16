@@ -52,18 +52,16 @@ async function processImage(filePath, optimizedCache) {
 
   // Check if file was already optimized (by hash)
   const currentHash = await getFileHash(filePath)
-  if (optimizedCache.has(currentHash)) {
-    const metadata = await sharp(filePath).metadata()
-    console.log(`✓ ${filePath} (${metadata.width}x${metadata.height}) - already optimized (cached)`)
-    return { skipped: true, hash: currentHash }
-  }
-
-  const image = sharp(filePath)
-  const metadata = await image.metadata()
+  const metadata = await sharp(filePath).metadata()
   const { width, height } = metadata
-
   const longestSide = Math.max(width, height)
   const needsResize = longestSide > MAX_SIZE
+
+  // Skip only if cached AND doesn't need resize
+  if (optimizedCache.has(currentHash) && !needsResize) {
+    console.log(`✓ ${filePath} (${width}x${height}) - already optimized (cached)`)
+    return { skipped: true, hash: currentHash }
+  }
 
   if (!needsResize && ext !== '.png') {
     console.log(`✓ ${filePath} (${width}x${height}) - already optimized`)
