@@ -1,0 +1,2 @@
+node scripts/optimize-images.mjs
+git add src/assets/
