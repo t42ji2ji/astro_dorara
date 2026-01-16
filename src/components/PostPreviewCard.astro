@@ -71,79 +71,127 @@ const previewContent = getPreviewContent(post)
 </template>
 
 <script>
-  function initPreviewCards() {
-    const wrappers = document.querySelectorAll('.post-item-wrapper')
+  const win = window as any
 
-    wrappers.forEach((wrapper) => {
-      const template = wrapper.querySelector('.preview-card-template') as HTMLTemplateElement
-      if (!template) 
-return
+  function initPreviewCard(wrapper: Element) {
+    // 跳過已初始化的 wrapper
+    if ((wrapper as any).__previewCardInit) {
+      return
+    }
+    ;(wrapper as any).__previewCardInit = true
 
-      // 複製卡片到 body
-      const card = template.content.cloneNode(true) as DocumentFragment
-      const cardEl = card.querySelector('.preview-card') as HTMLElement
-      if (!cardEl) 
-return
+    const template = wrapper.querySelector('.preview-card-template') as HTMLTemplateElement
+    if (!template) {
+      return
+    }
 
-      cardEl.style.display = 'none'
-      document.body.appendChild(cardEl)
+    const card = template.content.cloneNode(true) as DocumentFragment
+    const cardEl = card.querySelector('.preview-card') as HTMLElement
+    if (!cardEl) {
+      return
+    }
 
-      let isHovering = false
+    cardEl.style.display = 'none'
+    document.body.appendChild(cardEl)
 
-      const showCard = () => {
-        if (window.innerWidth <= 768) 
-return
+    let isHovering = false
+    let hideTimeout: ReturnType<typeof setTimeout> | null = null
 
-        isHovering = true
-        const rect = wrapper.getBoundingClientRect()
-
-        // 定位到文章項目右側
-        cardEl.style.position = 'fixed'
-        cardEl.style.left = `${rect.right + 16}px`
-        cardEl.style.top = `${rect.top}px`
-        cardEl.style.display = 'block'
-
-        // 強制 reflow，確保瀏覽器先渲染初始狀態
-        void cardEl.offsetHeight
-
-        // 觸發淡入動畫
-        cardEl.classList.add('is-visible')
+    const showCard = () => {
+      if (window.innerWidth <= 768) {
+        return
       }
 
-      const hideCard = () => {
-        isHovering = false
-        cardEl.classList.remove('is-visible')
-        // 等動畫結束再隱藏
-        setTimeout(() => {
-          if (!isHovering) {
-            cardEl.style.display = 'none'
-          }
-        }, 350)
+      if (hideTimeout) {
+        clearTimeout(hideTimeout)
+        hideTimeout = null
       }
 
-      wrapper.addEventListener('mouseenter', showCard)
-      wrapper.addEventListener('mouseleave', hideCard)
-      cardEl.addEventListener('mouseenter', () => {
-        isHovering = true
-        cardEl.classList.add('is-visible')
-      })
-      cardEl.addEventListener('mouseleave', hideCard)
-    })
+      isHovering = true
+      const rect = wrapper.getBoundingClientRect()
+
+      cardEl.style.position = 'fixed'
+      cardEl.style.left = `${rect.right + 16}px`
+      cardEl.style.top = `${rect.top}px`
+      cardEl.style.display = 'block'
+
+      void cardEl.offsetHeight
+      cardEl.classList.add('is-visible')
+    }
+
+    const hideCard = () => {
+      isHovering = false
+      cardEl.classList.remove('is-visible')
+      hideTimeout = setTimeout(() => {
+        if (!isHovering) {
+          cardEl.style.display = 'none'
+        }
+        hideTimeout = null
+      }, 350)
+    }
+
+    const onCardEnter = () => {
+      if (hideTimeout) {
+        clearTimeout(hideTimeout)
+        hideTimeout = null
+      }
+      isHovering = true
+      cardEl.classList.add('is-visible')
+    }
+
+    wrapper.addEventListener('mouseenter', showCard)
+    wrapper.addEventListener('mouseleave', hideCard)
+    cardEl.addEventListener('mouseenter', onCardEnter)
+    cardEl.addEventListener('mouseleave', hideCard)
   }
 
-  // 清理所有 preview cards
+  function initAllPreviewCards() {
+    document.querySelectorAll('.post-item-wrapper').forEach(initPreviewCard)
+  }
+
   function cleanupPreviewCards() {
-    document.querySelectorAll('body > .preview-card').forEach((card) => {
-      card.remove()
-    })
+    document.querySelectorAll('body > .preview-card').forEach((card) => card.remove())
   }
 
-  // 初始化和 Swup 頁面切換後重新初始化
-  initPreviewCards()
+  // 初始化當前頁面的卡片
+  initAllPreviewCards()
 
-  // Swup 頁面切換前先清理舊卡片
-  document.addEventListener('swup:willReplaceContent', cleanupPreviewCards)
-  document.addEventListener('swup:contentReplaced', initPreviewCards)
+  // 全局只設置一次
+  if (!win.__previewCardGlobalInit) {
+    win.__previewCardGlobalInit = true
+
+    // 點擊連結時立即隱藏卡片
+    document.addEventListener('click', (e) => {
+      const link = (e.target as Element).closest('a')
+      if (link?.href && !link.href.startsWith('javascript:')) {
+        document.querySelectorAll('body > .preview-card').forEach((card) => {
+          ;(card as HTMLElement).style.display = 'none'
+        })
+      }
+    })
+
+    // 用 MutationObserver 監聽 DOM 變化，自動初始化新的 wrapper
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        mutation.addedNodes.forEach((node) => {
+          if (node instanceof Element) {
+            if (node.classList.contains('post-item-wrapper')) {
+              initPreviewCard(node)
+            }
+            node.querySelectorAll('.post-item-wrapper').forEach(initPreviewCard)
+          }
+        })
+        // 清理孤立的卡片（wrapper 被移除時）
+        mutation.removedNodes.forEach((node) => {
+          if (node instanceof Element && node.classList.contains('post-item-wrapper')) {
+            cleanupPreviewCards()
+          }
+        })
+      }
+    })
+
+    observer.observe(document.body, { childList: true, subtree: true })
+  }
 </script>
 
 <style is:global>

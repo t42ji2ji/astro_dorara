@@ -23,7 +23,8 @@
       "Bash(ls:*)",
       "Bash(code --version:*)",
       "Bash(code --install-extension:*)",
-      "Bash(/bin/echo:*)"
+      "Bash(/bin/echo:*)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": [],
     "ask": []

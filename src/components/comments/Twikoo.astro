@@ -13,9 +13,22 @@ const twikooConfig = {
 ---
 
 <div id="tcomment"></div>
-<script is:inline src="https://cdn.jsdelivr.net/npm/twikoo@1.6.32/dist/twikoo.all.min.js"></script>
 <script is:inline define:vars={{ config: twikooConfig }}>
-  twikoo.init(config)
+  function initTwikoo() {
+    if (typeof twikoo !== 'undefined') {
+      twikoo.init(config)
+    }
+  }
+
+  // 如果 twikoo 已載入直接初始化，否則等腳本載入
+  if (typeof twikoo !== 'undefined') {
+    initTwikoo()
+  } else {
+    var script = document.createElement('script')
+    script.src = 'https://cdn.jsdelivr.net/npm/twikoo@1.6.32/dist/twikoo.all.min.js'
+    script.onload = initTwikoo
+    document.head.appendChild(script)
+  }
 </script>
 
 <style is:global>
