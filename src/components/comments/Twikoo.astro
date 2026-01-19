@@ -14,21 +14,40 @@ const twikooConfig = {
 
 <div id="tcomment"></div>
 <script is:inline define:vars={{ config: twikooConfig }}>
-  function initTwikoo() {
-    if (typeof twikoo !== 'undefined') {
+  ;(function() {
+    const TWIKOO_URL = 'https://cdn.jsdelivr.net/npm/twikoo@1.6.32/dist/twikoo.all.min.js'
+
+    function initTwikoo() {
+      const container = document.getElementById('tcomment')
+      if (!container || typeof twikoo === 'undefined') return
+
+      container.innerHTML = ''
       twikoo.init(config)
     }
-  }
 
-  // 如果 twikoo 已載入直接初始化，否則等腳本載入
-  if (typeof twikoo !== 'undefined') {
-    initTwikoo()
-  } else {
-    var script = document.createElement('script')
-    script.src = 'https://cdn.jsdelivr.net/npm/twikoo@1.6.32/dist/twikoo.all.min.js'
-    script.onload = initTwikoo
-    document.head.appendChild(script)
-  }
+    function loadScript() {
+      // 檢查是否已載入過
+      if (typeof twikoo !== 'undefined') {
+        initTwikoo()
+        return
+      }
+
+      const script = document.createElement('script')
+      script.src = TWIKOO_URL
+      script.onload = initTwikoo
+      document.head.appendChild(script)
+    }
+
+    function delayedInit() {
+      setTimeout(loadScript, 100)
+    }
+
+    // 初始載入
+    delayedInit()
+
+    // Swup 頁面轉換後重新初始化
+    document.addEventListener('swup:contentReplaced', delayedInit)
+  })()
 </script>
 
 <style is:global>
