@@ -16,7 +16,10 @@ const twikooConfig = {
 <script is:inline define:vars={{ config: twikooConfig }}>
   ;(function() {
     const TWIKOO_URL = 'https://cdn.jsdelivr.net/npm/twikoo@1.6.32/dist/twikoo.all.min.js'
-    let observer = null
+
+    // 使用全域變數追蹤狀態，避免重複註冊
+    window.__twikooState = window.__twikooState || { observer: null, handler: null }
+    const state = window.__twikooState
 
     function initTwikoo() {
       const container = document.getElementById('tcomment')
@@ -44,28 +47,36 @@ const twikooConfig = {
       if (!container) return
 
       // 清理舊的 observer
-      if (observer) {
-        observer.disconnect()
-        observer = null
+      if (state.observer) {
+        state.observer.disconnect()
+        state.observer = null
       }
 
-      observer = new IntersectionObserver((entries) => {
+      state.observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            observer.disconnect()
-            observer = null
+            state.observer.disconnect()
+            state.observer = null
             loadScript()
           }
         })
       }, { rootMargin: '200px' }) // 提前 200px 開始載入
 
-      observer.observe(container)
+      state.observer.observe(container)
     }
+
+    // 移除舊的事件監聽器（如果存在）
+    if (state.handler) {
+      document.removeEventListener('swup:contentReplaced', state.handler)
+    }
+
+    // 建立新的 handler（使用當前 config）
+    state.handler = setupObserver
 
     // 初始載入
     setupObserver()
 
     // Swup 頁面轉換後重新設定 observer
-    document.addEventListener('swup:contentReplaced', setupObserver)
+    document.addEventListener('swup:contentReplaced', state.handler)
   })()
 </script>

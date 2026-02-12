@@ -170,7 +170,13 @@ const previewContent = getPreviewContent(post)
       }
     })
 
-    // 用 MutationObserver 監聽 DOM 變化，自動初始化新的 wrapper
+    // Swup 頁面轉換前清理所有卡片
+    document.addEventListener('swup:willReplaceContent', cleanupPreviewCards)
+
+    // Swup 頁面轉換後初始化新的卡片
+    document.addEventListener('swup:contentReplaced', initAllPreviewCards)
+
+    // 用 MutationObserver 監聽 DOM 變化，自動初始化新的 wrapper（非 Swup 情況）
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         mutation.addedNodes.forEach((node) => {
@@ -179,12 +185,6 @@ const previewContent = getPreviewContent(post)
               initPreviewCard(node)
             }
             node.querySelectorAll('.post-item-wrapper').forEach(initPreviewCard)
-          }
-        })
-        // 清理孤立的卡片（wrapper 被移除時）
-        mutation.removedNodes.forEach((node) => {
-          if (node instanceof Element && node.classList.contains('post-item-wrapper')) {
-            cleanupPreviewCards()
           }
         })
       }
