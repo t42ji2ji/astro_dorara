@@ -16,6 +16,7 @@ const twikooConfig = {
 <script is:inline define:vars={{ config: twikooConfig }}>
   ;(function() {
     const TWIKOO_URL = 'https://cdn.jsdelivr.net/npm/twikoo@1.6.32/dist/twikoo.all.min.js'
+    let observer = null
 
     function initTwikoo() {
       const container = document.getElementById('tcomment')
@@ -26,7 +27,7 @@ const twikooConfig = {
     }
 
     function loadScript() {
-      // 檢查是否已載入過
+      // 已載入過，直接初始化
       if (typeof twikoo !== 'undefined') {
         initTwikoo()
         return
@@ -38,20 +39,33 @@ const twikooConfig = {
       document.head.appendChild(script)
     }
 
-    function delayedInit() {
-      setTimeout(loadScript, 100)
+    function setupObserver() {
+      const container = document.getElementById('tcomment')
+      if (!container) return
+
+      // 清理舊的 observer
+      if (observer) {
+        observer.disconnect()
+        observer = null
+      }
+
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            observer.disconnect()
+            observer = null
+            loadScript()
+          }
+        })
+      }, { rootMargin: '200px' }) // 提前 200px 開始載入
+
+      observer.observe(container)
     }
 
     // 初始載入
-    delayedInit()
+    setupObserver()
 
-    // Swup 頁面轉換後重新初始化
-    document.addEventListener('swup:contentReplaced', delayedInit)
+    // Swup 頁面轉換後重新設定 observer
+    document.addEventListener('swup:contentReplaced', setupObserver)
   })()
 </script>
-
-<style is:global>
-  .tk-meta-input {
-    background-color: white;
-  }
-</style>

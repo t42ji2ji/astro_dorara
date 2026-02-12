@@ -1,0 +1,891 @@
+Heat. Heat.
+Welcome everybody and welcome to those
+of you joining us on live stream um to
+this conversation that I have to say I
+have been looking forward to for months.
+Uh, I had was lucky enough to ch to
+moderate a conversation between Dar
+Amade and Demis Hassabis last year in
+Paris. Um, which I&#39;m afraid got most
+attention for the fact that you two were
+squashed on a very small love seat while
+I sat on an enormous sofa which was
+probably my screw- up. But I said at
+that point that this was for me like,
+you know, chairing a conversation
+between the Beatles and the Rolling
+Stones. And you have not had a
+conversation on stage since. So this is,
+you know, the sequel. the the the you
+know the bands get together again. I&#39;m
+delighted. You need no introduction. Uh
+the title of our conversation is the day
+after AGI which I think is perhaps
+slightly getting ahead of ourselves
+because we should probably talk about
+how quickly and easily we will get there
+and I want to do a bit of a sort of
+update on that and then talk about the
+consequences. So firstly on the timeline
+Dario you last year in Paris said we&#39;ll
+have a model that can do everything a
+human could do at the level of a Nobel
+laureate across many fields by 26 27.
+we&#39;re in 26. Uh do you still stand by
+that timeline?
+&gt;&gt; So, you know, it&#39;s always hard to know
+exactly when something will happen, but
+but I don&#39;t I don&#39;t think that&#39;s going
+to turn out to be that far off. So, um
+you know, the the the mechanism whereby
+I imagined it would happen is that we
+would make models that were good at
+coding and good at AI research and we
+would use that to produce the next
+generation of model and speed it up to
+create a loop that would that would uh
+increase the speed of model development.
+we are now in terms of you know the
+models that write code I have engineers
+within enthropic who say I don&#39;t write
+any code anymore I just I just let the
+model write the code I edit it I do the
+things around it I think I don&#39;t know we
+might be 6 to 12 months away from when
+the model is doing most maybe all of
+what sues do end to end and then it&#39;s a
+question of how fast does that loop
+close not every part of that loop is
+something that can be sped up by AI,
+right? There&#39;s like chips, there&#39;s
+manufacturer of chips, there&#39;s training
+time for the model. So, it&#39;s, you know,
+I I think there&#39;s a lot of uncertainty.
+It&#39;s easy to see how this could take a
+few years. I don&#39;t I I it&#39;s very hard
+for me to see how it could take longer
+than that. Um, but if if I had to guess,
+I would guess that this goes faster than
+people imagine. that that key element of
+code and increasingly research going
+faster than we imagine. That&#39;s going to
+be the key driver. It&#39;s it&#39;s really hard
+to predict again how much that
+exponential is going to speed us up, but
+but something fast is going to happen.
+&gt;&gt; So you Demis were a little more cautious
+last year. You said a 50% chance of a
+system that can exhibit all the
+cognitive capabilities humans can by the
+end of the decade. Um clearly in coding,
+as Dario says, it&#39;s been remarkable.
+What is your sense of do you stand by
+your prediction and what&#39;s changed in
+the past year?
+&gt;&gt; Yeah, look, I I I I think I&#39;m still on
+the same kind of timeline. I think there
+has been remarkable progress, but I
+think some areas of uh uh um kind of
+engineering work, coding or so you could
+say mathematics are a little bit easier
+to see how they would be automated
+partly because they&#39;re verifiable what
+the output is. Um some areas of natural
+science are much harder to do than that.
+you won&#39;t necessarily know if the
+chemical compound you&#39;ve built or this
+prediction about physics is correct. It
+may be you may have to test it
+experimentally and that will all take
+longer. So uh I also think there are
+some missing capabilities at the moment
+uh in terms of like not just solving
+existing conjectures uh or existing
+problems but actually coming up with the
+question in the first place or coming up
+with the theory or the hypothesis. I
+think that&#39;s much much harder and I
+think that&#39;s the highest level of
+scientific creativity and it&#39;s not
+clear. I think we will have those
+systems so I don&#39;t think it&#39;s impossible
+but I think there may be one or two
+missing ingredients. Um it remains to be
+seen how you know first of all can this
+self-improvement loop that we&#39;re all
+working on actually close without human
+in the loop. I think there also risks to
+that with to that kind of system by the
+way which we should discuss and I&#39;m sure
+we will but the the but but that could
+speed things up if that kind of system
+does work. We&#39;ll get to the risks in a
+minute, but one other change I think of
+the past year has been a kind of change
+in the pecking order of the race, if you
+will. This time a year ago, we just had
+the Deep Seek moment and everyone was
+incredibly excited about what happened
+there and there was still a sense, you
+know, that Google Deep Mind was kind of
+lagging open AI. I would say that now uh
+it&#39;s looking quite different. I mean,
+they&#39;ve declared code red, right? Um
+it&#39;s been quite a quite a year. So talk
+me through what specifically you&#39;ve been
+surprised by and how well you&#39;ve done
+this year and whether you think and then
+I&#39;m going to ask you about the lineup.
+Well, look, I I think we were I was
+always very confident we uh would get
+back to sort of the top of the the
+leaderboards and and the soda type of
+models across the board because I think
+we&#39;ve always had like the deepest and
+broadest research bench and it was about
+kind of marshalling that all together
+and um getting the intensity and focus
+and the kind of startup mentality back
+to the whole organization and it&#39;s been
+a a lot of work and um but I think we&#39;re
+and we&#39;re still a lot of work to do um
+but I think you can start seeing the the
+the the the you know the the kind of um
+the progress that&#39;s been made in both
+the models with Gemini 3 but also uh on
+the product side with Gemini app getting
+increasing uh market share. So I feel
+like uh we&#39;re making great progress um
+but there&#39;s a ton more work to do um and
+you know we&#39;re bringing to bear Google
+deep mind&#39;s kind of like the engine room
+of Google where we&#39;re getting used to um
+shipping our models more quickly into
+the product surfaces. One question for
+you Daria on on this aspect of it
+because you&#39;ve just or you&#39;re in the
+process of you know a new round at an
+extraordinary valuation too. Um but you
+are unlike Demis a let&#39;s call it an
+independent model maker and there is I
+think an increasing concern that the
+independent model makers will not be
+able to continue for long enough until
+you get to where the revenues come in.
+Um it&#39;s made very openly about open AI
+but talk me through how you think about
+that and then we&#39;ll get to the AGI
+itself. Yeah, I mean, you know, I think
+I think I think how we think about that
+is, you know, as we&#39;ve built better and
+better models, there&#39;s been a kind of
+exponential relationship, not only
+between how much compute you put into
+the model and how cognitively capable it
+is, but between how cognitively capable
+it is and how much revenue it&#39;s able to
+generate. So, our revenues grown 10x in
+the last three years from 0 to 100
+million in 2023, 100 million to a
+billion in 2024, and 1 billion to 10
+billion in 2025. And so th those revenue
+numbers, you know, I don&#39;t know if that
+curve will literally continue. It would
+be crazy if it did. Um, but those
+numbers are starting to get not too far
+from, you know, the sca the scale of the
+largest companies in the world. So
+there&#39;s there&#39;s there&#39;s always
+uncertainty. You know, we&#39;re trying to
+bootstrap this from nothing. It&#39;s it&#39;s a
+crazy thing, but but I have confidence
+that if we&#39;re able to produce the best
+models in the things that we focus on,
+um, uh, then I think then I think things
+will go well. And you know I I will I
+will generally say you know I think I
+think it&#39;s been a good year for both
+both Google and Anthropic and I think
+the thing we actually have in common is
+that they&#39;re you know they&#39;re both kind
+of kind of kind of companies that are
+you know or the research part of the
+company that are kind of led by
+researchers who focus on the models who
+focus on solving important problems in
+the world right who have these kind of
+hard scientific problems as a as a north
+star and and and I think those are the
+kind of companies companies that are
+going to succeed going forward and you
+know I think I think we share that
+between us
+&gt;&gt; very much. Uh I&#39;m I&#39;m going to resist
+the temptation to ask you what will
+happen to the companies that are not led
+by researchers
+uh because I know you won&#39;t answer it.
+But let&#39;s then go on to uh the
+predictions area now and this we are
+supposed to be talking about the day
+after AI. But let&#39;s talk about closing
+the loop. This the odds that you will
+get models that will close the loop and
+be able to you know power themselves if
+you will because that&#39;s the really the
+crux for the the winner takes all
+threshold approach. Do you still believe
+that we are likely to see that or is
+this going to be much more of a normal
+technology where followers and catchup
+can can compete?
+&gt;&gt; Well, look, I definitely don&#39;t think
+it&#39;s going to be a normal technology.
+So, I mean, there are aspects already
+that as Dario mentioned that it&#39;s
+already helping with our coding and and
+some aspects of research. The full
+closing of the loop though, I think is
+an unknown. I mean, I think it&#39;s
+possible to do. you may need AGI itself
+to be able to do that in some domains
+again where there these domains you know
+where there&#39;s there&#39;s more messiness
+around them it&#39;s not so easy to verify
+your answer very quickly um there&#39;s kind
+of MP hard domains so as soon as you
+start getting more and you know I also
+include by the way for AGI physical AI
+robotics working all of these kind of
+things and then you&#39;ve got you know
+hardware in the loop uh that may uh
+limit how fast the self-improvement
+systems can work but I think in coding
+and mathematics and these kind areas. I
+can definitely see that working. And
+then the question is more theoretical
+one is what is the limit of engineering
+and maths uh to solve uh the natural
+sciences. Dario, you um last year, I
+think it was last year that you
+published Machines of Love and Grace um
+which was a very I would say upbeat
+essay about the potential that that you
+were going to see unfold and you were
+talking about you know a a what was it a
+genius of data at country
+data center I&#39;m told that you are
+working on an update to this a new essay
+so you know wait for it guys it&#39;s not
+out yet but it is coming out but perhaps
+you can give us a sort of a sneak
+preview of what a year later your big
+take is going to be.
+&gt;&gt; Yes. So, you know, my take my take has
+not changed. It has always been my view
+that, you know, AI is going to be
+incredibly powerful. I think Demis and
+I, you know, kind of agree on that. It&#39;s
+just a question of exactly when um uh
+and because it&#39;s incredibly powerful, it
+will do all these wonderful things like
+the ones I talked about in Machines of
+Love and Grace. It, you know, will help
+us cure cancer. It may help us to
+eradicate tropical diseases. It will
+help us understand understand the
+universe. but that there are these, you
+know, immense and grave risks that, you
+know, not that we can&#39;t address them.
+I&#39;m not a doomer, but but that, you
+know, we we we we we need to think about
+them and we need to address them. And I
+wrote Machines of Loving Grace first. I&#39;
+I&#39;d love to give some uh a sophisticated
+reason why I wrote that first, but it
+was just that the the positive essay was
+easier and more fun to write than than
+the negative essay. Um, so, you know, I
+finally spent some time on vacation and
+I was able to write an essay about the
+risks. And even when I&#39;m writing about
+the risks, um, I I I try, you know, I I
+I&#39;m like an optimistic person, right? So
+even as I&#39;m writing about these risks, I
+I I wrote about it in a way that was
+like, how do we overcome these risks?
+How do we have a battle plan to fight
+them? And and and the way I the way I
+framed it was, you know, there&#39;s this
+scene from Carl Sean&#39;s Contact, the
+movie version of it, where, you know,
+they they kind of discover alien life
+and this international panel that&#39;s like
+interviewing um uh you know, people to,
+you know, to be humanity&#39;s
+representative to meet the alien. Um uh
+and uh one one of the questions they
+asked one of the candidates is, you
+know, if you could ask the aliens anyone
+question, what it would what what what
+would it be? And one of one of the
+characters says, &quot;I would ask, how did
+you do it? How did you manage to get
+through this technological adolescence
+without destroying yourselves? How did
+you make it through?&quot; And and and ever
+since I saw it, it was like 20 years
+ago, I think I saw that movie, it&#39;s kind
+of stuck with me. And that that&#39;s the
+frame that I used, which is which is
+that, you know, we we&#39;re we&#39;re we are
+knocking on the door of these incredible
+capabilities, right? the the ability to
+build basically machines out of sand,
+right? I think I think it was inevitable
+that the instant we started working with
+fire. Um uh but but how we handle it is
+is not inevitable. And so I think the
+next few years we&#39;re going to be dealing
+with, you know, how do we keep these
+systems under control that are highly
+autonomous and smarter than any human?
+How do we make sure that individuals
+don&#39;t misuse them? Right? I have worries
+about things like bioteterrorism. How do
+we make sure that nation states don&#39;t
+misuse them? That&#39;s why I&#39;ve been so
+concerned about, you know, the CCP,
+other authoritarian authoritarian
+governments. What are the economic
+impacts? Right? I&#39;ve talked about labor
+displacement a lot. And and you know,
+what what haven&#39;t we thought of which
+which in many cases, you know, maybe may
+be the the hardest thing to deal with at
+all. Um so, you know, I I&#39;m I&#39;m thinking
+through how to address those risks. And
+you know, for for each of these, it&#39;s a
+mixture of things that we individually
+need to do as as leaders of the of of of
+the companies and that we can do working
+together. And then there there&#39;s going
+to need to be some role for wider
+societal institutions like the like the
+government in in in addressing all of
+these. But, you know, I I I just feel
+this urgency that, you know, every day,
+you know, there&#39;s there&#39;s all kinds of
+crazy stuff going on in the outside
+world, outside AI, right? Um but but you
+know my my my view is this is happening
+so fast and is such a crisis we should
+be devoting almost all of our effort to
+thinking about how to get through this.
+&gt;&gt; So I can&#39;t decide whether I&#39;m more
+surprised that you a take a vacation b
+when you take a vacation you think about
+the risks of AI and c that your essay is
+framed in terms of are we going to get
+through the technological adolescence of
+this technology without destroying
+ourselves. So, I&#39;m my head is slightly
+spinning, but you then and I can&#39;t wait
+to read it, but you you you mentioned
+several areas that can guide the rest of
+our conversation. Let&#39;s start with jobs
+um because you actually have been very
+outspoken about that and I think you
+said that half of entry- level white
+collar jobs could be gone within the
+next one to five years. But I&#39;m going to
+turn to you Demis because so far we
+haven&#39;t actually seen any discernable
+impact on the labor market. Um, yes,
+unemployment has ticked up in the US,
+but all of the kind of economic studies
+I&#39;ve looked at and that we&#39;ve written
+about suggest that this is overhiring
+post pandemic that it&#39;s really not
+AIdriven. If anything, people are hiring
+to build out AI capability.
+Do you think that this will be as you
+know economists have always argued that
+it&#39;s not a lump of labor fallacy that
+actually there will be new jobs created
+because so far the evidence seems to
+suggest that? Yeah, I mean I I think in
+um the near term that is what will
+happen. The kind of normal evolution
+when a breakthrough technology arrives.
+So some jobs will get disrupted but I
+think new even more valuable perhaps
+more meaningful jobs will get created.
+Um I think we&#39;re going to see this year
+the beginnings of maybe impacting the
+junior level entry level kind of jobs
+internships this type of thing. I think
+there is some evidence I can feel that
+ourselves maybe like a slowdown in
+hiring in that but I think that can be
+more than compensated by the fact there
+are these amazing creative tools out
+there pretty much available for everyone
+uh almost for free that if you know I
+was to talk to a a class of undergrads
+right now I would be telling them to get
+really unbelievably proficient with
+these tools I think to the extent that
+even those of us building it we&#39;re so
+busy building it it&#39;s hard to have also
+time to really explore the almost the
+capability overhang even today&#39;s models
+and products have let alone tomorrow&#39;s
+and I think that uh can be maybe better
+than a traditional internship would have
+been in terms of you sort of leaprogging
+uh yourself to be a useful uh in a
+useful in a profession so I think
+there&#39;s that&#39;s what I see happening
+probably in the next 5 years um maybe we
+again slightly differ on time scales on
+that but I think what happens after AGI
+arrives that&#39;s a different question
+because I think really we would be in
+uncharted territory at that point
+&gt;&gt; do you think it&#39;s going to take longer
+than you thought last year when you said
+half of all white color jobs.
+&gt;&gt; I have about the same view. I I actually
+agree with you and with Demis that at
+the time I made the comment there was no
+impact on the labor market. I wasn&#39;t
+saying there was an impact on the labor
+market at that moment. Um you know now I
+think maybe we&#39;re starting to see just
+just the little beginnings of it you
+know in software and coding. I even see
+it within within anthropic where you
+know I you know I can look forward I can
+kind of look forward to a time where on
+the more junior end and then on the more
+on the more on the more on the more
+intermediate end we actually need less
+and not more people and you know we&#39;re
+thinking about how to deal with that
+within anthropic in a in a in a you know
+sense in a sensible way. Um I you know
+one to five years as of six months ago I
+would stick with that. you know, if you
+kind of, you know, connect this to what
+I said before, which is, you know, we we
+might have AI that&#39;s better than humans
+at at everything in, you know, maybe one
+to two years, maybe a little longer than
+that. The those don&#39;t seem to line up.
+The reason is that there&#39;s this there&#39;s
+this lag and there&#39;s this replacement
+thing, right? I I know that the labor
+market is adaptable, right? Just like
+you know 80% of people used to do
+farming you know farming got automated
+and then they became factory workers and
+then knowledge workers. So you know
+there is some level of adaptability here
+as well right we should be economically
+sophisticated about how the labor market
+works but my worry is as this
+exponential keeps compounding and I
+don&#39;t think it&#39;s going to take that long
+again somewhere between between a year
+and five years it will overwhelm our
+ability to adapt. I think I may be
+saying the same thing Demis is just
+factored out of that that difference we
+have about timelines which I think
+ultimately comes down to how how fast
+you close the loop on CO and
+&gt;&gt; how much confidence do you have that
+governments get the scale of this and
+have are beginning to think about what
+policy responses they need to have
+&gt;&gt; I don&#39;t think that that that it&#39;s
+anywhere near enough work going on about
+this I&#39;m I&#39;m constantly surprised even
+when I meet economists at places like
+this that they&#39;re not more of uh
+professional economist, professors
+thinking about what happens um and not
+just sort of on the way to AGI but um
+even if we get all the technical things
+right that Dario is talking about and
+the job displacement is one question
+we&#39;re worried about the economics of
+that but maybe there are ways to
+distribute this new productivity this
+new wealth more fairly I don&#39;t know if
+we have the right institutions to do
+that but that&#39;s what should happen at
+that point there should be you know we
+may be in a post scarcity world but then
+there are even the things that keep me
+up right now there are even bigger
+questions than that at that to do with
+meaning and um purpose and a lot of the
+things that we get from our jobs not
+just economically that&#39;s one question
+but I think that may be easier to solve
+strangely than uh what happens to the
+human condition and humanity as a whole
+and I think I&#39;m also optimistic we&#39;ll
+come up with new answers there we do a
+lot of things today um from extreme
+sports to art that aren&#39;t necessarily
+directly to do with economic gain so I
+think we will find uh meaning and maybe
+there&#39;ll be even more sort sophisticated
+versions of those activities. Um, plus I
+think we&#39;ll be exploring the stars. So,
+there&#39;ll be all of that to to factor in
+as well for in terms of purpose. But I
+think it&#39;s really worth thinking now
+even on my timelines of like 5 to 10
+years away. That isn&#39;t a lot of time uh
+before this comes.
+&gt;&gt; How big do you think is the risk of a
+popular backlash against AI that will
+somehow kind of cause governments to do
+what from your perspective might be
+stupid things? Because I&#39;m just thinking
+back to the era of you know
+globalization in the 1990s when when
+there was indeed some displacement of
+jobs governments didn&#39;t do enough the
+public backlash was such that we&#39;ve
+ended up sort of where we are now. Uh do
+you think that there is a risk that
+there will be a growing antipathy
+towards what you are doing and your
+companies in the kind of body politic?
+&gt;&gt; Um I think there&#39;s definitely a risk. I
+think um I think that&#39;s kind of
+reasonable. there&#39;s fear and there&#39;s
+worries about these things like jobs and
+livelihoods. Um I think there&#39;s a couple
+of things that I mean it&#39;s going to be
+very complicated the next few years I
+think geopolitically but also the
+various factors here like we want to and
+we&#39;re trying to do this with AlphaFold
+and our science work and isomorphic our
+spinout company solve all disease cure
+diseases come up with new energy sources
+I think as a society it&#39;s clear we&#39;d
+want that I think maybe the balance of
+what the industry is doing is not enough
+balance towards those types of
+activities I think we should have a lot
+more examples I know Dario agrees with
+me of like alpha fold like things that
+help sort of unequivocal good in the
+world. And I think actually it&#39;s
+incumbent on the industry and and all of
+us leading players to show that more,
+demonstrate that, not just talk about
+it, but demonstrate that. Um and but
+then it&#39;s going to come with these other
+intendent disruptions and um but I don&#39;t
+I think the other issue is the
+geopolitical competition. There&#39;s
+obviously competition between the
+companies but also US and China
+primarily. So unless there&#39;s an
+international cooperation or or
+understanding around this um uh which I
+think would be good actually in terms of
+things like minimum safety standards for
+deployment I think Dario would agree on
+that as well. I think it&#39;s vitally
+needed. This technology is going to be
+crossber border. It&#39;s going to affect
+everyone. It&#39;s going to affect all of
+humanity. Um actually contact is one of
+my favorite films as well. So funny
+enough, I didn&#39;t realize it was yours
+too, Dario. But I I think um um you know
+those kind of things need to be worked
+through. Um and and if we can maybe it
+would be good to have a bit of slow a
+slightly slower pace than we&#39;re
+currently predicting even my timelines
+so that we can get this right society.
+But that would require some coordination
+that is I I prefer your timelines.
+&gt;&gt; Yes, I will concede.
+&gt;&gt; But but Dario, let&#39;s turn to this now
+because one thing since we last spoke uh
+in Paris, the geopolitical environment
+has, if anything, I don&#39;t know,
+complicated, mad, crazy, whatever,
+whatever phrase you want to use.
+Secondly, the US has a very different
+approach now towards China. It&#39;s a much
+more it&#39;s a kind of no holds barred, go
+as fast as we can, but then sell chips
+to China. Um and that is it. So you&#39;ve
+got a different attitude towards the
+United States. You&#39;ve got a a very um
+strange relationship between the United
+States and and Europe right now
+geopolitically against that. I mean I
+hear you talk about it would be nice to
+have a CERN like organization. I mean
+it&#39;s a million years from where we are
+from the real world. So in the real
+world have the geopolitical risks
+increased and what if anything do you
+think should be done about that? And and
+the administration seems to be doing the
+opposite of what you were suggesting?
+Yeah, I mean, look, you know, we&#39;re
+we&#39;re we&#39;re just trying to do the best
+we can to, you know, we&#39;re just we&#39;re
+just one company and we&#39;re we&#39;re trying
+to operate in, you know, the the
+environment that exists, no matter how
+no matter how crazy it is. But, you
+know, I think I think at least my policy
+recommendations haven&#39;t changed that,
+you know, not selling chips is one of
+the, you know, one of the one of the
+biggest things we can do um to, you
+know, make sure that we have the time to
+handle this. Um, you know, you know, I
+said I said before, you know, I I I
+prefer Demis&#39; timeline. I wish we had
+five to 10 years, you know, so it&#39;s it&#39;s
+possible he&#39;s just right and I&#39;m just
+wrong, but but assume I&#39;m right and it
+can be done in one to two years. Why
+can&#39;t we slow down to to Demis&#39;
+timeline?
+Well, no. The but but but the reason the
+reason we the reason we can&#39;t do that is
+is you know because we have geopolitical
+adversaries building the same technology
+at a similar pace. It&#39;s very hard to
+have an enforcable agreement where they
+slow down and we slow down and and so if
+we can just if we can just not sell the
+chips then this isn&#39;t a question of
+competition between the US and China.
+This is a question of competition
+between me and Demis which I&#39;m very
+confident that we can work out.
+&gt;&gt; And what do you make of the logic of the
+administration which as I understand it
+is we need to sell them chips because we
+need to bind them into US supply chains.
+&gt;&gt; So you know it&#39;s it&#39;s I I think it&#39;s I
+think it&#39;s a question not just of time
+scale but of the significance of the
+technology. Right? If this was telecom
+or something, then all this stuff about
+proliferating the US stack and you know
+wanting to build our you know chips
+around the world to make sure that you
+know you know this c you know the you
+know these random countries in different
+parts of the world you know build data
+centers that have Nvidia chips instead
+of Huawei chips you know I think of this
+more as like you know it&#39;s a decision
+are we going to you know sell nuclear
+weapons to North Korea Uh and you know
+because that produces some profit for
+Boeing. Um you know where where we can
+say okay yeah these cases were made by
+Boeing like the US is winning like this
+is great like I I I just you know that
+that analogy should just make clear how
+I see this trade-off that I just don&#39;t
+think it makes sense. Um and and we&#39;ve
+done a lot of more aggressive stuff to
+you know toward towards towards China
+and other players that that I think is
+much less effective than this this one
+this one measure. One more area from me
+and then I hope we&#39;ll have time for a
+question or two. The other area of
+potential risk that doomers worry about
+is a kind of all powerful malign AI. Um
+and I think you&#39;ve both been somewhat
+skeptical of the doomer approach but in
+the last year we have seen you know
+these models showing themselves to be
+capable of deception duplicity. Uh do
+you think that do you think differently
+about that risk now than you did a year
+ago? And is there something about the
+way the models are evolving that we
+should put a little bit more concern on
+that?
+&gt;&gt; Yeah, I mean you know since since the
+beginning of anthropic we&#39;ve kind of
+thought about this risk. I mean you know
+our our our research at the beginning of
+it was very theoretical right? You know
+we pioneered this idea of mechanistic
+interpretability which is looking inside
+the model and and trying to understand
+looking inside its brain trying to
+understand why it does what it does as
+it you know as as human neuroscientists
+which we actually both have background
+in. um try try to understand try to
+understand the brain and I think as time
+has gone on we&#39;ve we&#39;ve increasingly
+documented the you know bad behaviors of
+the models when they emerge and are now
+working on trying to address them with
+mechanistic interpretability. So I you
+know I think uh you know I I&#39;ve always
+been concerned about these these risks.
+I&#39;ve talked to Demis many times. I think
+he has also been um concerned about
+these risks. I think I have definitely
+been and I I I would guess Demis as well
+although I&#39;ll let him speak for himself
+skeptical of of doomerism which is you
+know we&#39;re doomed there&#39;s nothing we can
+do or this is the most likely outcome. I
+think this is a risk this is a risk that
+if we work all work together we can
+address we can learn through science to
+properly you know control and and direct
+these creations that we&#39;re building. But
+if we build them poorly, if we go, you
+know, if if if we&#39;re all racing and we
+go so fast that there&#39;s no guard rails,
+then I think there is risk of something
+going wrong.
+&gt;&gt; So, I&#39;m going to give you a chance to
+answer that in the context of of a
+slightly broader question, which is over
+the past year, have you grown more
+confident of the upside potential of the
+technology, science, all of the areas
+that you have talked about a lot, or are
+you more worried about the risks that
+we&#39;ve been discussing? Look as I&#39;ve been
+working on this for 20 plus years. So we
+we already knew the reason I&#39;ve spent my
+whole career on AI is is the upsides of
+solving basically the ultimate tool for
+science and understanding the universe
+around us. I&#39;ve I&#39;ve sort of been
+obsessed with that since a kid and and
+and building AI is the you know should
+be the ultimate tool for that if we do
+it in the right way. The risks also
+we&#39;ve been thinking about since the
+start at least the start of deep mine 15
+years ago and um we kind of sort of
+foraw that if you got the upsides it&#39;s a
+dual purpose technology so it could be
+repurposed by say bad actors for harmful
+ends so we&#39;ve needed to think about that
+all the way through but I&#39;m a big
+believer in human ingenuity um but the
+question is having the time and the
+focus and all the best minds
+collaborating on it to solve these
+problems. I&#39;m sure if we had that we
+would solve the technical risk problem.
+It may be we don&#39;t have that and then
+that will introduce risk because we&#39;ll
+be sort of it&#39;ll be fragmented. There&#39;ll
+be different projects and people be
+racing each other. Then it&#39;s much harder
+to make sure you know these systems that
+we produce will be technically safe. But
+I I feel like that&#39;s a very tractable uh
+problem.
+&gt;&gt; If you if you have the time I want to
+make sure there&#39;s one question gentlemen
+keep it very short because we&#39;ve got
+literally two minutes.
+Thanks for Hello.
+&gt;&gt; Yeah. No speak.
+&gt;&gt; Thanks very much. I&#39;m Philip, co-founder
+of Star Cloud Building Data Centers in
+Space. Um, I wanted to ask a very
+slightly philosophical core question.
+The sort of strongest argument for
+doomerism to me is the Fermy paradox,
+the idea that we don&#39;t see intelligent
+life in our galaxy. I was wondering if
+you guys have any thoughts.
+&gt;&gt; Yeah, I&#39;ve thought a lot about that.
+That can&#39;t be the reason because we we
+we should see all the AIs that have So,
+just for everyone know the idea is well,
+it&#39;s sort of unclear why that would
+happen, right? So if if the reason
+there&#39;s a Fmy paradox there are no
+aliens because they get taken out by
+their own technology we should be seeing
+paper clips coming towards us from some
+part of the galaxy and apparently we
+don&#39;t we don&#39;t see any structures Dyson
+sphere is nothing whether they&#39;re AI or
+natur or sort of biological so to me um
+there has to be a different answer to
+fmy patterns I have my own theories
+about that but it&#39;s out of scope for the
+next minute but um you know I I just
+feel like uh that that I my prediction
+my feeling is that we&#39;re past the great
+filter it probably multisellular life if
+I would have to guess was incredibly
+hard for for biology to evolve that. Um
+so we&#39;re on you know there isn&#39;t a
+comfort of like what&#39;s going to happen
+next. I think it&#39;s for us to write as
+humanity what&#39;s going to happen next.
+&gt;&gt; This this could be a great discussion
+but is out of scope for the next 36
+seconds. But what isn&#39;t 15 seconds each
+what when we meet again I hope next year
+uh the three of us which I would love uh
+what will have changed by then? I well I
+think the biggest thing to watch is this
+issue of AI systems building AI systems
+how that goes whe that whether that goes
+one way or another that that will
+determine you know whether it&#39;s a few
+more years until we get there or or if
+we have you know you know if if we have
+wonders and and a great emergency in
+front of us that we have to face
+&gt;&gt; AI systems building
+&gt;&gt; I agree on that so we&#39;re we&#39;re keeping
+close touch about that um but also I
+think um outside of that I think there
+are other interesting uh uh uh ideas
+being researched like world models
+continual learning these are the things
+I think that will need to be cracked if
+self-improvement doesn&#39;t sort of deliver
+the goods on its own then we&#39;ll need
+these other things to work and then I
+think things like robotics may have its
+sort of breakout moment
+&gt;&gt; but maybe on the basis of what you&#39;ve
+just said we should all be hoping that
+it does take you a little bit longer and
+indeed everybody else to give us
+&gt;&gt; I would prefer that I think that would
+be better for the world
+&gt;&gt; but you guys could do something about
+that thank you So, it&#39;s very MUCH
