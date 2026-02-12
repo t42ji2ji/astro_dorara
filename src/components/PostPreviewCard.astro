@@ -146,11 +146,18 @@ const previewContent = getPreviewContent(post)
   }
 
   function initAllPreviewCards() {
+    // 先清理舊的卡片，確保乾淨的狀態
+    cleanupPreviewCards()
     document.querySelectorAll('.post-item-wrapper').forEach(initPreviewCard)
   }
 
   function cleanupPreviewCards() {
+    // 移除所有卡片
     document.querySelectorAll('body > .preview-card').forEach((card) => card.remove())
+    // 重置所有 wrapper 的初始化標記
+    document.querySelectorAll('.post-item-wrapper').forEach((wrapper) => {
+      ;(wrapper as any).__previewCardInit = false
+    })
   }
 
   // 初始化當前頁面的卡片

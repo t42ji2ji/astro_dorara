@@ -12,25 +12,43 @@ const twikooConfig = {
 }
 ---
 
-<div id="tcomment"></div>
-<script is:inline define:vars={{ config: twikooConfig }}>
+<div id="tcomment" data-twikoo-path={Astro.props.path}></div>
+<script is:inline define:vars={{ twikooConfig }}>
   ;(function() {
     const TWIKOO_URL = 'https://cdn.jsdelivr.net/npm/twikoo@1.6.32/dist/twikoo.all.min.js'
 
-    // 使用全域變數追蹤狀態，避免重複註冊
-    window.__twikooState = window.__twikooState || { observer: null, handler: null }
+    // 使用全域變數追蹤狀態
+    window.__twikooState = window.__twikooState || {
+      observer: null,
+      initialized: false,
+      currentPath: null
+    }
     const state = window.__twikooState
 
     function initTwikoo() {
       const container = document.getElementById('tcomment')
       if (!container || typeof twikoo === 'undefined') return
 
+      const path = container.getAttribute('data-twikoo-path')
+
+      // 如果已經初始化過相同的 path，跳過
+      if (state.initialized && state.currentPath === path) {
+        return
+      }
+
+      // 清空容器並重新初始化
       container.innerHTML = ''
-      twikoo.init(config)
+      state.currentPath = path
+      state.initialized = true
+
+      twikoo.init({
+        ...twikooConfig,
+        el: '#tcomment',
+        path: path
+      })
     }
 
     function loadScript() {
-      // 已載入過，直接初始化
       if (typeof twikoo !== 'undefined') {
         initTwikoo()
         return
@@ -46,6 +64,9 @@ const twikooConfig = {
       const container = document.getElementById('tcomment')
       if (!container) return
 
+      // 重置初始化狀態（因為頁面已經變了）
+      state.initialized = false
+
       // 清理舊的 observer
       if (state.observer) {
         state.observer.disconnect()
@@ -60,23 +81,18 @@ const twikooConfig = {
             loadScript()
           }
         })
-      }, { rootMargin: '200px' }) // 提前 200px 開始載入
+      }, { rootMargin: '200px' })
 
       state.observer.observe(container)
     }
 
-    // 移除舊的事件監聽器（如果存在）
-    if (state.handler) {
-      document.removeEventListener('swup:contentReplaced', state.handler)
-    }
-
-    // 建立新的 handler（使用當前 config）
-    state.handler = setupObserver
-
     // 初始載入
     setupObserver()
 
-    // Swup 頁面轉換後重新設定 observer
-    document.addEventListener('swup:contentReplaced', state.handler)
+    // Swup 頁面轉換後重新設定（只註冊一次）
+    if (!window.__twikooSwupRegistered) {
+      window.__twikooSwupRegistered = true
+      document.addEventListener('swup:contentReplaced', setupObserver)
+    }
   })()
 </script>
