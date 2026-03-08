@@ -79,11 +79,7 @@ export const defaultConfig: ThemeConfig = {
   rss: {
     fullText: true,
   },
-  comment: {
-    twikoo: {
-      envId: 'https://twikoo-cloudflare.joy8963259.workers.dev',
-    },
-  },
+  comment: {},
   analytics: {
     googleAnalyticsId: '',
     umamiAnalyticsId: '',

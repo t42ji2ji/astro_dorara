@@ -33,7 +33,6 @@ const banner = post.data.banner
         </span>
       </div>
     </div>
-    <!-- 手機版顯示縮圖，桌面版隱藏（因為 hover 卡片有大圖） -->
     <div class="post-thumbnail md:hidden">
       {
         banner ? (
@@ -45,7 +44,6 @@ const banner = post.data.banner
     </div>
   </a>
 
-  <!-- 桌面版 hover 預覽卡片 -->
   <PostPreviewCard post={post} />
 </header>
 

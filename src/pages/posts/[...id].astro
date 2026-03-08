@@ -1,6 +1,5 @@
 ---
 import type { GetStaticPaths, InferGetStaticPropsType } from 'astro'
-import Comments from '~/components/Comments.astro'
 import Pagination from '~/components/Pagination.astro'
 import SiteSeo from '~/components/SiteSeo.astro'
 import LayoutPostDetail from '~/layouts/LayoutPostDetail.astro'
@@ -50,8 +49,6 @@ function getUrl(id: string) {
     rightUrl={getUrl(next?.id)}
     showPageCount={false}
   />
-  <!-- BUG 这里使用 client:visible 会导致构建失败。ref: https://github.com/withastro/astro/issues/7329 -->
-  <Comments post={entry} />
 </LayoutPostDetail>
 
 <script>
