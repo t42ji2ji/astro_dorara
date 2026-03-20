@@ -1,0 +1,758 @@
+Hello and welcome to tonight's Commonwealth Club World Affairs program. I'm Michael Lewis,
+journalist, author, local boy, live in Berkeley, and your moderator for this evening's program
+with Bill Gurley. And now it's my pleasure to introduce Bill Gurley, general partner at
+Benchmark. Over his VC career, Bill's invested in and served on the board of companies such as
+Nextdoor, OpenTable, Stitch Fix, Uber, and Zillow. His latest venture, which we're going to talk about
+today, tonight, is his new book, Running Down a Dream, How to Thrive in a Career You Actually Love.
+Bill, congratulations on your new book and come join us.
+All right, we're going to do 45 minutes of just the two of us, and then we're going to do your
+questions. The book's great. Thank you. I mean, you know how I knew it was great is that so my
+just graduated from Marin Academy son, who's taking a gap year and is in London working,
+asks me all the time the questions you answer. That is the anxiety in the air around him about what
+he's going to do with his life and what, like what, how do you even think about it? I think you've hit a
+nerve. I think you're, I think you're going to find this thing is going to run and run and run,
+but we're not going to get the book right away. I'm going to do this in stages. Okay. And we're
+going to start with, we've known each other. When did we meet? I can't even remember how we met,
+but we met a long time ago. Was it through Moneyball? Maybe Maury. I don't know. Yeah.
+Yeah. But, but it was, I think it was Maury. Yeah. So a long time ago. Yeah. And my first
+impression of you was you were tall and I think it probably shapes everything that happens to you.
+I think you can't go through the world six, nine without having a kind of six, nine like life.
+Yeah. And, and, and well, you know, there is this thing with really tall people that you spend your life
+knowing people are watching you and I think it makes you better behaved. I think you're not going
+to get away with anything. You really are. You're not going to sneak one by anybody. And so you have
+to have like a better character when you get to be your size. All right. Um, but it's, so I want to
+start with your life a little bit because your life is what informs this book. I want to, I want you to
+walk us through your life up to the moment you get on stage at the university of Texas in 2018 and give
+the speech that leads to this book. Yeah. Tell me where you, how you grew up. Um, I grew up,
+I grew up in Dickinson, Texas, which is in between Houston and Galveston in Galveston County. Um, my
+father, and I think this is relevant to the, to the overall story for a reason I can share. My father
+grew up in rural North Carolina, fell in love with gas airplanes as a kid. Like his father built him a
+shed behind the house and he's out there till 12. Was he a real country boy? No, no, no,
+North Carolina, I rode North Carolina when your dad's growing up. No, I know, I know, but he's
+playing with these, those old Cox model airplanes and he goes to NC State and gets an aeronautical
+engineering degree and he's working at Langley Air Force Base in a wind tunnel. And someone comes
+by and ask him and 49 other people working there, would you want to move to Houston and help start
+NASA? Oh, and he said, yes, of course. Well, I don't, is it of course, like, like you, you know,
+you grow up, some people grow up in a geographic area and that's pretty, that's, that can be daunting
+to jump that far. But the reason I think that story is relevant is when it came time for me to think
+about jumping across the country. It seemed natural, like, like, cause I had seen this example.
+So you're eliminating that fear. Yeah. Fear of having to go somewhere else. Or, or even knowing
+what it led to for him. I mean, to, to grow up on a farm playing with model airplanes, you know,
+he's born in 36. So, you know, 18 is, what is that? 50, 54. By 69, they put a man on the moon.
+Like that's quite a run. Yeah. And he was in the middle of it. Yeah. Our whole, half the fathers on
+the street I grew up on worked at NASA. So it was, it was just around us. It didn't seem strange.
+Did you want to go into that line of work? No, no. And by the time I was graduating high school in 84,
+you know, and moved on to the space shuttle. And even that was, was, you know, not, I wasn't drawn
+to that. But my sister, this could take forever. No, no, no, no, I'll cut you off. I have some,
+I have some specific things I want to do with you. My sister was a double E at Rice and, and,
+and could have gone to a bigger company and went to compact computer corporation in Houston,
+which was a super hot startup at the time. John Doerr was on the board. Um, it was being disruptive
+of IBM. And so she was an early employee there, which is another data point, you know, that I have
+in my life. And I followed her there. When, how did you figure out what you wanted to be? So,
+so when I was like a sophomore in high school, I got ahold of a Commodore VIC-20, which was this
+precursor to the PC that you plugged into a TV. Right. And I would buy these magazines that had
+code written in them. And I, before I even knew how the code worked, I'd type them in and see it work.
+And, and of course I'd make typos and it wouldn't work. And then I'd have to figure,
+I learned to code that way through that and, and got fascinated with that. You could write a program
+that could do something. And by the way, like half the people my age in Silicon Valley have that same
+story. Yeah. But if I had found you, if I had found, if I had met you when you were in a junior
+or senior in high school and asked you what you were going to do when you grew up. Computer science,
+for sure. That's what you were going to do. Yeah. And I went to college and that's what I got.
+You were going to program computers. Yeah. That's not what you ended up doing. No,
+no, no, no. But I worked at compact for two, a little over two years. And so why do you leave
+that job? A couple of things happened. One, I had this, I developed this mental exercise that I
+didn't realize I was doing, but at the time, but I said to myself, well, a couple of years in,
+we started a third project, looked like the second project, looked like the first project.
+And I was starting to pay attention to some broader things and it looked a little redundant. And I
+said to myself, do I see myself here 30 years from now? And there were people in the building that
+had been engineers for 30 years. So I could, you know, I could, I could get a perspective on it by
+just thinking, do I want to be them? Right. And the answer was no. Very quickly in my brain,
+the answer was also, um, I had read Peter Lynch's one up on wall street and I was starting to get
+fascinated with stocks. Like when I got home at night, right? I got this value line notebook they used to
+have single pages. It was like 400 pages. You get updates in the mail. Yeah. Um, yeah. So I started
+thinking about stocks a lot out of just interest. So that moment, because I had a moment like this
+when I was working on wall street and I wrote a book about it, but no, but when you look at the
+people who are in whatever you just started out in and you can't, you don't really want to be that
+in 30 years. That's one, one thing. But the other thing you said is that it sounded like you were,
+it was repetitive. It was so you weren't learning, right? So you're, and learning is a big deal
+with you. Yes. You always love to learn. Well, actually I really, when I, when I decided to
+leave compact, I went to business school at the university of Texas. And, um, for some reason
+I fell in love with reading there. I did read that Peter Lynch book, but, but prior to like high school
+and undergrad, I didn't read much, but in business school, like a bit flip and I just started reading
+everything. Huh? Yeah. Including. This is the male brain waking up at age 25. Right? No,
+that's what happens. I think that is what happens. Yes. Our brains are a little slow to come along.
+Mine was, I don't mind. I had a similar sort of experience. Yeah. So, um, so you, we skipped
+over one thing because I, I think the fact that you're six, nine and played basketball at the
+university of Florida, even though you didn't play a lot, right? Right. You were on the, you're on a D1
+team. You had, you had, you were surrounded by NBA players. I practiced basketball, but yes. But you played,
+practiced basketball, three guys who played the NBA. Correct. You were, it was a pretty serious.
+And I, I, I, I, people, like people have asked me how that, like all the only thing I could possibly
+say how that might've impacted my career path is one. Um, I saw people get to very high places that I
+knew. So like, there's a certain like, Oh, that's doable. You mean the NBA? Yeah. But I knew it,
+for me, it wasn't that lane. So if I wanted to do it, I'd have to find another lane. Right. But,
+but still like, it's interesting to see like that kind of level of success up close and know about it.
+But I would say, I mean, we're going to get to your talk because the talk is the, is the catalyst
+for this point. But when you talk on a stage, you don't remind me of any VC. I know you remind me a lot
+of basketball coaches I know. Is that right? Oh yeah. You're a coach. You're so, you're so,
+the way you talk, the way you're talking to them, you sound like you're talking to a team at halftime
+that you're slightly irritated with. And, and, and, and you're, but you're holding, you're not gonna,
+you're not gonna go crazy on them, but you're, you're, you're slightly irritated with them.
+And you're telling them how life works. And, and so you clearly picked up and you're, a lot of,
+you're one of the founders I work with is in the audience. Yeah. But a lot of you, a lot of you,
+I mean, you brought up, I can't remember whether you brought it up in the talk or the book,
+but there was a, it was in the talk. We, you were quite moved by Bobby Knight's speech,
+introducing Mike Shusefki into the hall of fame. Yeah. I wouldn't watch that just, and,
+and he reminded me of you. He did. So you have this, you, okay. Am I wrong that your athletic,
+you know, let me just ask the question I want to ask your athletic career shaped you too. It wasn't
+just your dad was at Nassau and you play with the computers. You, that you, you clearly were,
+you cared a lot about sports. Yeah. You don't go suffer at the end of the bench on the university of
+Florida unless you care about this. Yeah. So where, tell me about that part of your,
+your development. I don't, I mean, like I said, the, the part that I think I might've taken away
+from it is, is just simply, um, knowing that they're like how far away from the, the talent level,
+the people that went to the NBA from the rest of us, right. Like even in practice every day,
+you could just tell, right. And knowing that if you were going to do something at that level,
+it would require you to have that same kind of advantage in whatever it is you go do.
+Like it was a real awakening of differential of, of potential, nothing about hard work or teamwork
+or any of that stuff that come. I think all that stuff leaks in like, like, you know,
+as you go through the whole process and, um, and grinding and, and, and coaches yelling at you and
+like, not, not being the end of the world, you know, the coaches, did your coaches mean a lot to you?
+No, not really. Okay. All right. That's interesting. That's all right. You know, I, I, I mean,
+I like to see you squirm a little bit. I read your book, book coach. I did not have that. I didn't have
+that experience. Yeah. I got lucky. Yeah. I mean, not everybody has that experience. Yes. Um,
+all right. So let you, you, you leave compact, you go to business school and, and get us from there to
+Silicon Valley. Well, I went through wall street. So I, I thought about venture capital a little bit
+when I was at business school, I was curious about it. Um, I couldn't find a way in. I had a few
+informational interviews. They said, go work for 20 years and call me back. I thought was, uh, not really
+an executable plan. Um, and then, uh, I, I started reading business magazines. I really
+love my corporate strategy class and a lot of, a lot of MBA students sit in the, in the
+big open area and pretend to be executives and read fortune and Forbes and wall street
+journal. And I was of course reading the tech articles cause that's what I was excited about.
+And there was this team of sell side analysts at Goldman Sachs, Dan Benton, uh, John Leventon,
+Rick Sherlin, and they were considered the acts and the reporters, when they wanted to write about
+these industries would always ask them. So I'm reading this stuff and they're like, keep coming
+up. Like these are the people that, that analyze these important tech industries. So I, um, did what
+you read about in books. I cold called them and said, can I come see you? And, and Dan and Rick said,
+yes, like a first year student at university of Texas, pretty far away from New York. Um, and then
+because I knew they were so well known, I called the other research directors and said, I'm going
+to be in New York meeting with Rick Sherlin and Dan Benton. Can I get 15 minutes for your time? And, um,
+I ended up with like seven meetings with research directors. And one of them gave me a shot,
+Al Jackson, who was at, at the book party on Monday night, which was great to see him. And by the way,
+he cared a lot about the athletics piece. I bet all the wall street people did. Yeah. I was asking
+him why he took a chance on this kid from Texas because the, the incoming group of, of people from
+NBA programs that year, there were 40 of us. And I was the only one that wasn't Columbia Wharton,
+you know, the ones you would expect. Yeah. But the, one of the things you signal, if you've been
+through a D one athletic program, if you've learned how to suffer. Yeah. And work and,
+and have work. Yeah, that's right. Then they've been, you're going to have to suffer in those jobs.
+What? So your interest in wall street comes from reading Peter Lynch. This is what gets you.
+A little bit in, in your book, which I know you hate. You say this, I don't hate. So this is,
+I read, I got to it. I thought it's funny. It was, he said that he read. What year did it come out?
+89. Yeah. So I went to work on wall street in 91. Okay. Yeah. Uh, and you, I didn't, I didn't,
+I should share with the audience. Michael's book, Liars Poker. Um, he thought he was writing a book
+to tell people don't ever come to this horrible place. That's your take on my book. I don't know.
+That's my take on you describing. No, no, not exactly. I didn't, I didn't, I didn't have that
+kind of view. My view is a little, there was a little more nuanced than that. It was that I was
+watching, I was watching people who had not the benefit of this advice at Princeton, where I went,
+I was watching people who had not the right thing to do. And I was watching people who had
+the right thing to do. Like they wanted to be, they wanted a treadmill and wall street,
+I watched her watch wall street become this treadmill. And I watched people who really had
+talents and interests that should have taken them in a different direction, feel they couldn't
+afford to do it. Cause you had to do this. Cause it was too scary. Uh, turn down Goldman Sachs
+would have been like turning down Princeton. Yeah. Yeah.
+And that bothered me really bothered me. And so what I, what I was hoping it would do was
+sort of demystify it so that the kid who was going to be an oceanographer would just say,
+okay, I know what it is silly. I'm gonna go be an oceanographer. It is true that it did
+not have that. It had that effect with some kids. Uh, but with other kids, it was more,
+oh my God, the dog whistle coming out of Liars Poker was Michael Lewis doesn't know anything. He
+persuades us. He doesn't know anything. And within 18 months, they're throwing hundreds of thousands
+of dollars a year at him to give financial advice. I don't know anything says the reader,
+where can I go to get paid hundreds, hundreds of thousands of dollars? And so it attracted all these
+people into the business. I don't want to digress on me too much, but I just, just flash forward.
+I would, I would, so, so my main draw was the thing I'd mentioned the tech analyst in this thing, but
+there, your book did create this note notion of sensationalism that it would be exciting. Yes.
+Exciting. What was it? Oh yeah. I actually, I had a, I had a blast. I, it was a rocket ship. I got very
+fortunate. Um, I had this amazing call on Dell that worked out like perfectly. It was going up or going
+down. It was the company was in trouble. It was trading at six times earnings. Their laptop had
+caught on fire and they had this option, uh, hedging strategy gone awry that they had to do a
+mea culpa to the street. So the street hated the stock, but we had done some analysis using this new
+tool called return on invested capital. And they had like a 10 to one advantage over compact and the other
+companies because of how they work their inventory and their positive cashflow cycle. And, uh, we went
+positive on it. They fixed those two problems. Stock went up a hundred X and you got credit for it. Yeah.
+I got credit for it. And I got to know Michael, which is awesome. And the CFO at the time, Tom Meredith.
+So why do you leave that job if it was so great? And one of the crazy things about that job is you, you
+go, you visit companies, you go straight and talk to the CFO and the CEO. It's crazy. You're 28 years old and
+you get to go straight to the top, which of the access is unbelievable because they think you're
+going to say nice things about it. Maybe, but still you get, you get, you get in. Right. Um,
+journalists have that too. Yeah. Yes. Yeah. Yeah. Yeah. And so, and podcasters. Now I meet them and
+they're like, it's unbelievable. They just sit there interviewing people that they love. Like, like,
+it's so cool. Anyway, there was that great part. Um, I had the same exact exercise one day. Uh, the company was in
+nonprofit nonprofit nonprofit nonprofit nonprofit nonprofit nonprofit nonprofit nonprofit nonprofit
+nonprofit nonprofit nonprofit nonprofit nonprofit nonprofit nonprofit nonprofit nonprofit nonprofit nonprofit
+the 36th floor and the corners were held by the senior most people and I'm there at 10 p.m. one
+night and I walk around the floor and I pause I don't even know why I did this in front of each
+of those four offices and said is that going to be me do I want that to be me 30 years from now
+and I got to know that night I remember making that decision that night that because I want to
+did you ever get to a place in your life where you looked up and said I want to be that in 30 years
+I never and when I got in venture I never had that discussion with myself ever again okay no no no
+yeah so it didn't at least the sight of the people yeah and I didn't you know I kind of got prepared
+to tilt adventure and and to leave I didn't I in neither of these cases did I walk out the door
+the next day I made a mental decision to to to find a way to go in a different direction what
+interests you about venture capital um I just said I just answered this question the other day so I
+I I love technology I love disruption right I really got into business strategy and this idea
+that you could bet on a a startup kind of out maneuvering an incumbent and then being successful
+and then you get to bet on it because I started trading stocks when when I was in college my friends
+and I would go to Binion's and and play single deck blackjack so I had this gambler kind of thing too
+you'd like to gamble yes yes and so you do like technology disrupt the gambling when you're
+counting cards you like to gamble I prefer to have edge okay I'm not I'm not I've been you sit at the
+I've met these no no no you don't like that no and I meet people that want to flip you know coins for
+yeah yeah for a lot of money none I have zero interest in that you like the idea of having an edge
+and then bet making yes yes yes yes right all that right and so it was perfect it was like all those
+things combined how did you know that like how would you even have discovered when you come in okay
+so so compact was a startup that was very successful my sister got options right I learned about that and
+started to have that idea I get to Wall Street and there are hot young companies that are growing
+really fast that are exciting to cover and then they're like would you cover IBM and I'm like I
+don't like I had zero interest so that told me I wanted to be more over here even on the other side
+of that right you know and and what was happening on the edge the edge was very exciting to me and so
+and so the venture venture is where it gets really on the edge and then I'd already decided I want to
+move to the buy side it was either going to be public or venture right because the sell side you're
+you're if you actually know you want to do it yourself yeah exactly right you don't really have
+any money on those who say don't know and those who know don't say exactly it's uh yeah so you're
+we should talk about your venture career but I want to flash forward to your speech but okay we'll
+come back to you yeah you want you because it's interesting you're kind of shy about talking about
+your career I mean people you said when you went to go sell a book that everybody wanted you to
+write about Uber or my career every single one of them yeah or a memoirs yeah yeah they didn't want
+a how-to book that's correct about how to lead your life right right so that would that but that that's
+interesting but you you go you get invited to go back to your alma mater yeah and give a talk to a
+class yeah it was a new incoming MBA class yeah and you can talk about anything yeah why did you decide
+to talk about this there was a during my entire career I was a writer and I wrote more I started
+as a self-signal I'm sure forced to become a writer but I found a way to use writing as a way to
+differentiate myself as a venture capitalist started as a self-signal I'm sorry I kept doing it through
+blogs I mean it was started as a newsletter but eventually became blog and in that process and I'm
+sure writers do this as well a new idea pops in my head I grab a new file open it up put the notes in
+and as something new comes across that's that's related to that I stick it in there and see how it
+builds and you know there for every blog post I did there's three or four of those that never see the
+light of day right I was reading a bunch of biographies at one time and there was a third biography
+and I saw this through line to the second and the first and the same way I'd write about frameworks
+for a new technology or a new disruption or a marketplace companies and the internet it just I
+had that same kind of aha moment that these pieces fit together in this way that there was a framework
+the biographies fit together yes and what was it so I wrote a pattern you saw a pattern I did and then
+what was the pattern well I thought it was so the thing that was super interesting to me is there
+were three people all in fields that your parents would tell you not to go into it was a folk singer
+a restaurateur and a basketball coach they all started on the very bottom rung yep they were all
+insanely curious about their field so much so that they're out learning proactively on their own like
+not learning in a classroom where a teacher's teaching you they're studious you're not doing it
+they're studious and all three of them are just studious studious in a way that you that I've never
+seen other people do you know and uh say who they are yeah yeah so I mean they're all three profiled in
+the book and the video but uh Danny Meyer a restaurateur in New York uh took copious notes every time he
+visits any restaurant um before he even becomes a restaurateur yes yes yeah even it has a hobby when he's
+young um Bob Dylan who most people don't know how studious he was I have no idea on his way up and
+the movie missed it too the new movie that came out good movie but but the Scorsese documentary gets it
+you know but but just and he's been a lifelong learner he just came out with this book about 50 songs that
+mattered most they're not his right right so he's you know like studying and then uh then Bobby Knight
+who in his early way up um forced his way in front of like six of the best coaches in the history of the sport
+like I've never seen a mentor pursuit like that right ever ever and the thing I really love about Bobby Knight
+everybody knows the chair and the anger and all that right he has a coaching tree that is bigger than anyone
+that's ever coached you put it up in this on a slide in your time yeah yeah yeah the number of people that either
+played for him or coached under him that have gone on to coach on their own so he himself was a teacher yeah yeah and and and and I
+I think it's an interesting way to judge someone's impact on the world you know but Danny has the same kind of thing if you talk to a chef that ever worked at a Danny Meyer
+restaurant it matters to him uh-huh and that's gotta feel really cool if you're Danny that that people care that they were just going through your your your program that you had got exposed to it a little bit
+so you're about to give this talk at the University of Texas yeah notice this pattern yeah these three people who you admire
+yeah interested in all had a kind of similar approach to the how they found their career in careers that no parent would say yeah and the intentionality
+like that that part was really interesting to me like like Danny didn't originally have that intentionality had this amazing moment with his uncle one night at dinner
+his uncle Richard and and then the next describe that moment that's his interesting moment I mean I if I have one goal of this book it's to be uncle Richard for as many people as possible and then the next day
+down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down down
+Richard, and I guess his Uncle Richard notices, he's got a frown on his face. He said, why are
+you so down? He said, I have to take the LSAT tomorrow. His Uncle Richard said, do you really
+have to? Like, do you have to take the LSAT tomorrow? And this led to a conversation where
+his Uncle Richard told him, you know, Danny, all you ever do is think about restaurants. Why don't
+you just go open a restaurant? It had never dawned on him. His father had had a couple of bankruptcies
+in the broad travel and leisure space, and so his father had kind of pushed him away from
+the idea. He needed Uncle Richard to give him permission to go think about this thing. There are
+two things going on there. One is sort of freeing yourself from this sense of obligation. I have
+to go do this. I'm supposed to go do this. You see that. Broadly, I'm supposed to go make
+a lot of money. Yes. You know, and that really is a trap. You get stuck. This shuts down your
+imagination. I think you can get stuck just because the grind today for young adults is
+so hard that it feels like sunk cost. Yeah. Like, you come out and like, I've done all this
+too, Jim. I've done all this work to get to this place. Like, going somewhere new, I would
+be giving up all this work that I put. Right. So ignoring sunk cost is one of the great lessons
+in life. Yes. Right. No doubt. Yeah. But the second thing is that it's okay to go do the
+thing you want to do. Yes. Even if it sounds maybe not so promising. Yes. Because the intensity
+with which you want to do it will overwhelm everything. And in the moment, like, once Danny
+had that bit flipped, it changed everything. Right. Like, and he became, I mean, he was already
+studious on this industry, but he became this massive learner. He enrolled in a, in a $300
+restaurant management course that he found in a magazine on a corner of the street in those boxes,
+you know, in New York. Yeah. And there's another character in the, in the, in the book that also
+went to a cosmetology course offered by the city of Los Angeles that's free. And this is this bottom
+rung notion, like, is really interesting to me. Like, you don't have to have networks or connections.
+You can't, and he took a job, um, that was paying like 15 grand a year just to learn. Like, he knew
+it wasn't the income he needed, but he wanted the experience. Yeah. It's funny. It's, it's, um,
+the old guild model. Yes. The old, you, you are, you're, that you, you apprentice, the old apprenticeship.
+Well, and then he went through Europe doing these stages of fancy European word for work for free,
+which is the apprentice thing. And he went and did that all through Italy, all through France.
+But it is the way to learn. Yes. Yeah. And there are a lot of places, a lot of careers that really
+don't offer it. I agree. Like it's, you have to go almost insist upon the experience. Yes. And,
+and you, you're encouraging people to do this. Yes. Fine. But one of your lessons is like, find,
+be good at finding mentors. Yes. But also note one, one great test of whether you're really tilting at
+your, your true obsession and fascination is do, is that learning? I call it free. Like,
+like, is that studying that Danny did? Like he was doing it before he ever, uh, like became convinced
+it could be a career, but like, if you really love what you do, you, you go home at night,
+you're reading about how to be better at it. Right. You know, you don't think of it as,
+you don't think of it as work. And I would say you might even get positive energy from it. Right.
+Whereas studying something you don't love might suck, suck energy. I want to talk about why people,
+so many people do things they don't want to do. And by the way, Danny would, would do that the rest of
+his career. I mean, he would go on these tours when he opened this blue smoke restaurant in New York as
+a barbecue place. He took his team all around America and sampled every bar, the top barbecue
+places all over when he opened Shake Shack, which the very first one in Madison square,
+he went to 10 different burger places around the U S and his team would debate what worked and what
+didn't like it's a, it's a, it's, it's a very artisan approach to what he did and what he does.
+And he, he wrote a book called setting the table where I gathered most of this information from,
+and I've gotten to know him cause he was on the board of open table, but did you interview all
+the people who were in here? Not all of them. Cause Dylan's very hard to get to.
+I heard when Scorsese did the documentary, they had an intermediary.
+So just to finish with the talk. So you decide this is the subject of your talk and you decide
+you're going to try to distill some principles. You can get across to them. Yes. What were the
+principles? Cause you've expanded on them. I added one. So there were all those were there,
+but one. Okay. Yeah. Find your passion. We renamed it chase your curiosity and hear people find the
+word passion, very cliche. You quote Jerry Seinfeld. Jerry Seinfeld gave it where he said,
+figure out where you're fascinated. Fascination. And I think it's a better word.
+Yeah. Like this. And then hone your craft, which is just immense continuous learning. And,
+and I don't, if you don't, if you're not in the right lane, I don't think you can do the second
+one. And the second one's a good test of whether you're in the right lane. They reflect on each
+other really well. Right. And all these people did it. I mean, the, the Bobby Knight stuff where he's
+showing up, you know, to these coaches with a hundred play cards and asking them if they'll go through
+one by one with them, right? Like that's a, that's a crazy level of obsession. What's the venture
+capitals version of hone your craft? Um, what did you do to become a good venture capitalist? I think
+you, well, for me, I had the advantage of starting on wall street. So I had read Buffett and Howard
+Marks and Graham and Dodd. And I, I think that gave me a different lens. I always said, event ventures
+creating products for the public markets to buy. So you kind of want to know what they want. Right.
+Um, and I came at it from that. And then, you know, John door and Mike Marich, like the contemporary
+leaders, when I joined, like you study them, you, you know, there's books about the people that came
+before them. Right. You study those. And then in venture, you have to study the edge of the technology
+and have insane FOMO about it. Did you feel like you got better with age?
+At the, um, you get better at sitting in a boardroom, keeping your mouth shut, being better at, at,
+at those kinds of soft human skills. I think, um, staying on the edge gets harder as you get older.
+Okay. I think I've always said venture bends towards youth because the new kids are doing new things,
+you know? Right. And, uh, and it's hard to, it's hard to keep up with all of them.
+And your time is absorbed with old things. Yeah. Yeah. As a venture capitalist gets older,
+they're the, they, they have families to get second homes. They might play golf. Right.
+And it becomes harder to be all in. Right. So before we, so at this, you, you give this talk. Yeah.
+Um, and you, I can give you the other ones real quick. So just cause you started that, um,
+develop mentors. And I have some very specific ways to do that. I think people screw that up.
+Talk about that. Embrace your P. Okay. What do people screw up? They shoot too high.
+Like they just, they go up to someone who's got no time and says, Hey, will you be my mentor?
+Right. So they shoot too high and they ask for this thing that seems gargantuan. Yeah.
+And it's just, there's a nuance, there's a nuance to getting that right. And, and that ain't it.
+Yeah. No, I had a, I, an undergraduate at Cal call me a few years ago and said,
+we needed to write a book together. Yeah.
+And I just thought, this is, I don't even know what to do with that.
+Yeah, exactly.
+And I said, why do I need, why do I need, why do I need, yeah, yeah, yeah.
+It's ambitious.
+But yes. Okay.
+But, but, but, but I recommend two things. One, I recommend, and I borrowed this from Danny.
+When Danny set out to be a restaurateur, he, there were 10 people that he wrote down in a journal that
+were defining the new age of being in the restaurant business.
+Right.
+Wolfgang Puck and like people like that. And he, he, he kept like a fan boy journal on each one of them.
+Right.
+And I think that's a great idea. Like if you're going to go be a writer, you know, have a profile of Michael
+Lewis and Malcolm Gladwell and Krakauer and like study what makes them great. Like there's,
+there's never been a better time in the history of the world to learn on your own time.
+Right.
+There's so much stuff out there.
+Yeah.
+Podcasts, interviews on YouTube, AI.
+Yeah.
+You know, you can just tell AI, Hey, you be this person for a while. I'm going to ask you some
+questions.
+So people shoot too high.
+Yeah.
+Or anything else they do that they should.
+No, but I love this exercise of having this, this, this, this group of people that you study
+like as a fan person.
+Cause I think you learn a lot through that. And if you ever meet them one day, you now are in a much
+better way to have a nuanced conversation.
+Cause you know so much about them. And then, um, and then the other thing just, yeah, don't aim so
+high, like grab someone two rungs on the ladder above you. Who's never been asked to be a mentor
+before. Cause they'll be flattered that you ask. And then you start that question. No, you'd never
+ask that question. No, you go up to them with, with a very specific question about that relates to
+something they're really good at. And you start a relationship. That's all in there. Right.
+I know. So, all right. Uh, you want to go through the, you want to go through?
+Sure. It shows that my favorite, uh, principle in the book is embrace your peers. And I don't
+think enough people do this and not, I don't know that any books really ever talked about doing it,
+but I've come across a number of people now that, that early in their journey, let's say all on
+rung one of the ladder, find a group of like-minded people that are, that are heading in the same
+general direction and become friends and start a WhatsApp group, whatever, but, but share ideas,
+share networks, share experiences, share your down days. They can be an incredible support.
+Collaborate instead of compete. Yes. Yes. And I think we learned to compete from zero sum games
+by night games. And most industries outside of downhill skiing, there's lots of winners.
+Right. And so you don't need to be as sharp elbowed. Right. And people that have done this,
+I find are more successful, more fulfilled. Their network builds faster. I just think it's a really
+cool thing to like go build and, and on your career path. Can you think of an example of someone sharing
+something with you in your career where you kind of went, I can't believe they're doing that for me.
+You know what I, you know, what that makes me think of in the Bobby Knight chapter, his, his coach gets
+some data from another coach and then later they end up playing that team and, and Bobby Knight's team
+wins. And Bobby reflects on whether that was a good idea for that coach to have given him that.
+Yeah. And then, and then Bobby Knight went on to let all these coaches leave. He clearly didn't
+feel that, that like a play was proprietary or anything like that. And so I thought it was cool
+that, that went the first time he saw that he stopped and paused and says, was that a mistake?
+And then he, and then he got over it and said, no, no, that's just part of how this works.
+People sense when you're, um, when you're operating in a zero sum spirit, no doubt. And, and they,
+they respond, they should respond, respond badly to it. You should kick them out of your, your peer group.
+If you feel that. Yeah. And there, those people are out there. Oh my God. Yes. Well,
+wall street's full of them. Yes. Yes. But you can find people that don't, you know, that don't.
+Yeah. Yeah. One of my lifelong friends, Mike Mobison, I met when I was a sell side analyst.
+He's great. And we've shared books for the past 30 years. Yeah. Yeah. But it's, uh, so I'm going to stop
+you as you're going through this, because I wanted to talk about this. You give this talk. Yeah. Uh,
+it goes on for, I thought it was a commencement speech. No, but it was, it's an hour and 10 minutes or
+something. And that was the longest. Yeah. Longer than Trump, uh, yeah. But it's, it's, uh, um,
+and you think that's it. You just, you weren't, you were given a talk to give a talk. You weren't
+giving a talk because you were trying to advertise. No, no, no. Your desire to write a book. That was,
+that was it. And, but the response to the talk. Well, they posted it on YouTube. And what happens?
+Um, I started to hear from people who, and I, and since the books come out, I've heard from even
+more people that had seen the talk, watched it with their children. I've met people whose careers
+are completely different now from seeing the YouTube. Because of it. Yeah. I met this guy.
+He's great. He's a high school teacher, loves football. And he saw that speech and said, man,
+I would just, I wish I could just do football all day long. And it took about five years, but he launched a
+website where he categorizes offensive football plays. And then he created a software app. And
+now he's got like 700,000 followers and he's quoted by NFL commentators. Who is he? Dan Casey. Okay.
+Yeah. Huh. But anyway, it's fun. That's pretty fun when you hear that kind of stuff. Well,
+you're giving people permission. Yes. To take the thing that they're in. Uncle Richard. Yeah. That you're
+doing that. Yes. And you're doing it from the perch of an extremely successful venture capitalists.
+Yeah. So that they think, well, if he thinks it's okay. I don't know if that carries the weight or not.
+I'd like to think the story. Oh, of course it carries some weight. Yeah.
+Of course it carries some weight. And then the other thing. Has anybody come back to you and said,
+you screwed up my life? No, I haven't heard that. I followed my passion.
+And my life's ruined. I haven't heard it. But you know what's interesting about bringing that up?
+Daniel Pink wrote this book, The Power of Regrets. And he highlights in that book that
+people are really forgiving to themselves for regrets of action. Yep. And they're, they,
+the thing that causes them immense anxiety all the way up to the end of their life is what they didn't
+do. What they didn't do. Yeah. Regrets of inaction. So even if that did not work for these people,
+I don't know that they'd dwell on it all that much because of that element, you know? Did you find the
+characters in your story? The, that, so this is something I have done since I was, I don't know
+why it's morbid since I was a kid. Uh, but I would think like when I'm, when I'm about to die is what
+do I want to have done in this situation? Yes. It's the, one of the ways I make decisions. Like
+when I look back on this, am I, am I going to, and it always pushes me in the direction of more risk
+taking? I don't know if you know this, but Bezos has, has something he calls the regret minimization
+framework, which he admits is nerdy. But, but when he was deciding whether to start Amazon or not,
+David Shaw was trying, he worked at D Shaw, David Shaw was trying to get him to not go.
+And he came up with this idea, which is, he was going to argue his way out of it. No,
+no. He said, what would my 80 year old self advise me in this situation? It's almost identical to that.
+Yeah. And I think it's correlates with my, or do you want to be doing this 30 years from now?
+Yes. I think that's right. And it's, we, we have a saying in the book, life is a use it or lose it
+proposition. And when you're young, it feels like life is eternity, but when you're 40, it doesn't
+feel that way anymore. And it slips on a dime. Yeah. And if you can get in touch with that sooner,
+maybe you're willing to take more risk. Right. Yeah. All right. So, um, the other thing had
+happened, James clear found the video somehow, some way and posted and started talking.
+Oh, so that's what, and not just James, but, but the team, David Sinra, who, who, who does the
+founders podcast started mentioning it in a lot of his biography talks. He'd started going, oh yeah,
+it's like the girly talk, like over and over. So it got out there amongst people. And then
+some people started poking me. Right. And you, you, um, when you decided to do as a book,
+you didn't do it alone. You have a co-author. I did get a co-author. Why? So part of this is, is, um,
+when I, in, in just, as you know, I became a voracious reader and I started to really appreciate long
+form nonfiction and your stuff, Gladwell stuff. There's a book. I don't even know if you know about
+called the new, new journalism. I'm in it. Yeah. You're in it. Yeah. Yeah. I just,
+yeah. I didn't mean you knew about it. They interviewed me. He interviewed me at great
+lengths. And before that one was the new journalism, Tom Wolf's, Tom Wolf's book that was put together.
+And these techniques, um, I really having, I had read those books for fun. Right. And so I,
+when I decided I wanted to do this thing, I, I had this ambition to do it really well. And, and, um,
+I came up with this idea that we could alternate and interleave, um, stories or profiles with
+principles, which, um, Michael Dell's book had two threads interleaved alternating chapter, which
+part of made me think about that. Yep. But I wanted the stories to read like exceptional, um,
+nonfiction writing, like, like the, the narrative stuff that you guys do. And I'd met this there.
+I'd read this article called the greatest bowling story ever. I may have sent it to you once. Um,
+that was in D magazine and it was written by this guy, Michael Mooney. And I read it in like a long
+time ago, but I met him one day and I said, you wrote that bowling story. And he said, you wrote that
+speech at the university of Texas. That was his direct comeback. Yes, exactly. And, um, he does a lot of
+writing for the Atlantic and it was in my mind, the perfect person to hone the profile stories and
+make them come alive. Right. And I also was still practicing venture and didn't in my mind have the
+time to go do all of that myself, but he ended up becoming a co-researcher. We spent five or six years
+and we read probably a hundred biographies together. We talked to Adam Grant and Angela Duckworth and Daniel
+Pink. We got in front of all these people and we went through all the academic literature on career
+satisfaction and like we had a ball and the scope went like this. And did you find you, a lot of the
+characters in the book are characters you talked about on stage. So you had some of them are, some
+of them are, but we added to you added a couple. We added a lot. And one of the things I, Malcolm,
+I got to talk to Malcolm too. I mean, I, I, Malcolm Gladwell. Yeah. I had an unfair advantage in putting
+this together, but Malcolm's big push was use for the rest of the profiles use people, people don't
+know. Yeah. Versus, versus Bobby Knights or Bob Dylan. Yes. Yes. And so the rest of them that we
+added are more obscure stories, but, but, but wonderful. Like the Jen Atkins story, I just think
+is so wonderful. Yeah. It's, um, it's a greater literary challenge, but, but you have the benefit of
+being able to invent them for the reader. Yes. The reader doesn't have the picture in there. Yes.
+Yes. And, and late in, in the Lori Bartlett chapter, who's a Hollywood agent, um, you know,
+during the interview process, Michael's pushing her like, okay, so you love movies growing up.
+Where did you watch them? And she told him about this old theater in her hometown. And Michael went
+and found pictures of it. And like, you, you, you've seen the writing in the chapter, right? Like it
+starts with her going to this theater and he paints the whole thing. And that's what I wanted. And,
+but I'm borrowing from the stuff you guys do like, and learning. I'm curious,
+you know, Michael was doing some of that work, but I'm curious, did you notice
+another pattern? It's a pattern I notice all the time writing about people.
+They don't see their own story. You, you, that you can help them figure out what their story is.
+They're not, they're not moving through life as narrative nonfiction writers. Yeah.
+They're not, they're not actually cobbling together narrative at all. Yeah.
+And that sometimes there's like a wonderful narrative to create from what's happened in their lives.
+And we did some other fun things like the, uh, we, we usually made it just first name at the
+beginning and just kind of review. So you don't know who it is. And then we've blown that already.
+And then in almost all of them, the, uh, the peak is their first success. And then we just have like a
+paragraph or two about all this other stuff that happened, but we try and, we try and, uh, land the
+plane to pinnacle at, at that first big success. But you, did you, but these are all writing techniques.
+Yes. Yeah. Uh, it's, but it's, uh, so you, you figure out how to do it. Yeah. You go out in the
+marketplace with it. Yeah. And the publishers don't really want you to do this. No. Why do you think that
+is? Um, this is going to sell way better than any memoir about you. Yes. I'm surprised.
+Or, or how to be a great VC. How many people were going to buy that? I don't know.
+And what, what impact would it have on the world? Well, that's, that's the other point, right? I mean,
+what you're trying to do is make the world better. Yes. Trying to like, make sure people don't take
+this wrong step in the, yeah. I, there, there's a piece that we didn't hit on, which is I was at a,
+at this odd conference that my friend of mine had put together where he tried to intentionally match
+people that wouldn't know each other. And Brian Koppelman was there. The,
+the billions guy, the billions guy gave me a role rounders. And, uh, he has this thing he does where
+he tries to push people to do a creative act. Like he just said, Hey, have you done anything creative?
+Go do something creative. And he starts poking me with this one night. And like, I said, well,
+I've got this speech I gave at the university of Texas. And he went and watched it. And the next day,
+he's like, you have to write a book, you have to write a book. And then the other thing that happened,
+Tony Fidel, who's a good friend of mine, who, who's he? Tony Fidel was the inventor of the iPod
+and ran engineering for the iPhone. And then was the founder of nest. Okay. Um, very successful.
+And he wrote a book called build about building great products. And he said it was the best thing he'd
+ever done. And listen to what I just told you, what he accomplished. And I was trying to, and, and Danny had told
+me the same thing that he's more proud of the book setting the table than all the other stuff that he
+had done. But it's almost as if when you go out in the publishing world, the publishing world is trying
+to do to you with the world does to young people. They try to get you to do the thing that doesn't
+mean anything to you, but it's easy, but it's easy. But they think they can, it seems like that it's a
+safe road. It was a safer road. They wanted a safer road, right? The agent, the meeting with agents was
+the same thing. And only one agent was willing to listen to this as a real idea. The, the editor
+didn't do it. We ended up closing the deal with love the idea from the beginning, the one editor,
+right? And he wrote me a letter that makes me cry. If I read it again, explaining how much he
+understood what I wanted to accomplish, right? Like really like it was as good a pitch as I've ever given
+to a founder as to why they should take our money. Like, I was just like, Oh, I'm done. I was like,
+I'm done. Like, you know, this is just that good. Did you, is one of the things that's motivating you,
+you said, you know, you saw these patterns and people you admired and that led you to give that
+talk. But how much did you see in your work life of people doing things for the, that they weren't
+interested in because they thought they were supposed to do it, do it? I don't think I'll tell
+you that the thing I think that, that, that, that really fascinates me is the notion of unlocking
+human potential and someone going and accomplishing something that they wouldn't have otherwise.
+Right. Like, like, and just, um, I get, I have this closet secret. I've been watching American
+Idol since season one. And I just love, I just love this notion that this person can get discovered.
+Oh yeah. Yeah. And then reach. Yeah. It's like, it's like my version of the Hallmark Channel or
+something. Like I just, who's your favorite discovery on American Idol? I, you know, it's probably Kelly.
+Like it's the, the original, like just, and maybe I was younger and more impressionable. I don't know.
+It's been 20 something years. But the idea that people have things in them that are not being,
+that aren't being found and recognized and are possible. And if you think about it,
+and when I hear these stories, you know, that have been inspired, or even when I read the ones that we
+wrote in there, when I read the audio book, I, a couple of times I'd like choked up. It was kind of a
+weird thing to say. Crying at your own words. Yeah, exactly. It's like laughing at your own words.
+But there's something about it I love. Like, like the rags to riches, like breakthrough. I love it.
+Yeah. Well, if you think about the American Idol situation, it tells you something about life in
+general, right? Because if that obvious a talent can have gone neglected, what else can't, can go,
+what can't go neglected? Right.
+There are a lot more subtle talents than, like the ability to run a restaurant. Yes.
+That you, the only way it's going to surface is if you insist on surfacing it. Yeah.
+And the world's not going to come find it. And they might, they might be stuck because they don't feel
+like they have permission or they don't believe that they might be successful. Right. And that's
+the goal is to see if we can help them get to that place. Right. That's kind of what you, I mean,
+in your business life, you're doing that a bit with entrepreneurs, right? A bit. Yeah. I mean,
+that's going on. Yeah, it's the same. I mean, I think there's a similarity between that and Ida,
+where, you know, you, you meet a founder and there's two people in a PowerPoint and then,
+you know, 10 years later, you know, there's three, 4,000 employees and an IPO and like,
+it's pretty cool. Right. Yeah. We backed Open Table when they had three restaurants. And I remember
+with my wife being in Bali and walking into a restaurant and seeing that device. And I'm like,
+you know, this is, there's 20,000 restaurants on the thing. And I'm like, wow, like we really did it.
+Yeah. This is before Uber, obviously. And then, you know, look at that. Yeah. So there is,
+like, there's this fun thing of being able to see something early and see it thrive that I get
+emotional. Well, when you've seen it over and over, you know, it can happen. Yes. Right. It's really,
+it becomes real in your mind because you've seen it before. I, I, I'm, we've already cut over time.
+We're already over time on us. Uh, so let me, this is, so this hasn't been sorted in any way for me,
+but this is great. You've talked about finding a mentor as a mentor. How do you ensure the greatest
+success for your mentees? And can you tell us your favorite personal mentor mentee story?
+Um, I think, I think the thing that, uh, this, this, this won't sound that remarkable, but like
+the more you can teach someone to learn themselves and teach them like, like helping them with one
+problem or one connection's not going to be everlasting. If you can teach them to learn and teach them
+patterns on how to connect and, you know, get successful and, and, and really understand
+what they're working on or encouraging them. I mean, I might just hand them the book in the future.
+I mean, that could save a lot of time. Um, but I had, I got so lucky. I, I got lucky in, in, in numerous ways.
+But when I got to wall street, there was this gentleman, I doubt you ever met him, his name was
+Charlie Wolf and he was an analyst at CSFB and he was a Columbia professor and he loved stocks, almost
+Jim Cramer level of enthusiasm about stocks. Yeah. And he was my mentor as, as, as he was a mentor for
+the whole analyst group there, but he knew my companies really well. Yep. And he had this gravely
+old voice and he just loved to talk about stocks and he'd say, come on kid, build a model, build a model.
+Don't ask the bell to build a model. And, uh, it just made it so much fun. Like he had so much
+enthusiasm for it. Like just showing up and like it, it, it made going to work like super exciting.
+He was important to you. Yeah. Yeah.
+Yeah. Moveson too. Like he impacted a lot of us in, in that circle.
+Here's what I want to, is this is floating in the back of everyone's minds.
+Uh, all for, all for following interests and curiosities, but how do you deal with the realities
+of needing income? Any suggestion? What's the line of how much there is, what's the line of how much
+I can't read the rest. That's okay. I mean, I, I get this question some. So, so I started getting the
+question early, even after the video and, um, you know, several of the stories in the book, people really
+do start at ground zero. So Jen moved to LA with $200 in the pocket. Now Bob Dylan, I guess you could
+be, yeah, Bob Dylan hitchhiked to New York with $10. So you could be in debt. So I guess you could be
+worse off than they are. Right. And, and, and, and more inflexible. Right. Um, and, and look, there's
+some level of, um, the world's problems that this book's not going to be a solve for. Like that's not the
+whole purpose of the book. Right. Um, I, I was inspired by getting this question a lot. And if
+you look on the last page in the book, I'm going to launch a foundation called the running down a
+dream foundation. I will see how it goes, but we're going to offer a hundred $5,000 grants to people
+who need a little boost to get headed in this direction. We're going to do applications. That's
+very cool. And so we'll see what happens. Yeah. And then are you going to vet these applications?
+Yeah. And Michael Mooney, the co-writer wants to be on, we're going to have a little board that goes
+through them and we have to build the application right now. The website has an email form that says,
+let us know when the application opens. Has anything, so nothing. Yeah. People have submitted emails.
+Right. Right. And then we're going to go build the application. Can I come write about it? Yes. Yes.
+I'd love to come write about it. That would be, or a podcast about it. That would be a really interesting
+little exercise. Yeah. See what comes in the door and what you think of them. Yes. And then,
+and then one thing we're going to do is if you show meaningful progress, which we will
+define over time, you get another grant. So you just, you just model what you said.
+You have opened up your literary material to me without asking for anything. It's like,
+you could do another book out of that. Well, I have a, I'll tell it just for this audience,
+although I think they're posting this on YouTube. My ultimate dream version of the foundation is enough
+people are successful that read the book that they contribute to it. And it has an
+evergreen life to it. I'm not starting it that way. I'm just starting it with my money and money from
+the book. Right. But, but, but hope that's like my dream version of it, that it would become this
+self-reinforcing thing. We'll go see it. Two years from now, I might say it didn't work for all these
+reasons. I don't know. Right. All right. Unemployment is 4%, but for 20 somethings, it's 12%.
+Yeah. What advice do you give to young graduates who are experiencing anxiety that AI is taking
+away entry level jobs? Yeah. So, so this is the most popular question of all these days.
+Yes. Um, there's a, there is a reality that there, first of all, I love Covey's principle,
+you know, understand your circle of influence, what's inside of it and what's outside of it. And AI is
+outside of your circle of influence. You're not going to stop it. You know, it's not going away.
+You're not going to lobby the government to put it in a box. I mean, try, but it'd be a weird way
+of optimizing your situation. Right. And so, um, and so think about that. If you think about that
+pragmatically, it takes away, like, what is the real value of sitting around being anxious?
+Worrying about it. Yes.
+There's no proactive movement in that whatsoever. And in fact, it's probably negative for what you're
+going to go do. Right. And so that said, I'd have a couple of pieces of advice. One,
+in any role in any field, be the most AI enabled version of yourself you can possibly be. There's
+tons of anthropologists that have written about how we evolve with our tools. And you can just imagine
+a farming competition between a guy with a tractor and some drones and the other guy's got a plow and
+a donkey. Who's going to win? Right. And, and, and you need to think about it that way. And if there
+are 40 people in your org all doing the same thing and you understand how AI affects that role more than
+the rest of them, you're not getting laid off. Right. Like it's just not going to happen. Right. And you'll
+also start to understand what parts of your job are a threat or not. And maybe you can elevate yourself
+to where you're a designer and not the, the, the worker bee because you now have this power. Right.
+I would also say that if you really treat your job with high agency and you kind of have this custom
+career path that you've mapped out using the principles of this book, um, AI is like a superpower.
+Like you can learn faster than you could have ever learned before. You can get more things done.
+Yeah. Like with fewer people. Yep. It's a, you can really accelerate yourself. And I meet,
+I've met all kinds of people that view it that way. But if you're in a job you don't love and you don't
+really consider yourself an artisan and you're not pushing the forefront, you're, you're more likely to
+get run over by this. One thing that's interesting, if you think about your job as an artisan,
+you're painting what hasn't been discovered yet. That's right. And all the stuff that's in the LLM is
+all the best practice that's already been written down. Right. So if you've somehow put yourself on the
+edge of the industry and are thinking about what's coming in the future, you're more future proof from
+this, but you're only going to do that if you're super fascinated by the subject matter. Right.
+Yeah. The nuance artisans really get into nuance and the nuance isn't in the models.
+You know, there's another version of this, the version of my career is that when I, I mean,
+well before AI, when I felt like a subject had been dealt with in basically done, I completely lost
+interest in it. That the interest was what had not been done or what people weren't paying attention to.
+And so it doesn't, I mean, maybe one day, uh, it will be a threat, but it doesn't feel like a threat.
+And I don't think it does to anybody who has that mentality about what they do.
+I've met some local, uh, entrepreneurs that like run laundromats or stuff. And they're,
+they're like, do you know what this stuff can do? Like I was thinking about launching a fourth location
+and I didn't know where to put it in the city. And I told it about these and it like spit out the next
+three spots and started looking up things that were available. Like, and they're like, they're like
+giddy. Like, Oh my God, does anyone know about this? It's so awesome. Like it's an interesting contrast
+from those people too. And Mark Cuban the other day tweeted, uh, he said, he said, there's two types of
+people, the people that use LLMs to learn faster and the people that use LLMs to not learn at all.
+I thought that was profound. That's interesting. Yeah. Yeah. That's right.
+Good separator. Yeah. Yeah. All right. Here we go. You talked about the importance of finding peers.
+What do you think gets in the way of people finding their tribes? What was most helpful to you?
+The thing, the number one thing we already talked about is this sharp elbow thing. And, um,
+if you've been trained as a highly competitive athlete or at a super competitive high school,
+you might have these zero sum notions in your own brain that you got to learn to get over and get around.
+Yep. And put away, I would say put away.
+Put them away. Right.
+If you will co-evolve with a group of people and you all succeed, like it makes the journey so much
+more fun. Like so much more fun. You get this from athletics. Perhaps. Right? Maybe not necessarily.
+Yeah. You can. Yes. Yes. You get that feeling. Yes. Uh, what's the career risk you almost didn't take?
+And what pushed you over the edge to take it? Almost didn't. I took most of them. You know,
+I was, one of the things that made me think of this thing. I, I got invited to hang out with Rick Rubin
+at Shangri-La, his studio for three and a half hours. And man, that was cool. Yeah. Like that was cool.
+But in his book, he says, um, he says, every single career move I made, all my friends advised me
+against and they were all the exact right decision. He said that. Yeah. He said that in his book.
+Like, like just trust your gut. I have a hard time imagining Rick Rubin asking his friends for their
+advice. Well, maybe, maybe, maybe, maybe, maybe he told him I'm going to go do this and see you're
+stupid. Like he walked away from the Beastie Boys after the first album as an example, but then he
+produced LL Cool J and then all this other stuff started. No, he does, you know, he is a really good
+example of you, you never know where he's going to go next because he's following his own. He's,
+yeah, some sound in his, I don't mean to be, um, to not answer the question, but I go back to that
+thing my father did of going to do NASA. I never felt like, uh, risk averse in making my career
+decisions. I never like had that in my brain. All right. So there's a related one. Uh, but maybe
+this, maybe the answer is nothing. Uh, what would you do differently if you were to start your career
+all over again? I don't think I would do anything different. I, the, the two, the two step, the two
+places I ended up, you know, leaving were great stepping stones for where I ended up. Like they added
+to, it all added up. Like they weren't bad places to have gone. But both, the couple, the two moments
+in your career that are really, really important in the moments you leave compact and the moments
+you leave wall street, and it's both the same reason. Yeah. It's both, you're not learning anymore.
+You're not, you, you sense this kind of, and you weren't afraid to go try something. Right.
+Why didn't you have that fear? Where you think the, where you think the absence, fear is a great
+motivator in people's lives. And it takes them all kinds of sad directions. Why did you not?
+I can only, I mean, the only thing I can attribute to is that father's story. I don't know. I don't know.
+Maybe reading, reading about people, you know, jumping and moving and trying new things. You're
+reading your book. Like I, I, I didn't, I didn't have the fear. I mean, sometimes when you land in the
+new place, you're actually, when I landed in a new place, I was excited. When I first got to New York,
+man, that was cool. Yeah. And when I got to the Bay area, man, that was cool. Like being here,
+like you found a resting place for a long time. Yeah. You didn't get, you didn't get agitated with
+it. No, I loved the job. I really, really adored it. We're going to do one VC story. Okay. All right.
+Because we've got one minute left and I don't have any idea what this is, but apparently you have a story
+about how you and Barry bonds secured an Uber deal. Um, there's, there's some mixed messages in there.
+All right. And I don't know who, no, no, no. Well, it wasn't, it wasn't Uber. It was a company
+called jammed at, we were competing with Sequoia, um, for a deal. And we, um, we, we became aware that
+the, uh, that we were in a competitive situation. And this was at the time where Barry bonds was,
+you know, crushing it. Right. And, um, when they were in the meeting deciding what to do,
+and that timing was somewhat lucky. We delivered a signature bat from Barry with a note that said,
+let's go hit a home run together. And it showed up as they were making the decision. How'd you get the
+bat? I don't remember my, my, my assistant Amy, who's in the room, it probably knows the answer to
+that. And she probably did it. So, uh, ladies and gentlemen, Bill Gurley. Thank you all.
+Um, all right. We've got to do some, we've got to do something formally. Okay.
+Just in case you, or just, you can, I think you gotta sit here anyway. Okay. You shouldn't leave.
+Our thanks to Bill Gurley, author of running down a dream, how to thrive in a career you actually love.
+We encourage you to pick up a copy of Bill's book here or at your local bookstore.
+And for information about the Commonwealth club world affairs membership in upcoming programs,
+please visit www.commonwealthclub.org. I'm Michael Lewis and have a good night. Thank you.
+Is
+
+
+
+
+
+Is
+
+Is
+
+
+a special event.
+Is
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thank you.
