@@ -1,0 +1,60 @@
+---
+---
+
+<div id="time-scale-widget" class="my-10 not-prose">
+  <div class="grid grid-cols-2 gap-4 text-center">
+    <div class="py-4">
+      <p class="text-xs text-stone-400 dark:text-stone-500 mb-1 m-0">1,000,000 秒</p>
+      <p class="text-base text-stone-600 dark:text-stone-300 m-0 font-medium">11.6 天</p>
+      <p id="ts-m-label" class="text-xs text-stone-400 dark:text-stone-500 mt-1 m-0"></p>
+    </div>
+    <div class="py-4">
+      <p class="text-xs text-stone-400 dark:text-stone-500 mb-1 m-0">1,000,000,000 秒</p>
+      <p class="text-base text-stone-600 dark:text-stone-300 m-0 font-medium">31.7 年</p>
+      <p id="ts-b-label" class="text-xs text-stone-400 dark:text-stone-500 mt-1 m-0"></p>
+    </div>
+  </div>
+
+  <!-- Scale bar -->
+  <div class="mt-2 mx-auto" style="max-width: 20rem;">
+    <div class="h-1 bg-stone-200 dark:bg-stone-700 rounded-full relative">
+      <div
+        class="absolute left-0 top-0 h-full rounded-full bg-stone-700 dark:bg-stone-300"
+        style="width: 2px;"
+      >
+      </div>
+    </div>
+    <div class="flex justify-between text-xs text-stone-400 dark:text-stone-500 mt-1.5">
+      <span>← 一百萬</span>
+      <span>十億 →</span>
+    </div>
+  </div>
+
+  <!-- Context -->
+  <p class="text-xs text-stone-400 dark:text-stone-500 text-center mt-5 m-0">
+    如果一秒數一下，數完一百萬要 11 天。數完十億要 31 年。
+  </p>
+</div>
+
+<script>
+  function initTimeScale() {
+    const now = Date.now()
+    const millionDate = new Date(now + 1_000_000 * 1000)
+    const billionDate = new Date(now + 1_000_000_000 * 1000)
+
+    const fmt = (d: Date) =>
+      `${d.getFullYear()} 年 ${d.getMonth() + 1} 月 ${d.getDate()} 日`
+
+    const setText = (id: string, text: string) => {
+      const e = document.getElementById(id)
+      if (e) e.textContent = text
+    }
+
+    setText('ts-m-label', fmt(millionDate))
+    setText('ts-b-label', fmt(billionDate))
+  }
+
+  initTimeScale()
+  document.addEventListener('DOMContentLoaded', initTimeScale)
+  document.addEventListener('swup:content:replace', initTimeScale)
+</script>
