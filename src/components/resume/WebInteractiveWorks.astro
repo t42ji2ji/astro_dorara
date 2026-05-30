@@ -24,7 +24,7 @@ import gpxImage from '~/assets/sitemap/gpx.png'
 import bumptogetherImage from '~/assets/sitemap/bumptogether.png'
 
 const categories = [
-  { id: 'personal', name: '個人成長' },
+  { id: 'personal', name: '熱門' },
   { id: 'create', name: '創作工具' },
   { id: 'fun', name: '趣味體驗' },
   { id: 'utility', name: '實用工具' },
@@ -132,7 +132,8 @@ const webWorks = [
     description: '多人線上派對遊戲，選擇動物角色，蓄力衝撞把對手撞下擂台！',
     path: 'https://bumptogether.pages.dev',
     image: bumptogetherImage,
-    categories: ['fun'],
+    categories: ['fun', 'personal'],
+    featured: true,
   },
   {
     title: '眼冒金星生成器',
