@@ -43,6 +43,10 @@ export const defaultConfig: ThemeConfig = {
         href: '/categories',
       },
       {
+        name: 'AI Tools',
+        href: '/ai-tools',
+      },
+      {
         name: 'About',
         href: '/about',
       },

@@ -1,0 +1,327 @@
+---
+import LayoutDefault from '~/layouts/LayoutDefault.astro'
+
+interface Tool {
+  name: string
+  desc: string
+  url: string
+  iconDomain: string
+  category: 'code' | 'image' | '3d' | 'audio' | 'video' | 'chat'
+  affiliate?: boolean
+  recommended?: boolean
+  highlight?: string
+}
+
+const tools: Tool[] = [
+  {
+    name: 'Meshy',
+    desc: '從文字或圖片生成 3D 模型，輸出乾淨拓樸與 PBR 貼圖，做角色、道具、場景都很順手。',
+    url: 'https://www.meshy.ai?via=dorara',
+    iconDomain: 'meshy.ai',
+    category: '3d',
+    affiliate: true,
+    recommended: true,
+    highlight: '我自己最常用的 3D 工具',
+  },
+  {
+    name: 'ElevenLabs',
+    desc: '語音生成、聲音克隆、SFX 音效都做得很好，做影片旁白、podcast、角色配音、生成音效都靠它。',
+    url: 'https://try.elevenlabs.io/xdy9iygyhr02',
+    iconDomain: 'elevenlabs.io',
+    category: 'audio',
+    affiliate: true,
+    recommended: true,
+    highlight: '旁白 + SFX 一站搞定',
+  },
+  {
+    name: 'Fish Audio',
+    desc: '聲音克隆模型，中文表現特別好，要做中文角色配音、母語級的台詞旁白都很順手。',
+    url: 'https://fish.audio',
+    iconDomain: 'fish.audio',
+    category: 'audio',
+    highlight: '中文聲音克隆很強',
+  },
+  {
+    name: 'Cursor',
+    desc: 'AI 程式編輯器，內建 Agent 模式可以直接讓它幫你改一整個專案。',
+    url: 'https://cursor.com',
+    iconDomain: 'cursor.com',
+    category: 'code',
+  },
+  {
+    name: 'Claude（Anthropic）',
+    desc: '寫程式、長文推理、做研究最強的模型之一，Claude Code 是命令列下的 Agent。',
+    url: 'https://claude.ai',
+    iconDomain: 'claude.ai',
+    category: 'code',
+  },
+  {
+    name: 'ChatGPT（OpenAI）',
+    desc: '日常對話、發想、寫稿、查資料的通用助手。',
+    url: 'https://chatgpt.com',
+    iconDomain: 'openai.com',
+    category: 'chat',
+  },
+  {
+    name: 'Gemini（Google）',
+    desc: 'Google 的多模態模型，圖片、影片理解能力強，2.5 系列推理也不錯。',
+    url: 'https://gemini.google.com',
+    iconDomain: 'gemini.google.com',
+    category: 'chat',
+  },
+  {
+    name: '騰訊混元 Hunyuan 3D',
+    desc: '騰訊的 3D 生成模型，免費額度大方（每天 20 次）。最讚的是可以幫你把模型拆分件，方便後續調整與動畫。',
+    url: 'https://3d.hunyuan.tencent.com',
+    iconDomain: 'hunyuan.tencent.com',
+    category: '3d',
+    highlight: '會幫你拆分件',
+  },
+  {
+    name: '剪映 CapCut',
+    desc: '影片剪輯主力，AI 字幕、語音轉文字、自動剪輯都做得很好。',
+    url: 'https://www.capcut.com',
+    iconDomain: 'capcut.com',
+    category: 'video',
+  },
+  {
+    name: 'Remotion',
+    desc: '用 React 寫程式做影片，做開場片頭、自動化批量產出影片、資料驅動動畫超強。',
+    url: 'https://www.remotion.dev',
+    iconDomain: 'remotion.dev',
+    category: 'video',
+    highlight: '寫程式做影片的神器',
+  },
+  {
+    name: 'Midjourney',
+    desc: '美感、藝術風格、構圖都是業界頂尖，做插畫、海報、概念圖最強。',
+    url: 'https://www.midjourney.com',
+    iconDomain: 'midjourney.com',
+    category: 'image',
+    highlight: '風格插畫的首選',
+  },
+  {
+    name: 'Nano Banana Pro（Gemini）',
+    desc: 'Google 最新的生圖模型，品質夠用又便宜，做大量素材、批次生成首選。透過 Gemini App 或 AI Studio 使用。',
+    url: 'https://gemini.google.com',
+    iconDomain: 'gemini.google.com',
+    category: 'image',
+    highlight: '便宜大碗的生圖',
+  },
+  {
+    name: 'GPT Image（OpenAI）',
+    desc: '改圖、加東西、修細節、依文字指令編輯最聰明的模型。在 ChatGPT 介面裡直接用。',
+    url: 'https://chatgpt.com',
+    iconDomain: 'openai.com',
+    category: 'image',
+    recommended: true,
+    highlight: '編輯圖片最強',
+  },
+  {
+    name: '豆包 Doubao',
+    desc: '字節跳動的 AI 助手，畫中國感的貼圖、插畫、傳統風格圖有奇效，免費額度也夠用。',
+    url: 'https://www.doubao.com',
+    iconDomain: 'doubao.com',
+    category: 'image',
+    highlight: '中國風貼圖／插畫有奇效',
+  },
+  {
+    name: 'Suno',
+    desc: '從一句文字描述就能生成完整歌曲，做影片配樂、開場主題曲、自製 BGM 都很強。',
+    url: 'https://suno.com',
+    iconDomain: 'suno.com',
+    category: 'audio',
+    highlight: '做音樂最強的 AI',
+  },
+]
+
+const faviconUrl = (domain: string) => `https://www.google.com/s2/favicons?domain=${domain}&sz=128`
+
+const categoryMap: Record<Tool['category'], { label: string; emoji: string }> = {
+  image: { label: '生圖 / 編輯圖', emoji: '🎨' },
+  '3d': { label: '3D 建模', emoji: '🧊' },
+  video: { label: '影片剪輯 / 生成', emoji: '🎬' },
+  audio: { label: '聲音 / 音樂', emoji: '🎵' },
+  code: { label: '寫程式 / Agent', emoji: '💻' },
+  chat: { label: '通用對話', emoji: '💬' },
+}
+
+const grouped = (Object.keys(categoryMap) as Tool['category'][]).map((cat) => ({
+  meta: categoryMap[cat],
+  tools: tools.filter((t) => t.category === cat),
+}))
+---
+
+<LayoutDefault>
+  <section class="hero mb-10">
+    <h1 class="text-4xl font-bold mb-3">我的 AI 工具箱 🧰</h1>
+    <p class="text-base text-gray-600 dark:text-gray-400 mb-2">
+      做影片、寫程式、生成 3D、剪輯——這是我日常實際在用的 AI 工具清單。
+    </p>
+    <p class="text-sm text-gray-500 dark:text-gray-500">
+      標示 <span class="affiliate-badge inline-block">推薦</span> 的工具是我用很久、真的會推給朋友的。其中部分連結是 affiliate link，透過它註冊你可以拿到優惠、我也會拿到一點回饋——但我只放自己真的在用的東西。
+    </p>
+  </section>
+
+  <hr class="my-8 bg-gray-200 dark:bg-gray-700 h-[1px] border-0" />
+
+  {
+    grouped.map(({ meta, tools }) => (
+      <section class="tool-section mb-10">
+        <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
+          <span>{meta.emoji}</span>
+          <span>{meta.label}</span>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {tools.map((tool) => (
+            <a
+              href={tool.url}
+              target="_blank"
+              rel={tool.affiliate ? 'sponsored noopener' : 'noopener'}
+              class="tool-card"
+            >
+              <img
+                class="tool-card-icon"
+                src={faviconUrl(tool.iconDomain)}
+                alt={`${tool.name} logo`}
+                loading="lazy"
+                width="48"
+                height="48"
+              />
+              <div class="tool-card-body">
+                <div class="tool-card-header">
+                  <div class="tool-card-title">{tool.name}</div>
+                  {tool.recommended && <span class="affiliate-badge">推薦</span>}
+                </div>
+                {tool.highlight && <div class="tool-card-highlight">{tool.highlight}</div>}
+                <div class="tool-card-desc">{tool.desc}</div>
+                <div class="tool-card-url">
+                  {new URL(tool.url).hostname.replace('www.', '')} →
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+    ))
+  }
+
+  <hr class="my-8 bg-gray-200 dark:bg-gray-700 h-[1px] border-0" />
+
+  <p class="text-xs text-gray-500 dark:text-gray-500 mb-12">
+    這個清單會持續更新。如果你有覺得值得推薦的 AI 工具，歡迎在 Threads 或 Twitter 跟我說。
+  </p>
+
+  <style>
+    .hero {
+      padding-top: 1rem;
+    }
+
+    .tool-card {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
+      padding: 1.25rem;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      height: 100%;
+    }
+
+    .tool-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      object-fit: contain;
+      flex-shrink: 0;
+      background: rgba(0, 0, 0, 0.03);
+      padding: 4px;
+      margin: 0;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    }
+
+    :global(.dark) .tool-card-icon {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .tool-card-body {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    :global(.dark) .tool-card {
+      background: rgba(30, 30, 35, 0.8);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .tool-card:hover {
+      transform: translateY(-2px);
+      border-color: #667eea;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    :global(.dark) .tool-card:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .tool-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .tool-card-title {
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+
+    .tool-card-highlight {
+      font-size: 0.8rem;
+      color: #667eea;
+      font-weight: 500;
+    }
+
+    .tool-card-desc {
+      font-size: 0.875rem;
+      color: #666;
+      line-height: 1.55;
+    }
+
+    :global(.dark) .tool-card-desc {
+      color: #aaa;
+    }
+
+    .tool-card-url {
+      font-size: 0.75rem;
+      color: #999;
+      margin-top: auto;
+      padding-top: 0.25rem;
+    }
+
+    .tool-card:hover .tool-card-url {
+      color: #667eea;
+    }
+
+    .affiliate-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.125rem 0.5rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      letter-spacing: 0.02em;
+    }
+  </style>
+</LayoutDefault>
