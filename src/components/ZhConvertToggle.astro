@@ -1,0 +1,64 @@
+---
+// Traditional/Simplified Chinese toggle for post content
+---
+
+<button
+  id="zh-convert-toggle"
+  type="button"
+  aria-label="切換簡體繁體"
+  class="not-prose zh-convert-btn text-xs px-2 py-1 rounded border border-stone-300 text-stone-500 bg-transparent cursor-pointer transition-colors hover:bg-stone-100 dark:border-stone-700 dark:text-stone-400 dark:hover:bg-stone-800"
+>
+  切換簡體
+</button>
+
+<script>
+  import { Converter, HTMLConverter } from 'opencc-js/t2cn'
+
+  function setupZhConvertToggle() {
+    const btnEl = document.getElementById('zh-convert-toggle')
+    const contentEl = document.querySelector<HTMLElement>('.post-content')
+
+    if (!btnEl || !contentEl)
+return
+
+    const btn: HTMLElement = btnEl
+    const content: HTMLElement = contentEl
+
+    const converter = Converter({ from: 'tw', to: 'cn' })
+    const handler = HTMLConverter(converter, content, 'zh-tw', 'zh-cn')
+
+    function prefersSimplified() {
+      const langs = navigator.languages ?? [navigator.language]
+      return langs.some(lang => /^zh-(cn|hans|sg)/i.test(lang))
+    }
+
+    function isSimplified() {
+      const stored = sessionStorage.getItem('zh-convert')
+      if (stored)
+return stored === 'cn'
+      return prefersSimplified()
+    }
+
+    function apply() {
+      if (isSimplified()) {
+        handler.convert()
+        btn.textContent = '切換繁體'
+      } else {
+        handler.restore()
+        btn.textContent = '切換簡體'
+      }
+    }
+
+    btn.addEventListener('click', () => {
+      sessionStorage.setItem('zh-convert', isSimplified() ? 'tw' : 'cn')
+      apply()
+    })
+
+    apply()
+  }
+
+  setupZhConvertToggle()
+
+  // Re-run after page transitions (for Swup)
+  document.addEventListener('astro:after-swap', setupZhConvertToggle)
+</script>
