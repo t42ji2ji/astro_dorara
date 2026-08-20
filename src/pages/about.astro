@@ -7,6 +7,8 @@ import woodIcon from '~/assets/resume/wood.webp'
 import wuzuIcon from '~/assets/resume/wuzu.png'
 import kryptogoLogo from '~/assets/resume/kryptogo.png'
 import hanamiLogo from '~/assets/resume/hanami.png'
+import keyfarmImage from '~/assets/sitemap/keyfarm.png'
+import bumptogetherImage from '~/assets/sitemap/bumptogether.png'
 import WebInteractiveWorks from '~/components/resume/WebInteractiveWorks.astro'
 
 // Web works moved to src/components/resume/WebInteractiveWorks.astro
@@ -420,6 +422,56 @@ import WebInteractiveWorks from '~/components/resume/WebInteractiveWorks.astro'
           </div>
         </div>
 
+        <!-- 精選作品 -->
+        <h4 class="font-bold text-lg mb-4 mt-4">🌟 精選作品</h4>
+        <div class="cards-grid grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+          <!-- KeyFarm -->
+          <a href="https://keyfarm.dorara.app/" target="_blank" class="featured-card">
+            <div class="featured-image-container">
+              <img src={keyfarmImage.src} alt="KeyFarm" class="featured-image" />
+            </div>
+            <div class="featured-info">
+              <div class="featured-header">
+                <span class="featured-name">KeyFarm</span>
+                <span class="featured-type">桌面 App</span>
+              </div>
+              <div class="featured-tagline">Your keyboard is a farm</div>
+              <p class="featured-desc">
+                把日常打字變成種田。每顆按鍵都是一塊田，敲越多長越茂盛，從澆水、發芽到結果收成，還有熱力圖模式和 100
+                種作物可以收集，鴨子跟小狗會在農場裡跑來跑去。免費開源。
+              </p>
+              <div class="featured-tags">
+                <span class="featured-tag">macOS</span>
+                <span class="featured-tag">Windows</span>
+                <span class="featured-tag">開源免費</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- BumpTogether -->
+          <a href="https://bumptogether.dorara.app/" target="_blank" class="featured-card">
+            <div class="featured-image-container">
+              <img src={bumptogetherImage.src} alt="BumpTogether" class="featured-image" />
+            </div>
+            <div class="featured-info">
+              <div class="featured-header">
+                <span class="featured-name">BumpTogether</span>
+                <span class="featured-type">線上遊戲</span>
+              </div>
+              <div class="featured-tagline">charge. dash. bump!</div>
+              <p class="featured-desc">
+                復古 CRT
+                電視風格的多人連線派對遊戲。挑一隻動物角色，長按蓄力、放開衝刺，把對手撞下擂台。開個房間把連結丟給朋友就能開打。
+              </p>
+              <div class="featured-tags">
+                <span class="featured-tag">2–6 人連線</span>
+                <span class="featured-tag">免安裝</span>
+                <span class="featured-tag">經典 / 淘汰模式</span>
+              </div>
+            </div>
+          </a>
+        </div>
+
         <!-- APP 作品展示 -->
         <h4 class="font-bold text-lg mb-4 mt-4">📱 上架應用程式</h4>
         <div class="cards-grid grid grid-cols-2 gap-4 mb-6">
@@ -612,6 +664,106 @@ import WebInteractiveWorks from '~/components/resume/WebInteractiveWorks.astro'
         font-size: 0.75rem;
         color: #999;
         margin-top: 0.25rem;
+      }
+
+      /* 精選作品卡片 */
+      .featured-card {
+        display: flex;
+        flex-direction: column;
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 16px;
+        overflow: hidden;
+        text-decoration: none;
+        color: inherit;
+        box-shadow: var(--card-shadow);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .featured-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--card-shadow-hover);
+        border-color: rgba(102, 126, 234, 0.3);
+      }
+
+      .featured-image-container {
+        width: 100%;
+        aspect-ratio: 16/10;
+        overflow: hidden;
+        background: #111;
+        border-bottom: 1px solid var(--card-border);
+      }
+
+      .featured-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .featured-card:hover .featured-image {
+        transform: scale(1.05);
+      }
+
+      .featured-info {
+        padding: 1.25rem;
+      }
+
+      .featured-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.25rem;
+      }
+
+      .featured-name {
+        font-weight: 700;
+        font-size: 1.125rem;
+      }
+
+      .featured-type {
+        font-size: 0.688rem;
+        color: #667eea;
+        border: 1px solid rgba(102, 126, 234, 0.4);
+        border-radius: 6px;
+        padding: 0.125rem 0.375rem;
+      }
+
+      .featured-tagline {
+        font-size: 0.813rem;
+        color: #667eea;
+        margin-bottom: 0.5rem;
+      }
+
+      .featured-desc {
+        font-size: 0.875rem;
+        color: #666;
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      :global(.dark) .featured-desc {
+        color: #aaa;
+      }
+
+      .featured-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.375rem;
+        margin-top: 0.75rem;
+      }
+
+      .featured-tag {
+        font-size: 0.688rem;
+        color: #666;
+        background: rgba(0, 0, 0, 0.04);
+        border-radius: 6px;
+        padding: 0.125rem 0.5rem;
+      }
+
+      :global(.dark) .featured-tag {
+        color: #aaa;
+        background: rgba(255, 255, 255, 0.08);
       }
 
       /* APP 卡片 */
