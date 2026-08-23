@@ -14,12 +14,45 @@
 <script>
   import { Converter, HTMLConverter } from 'opencc-js/t2cn'
 
+  // 明確表態的語言標籤，優先於任何地區推測
+  const HANT_LANG = /^zh-(?:tw|hk|mo|hant)\b/i
+  const HANS_LANG = /^zh-(?:cn|sg|my|hans)\b/i
+  const ANY_ZH = /^zh\b/i
+
+  // 時區作為地區訊號：不受 VPN 影響，也不需要額外請求
+  const CN_TZ = /^(?:Asia\/(?:Shanghai|Chongqing|Chungking|Harbin|Urumqi|Kashgar)|PRC)$/
+  const HANT_TZ = /^(?:Asia\/(?:Taipei|Hong_Kong|Macau)|ROC)$/
+
+  function timeZone() {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone ?? ''
+  }
+
+  function prefersSimplified() {
+    const langs = navigator.languages?.length ? navigator.languages : [navigator.language ?? '']
+
+    for (const lang of langs) {
+      if (HANT_LANG.test(lang)) {
+        return false
+      }
+      if (HANS_LANG.test(lang)) {
+        return true
+      }
+      // 裸 zh 沒有地區資訊，用時區決定；預設為簡體（CLDR 的 zh 預設是 Hans）
+      if (ANY_ZH.test(lang)) {
+        return !HANT_TZ.test(timeZone())
+      }
+    }
+
+    // 非中文瀏覽器：只有在中國大陸時區才轉簡體
+    return CN_TZ.test(timeZone())
+  }
+
   function setupZhConvertToggle() {
     const btnEl = document.getElementById('zh-convert-toggle')
     const contentEl = document.querySelector<HTMLElement>('.post-content')
 
     if (!btnEl || !contentEl)
-return
+      return
 
     const btn: HTMLElement = btnEl
     const content: HTMLElement = contentEl
@@ -27,15 +60,10 @@ return
     const converter = Converter({ from: 'tw', to: 'cn' })
     const handler = HTMLConverter(converter, content, 'zh-tw', 'zh-cn')
 
-    function prefersSimplified() {
-      const langs = navigator.languages ?? [navigator.language]
-      return langs.some(lang => /^zh-(cn|hans|sg)/i.test(lang))
-    }
-
     function isSimplified() {
-      const stored = sessionStorage.getItem('zh-convert')
+      const stored = localStorage.getItem('zh-convert')
       if (stored)
-return stored === 'cn'
+        return stored === 'cn'
       return prefersSimplified()
     }
 
@@ -50,7 +78,7 @@ return stored === 'cn'
     }
 
     btn.addEventListener('click', () => {
-      sessionStorage.setItem('zh-convert', isSimplified() ? 'tw' : 'cn')
+      localStorage.setItem('zh-convert', isSimplified() ? 'tw' : 'cn')
       apply()
     })
 
