@@ -22,6 +22,8 @@ import wishImage from '~/assets/sitemap/wish.png'
 import woopImage from '~/assets/sitemap/woop.png'
 import gpxImage from '~/assets/sitemap/gpx.png'
 import bumptogetherImage from '~/assets/sitemap/bumptogether.png'
+import profolioImage from '~/assets/sitemap/profolio.png'
+import randommapImage from '~/assets/sitemap/randommap.png'
 
 const categories = [
   { id: 'personal', name: '熱門' },
@@ -199,6 +201,20 @@ const webWorks = [
     path: '/scratch-card',
     image: scratchCardImage,
     categories: ['fun'],
+  },
+  {
+    title: 'QRN 量子觀景儀器',
+    description: '用量子亂數在你周圍撒下一千個座標，找出聚得最密的「引」與最稀的「缺」，帶你去一個沒人預測得到的地方。',
+    path: 'https://randommap.dorara.app/',
+    image: randommapImage,
+    categories: ['fun', 'personal'],
+  },
+  {
+    title: '個人作品集',
+    description: '早期的個人作品集網站，收錄 UI 設計與前端開發作品，包含獲得巴哈姆特 ACG 銅賞的《誰是國王》。',
+    path: 'https://profolio.dorara.xyz/#/',
+    image: profolioImage,
+    categories: ['personal'],
   },
 ]
 ---
