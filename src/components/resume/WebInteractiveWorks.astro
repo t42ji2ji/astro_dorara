@@ -33,6 +33,10 @@ import bookingImage from '~/assets/sitemap/booking.png'
 import yarnImage from '~/assets/sitemap/yarn.png'
 import guitarImage from '~/assets/sitemap/guitar.png'
 import rugImage from '~/assets/sitemap/rug.png'
+import meetrecImage from '~/assets/sitemap/meetrec.png'
+import mailsiftImage from '~/assets/sitemap/mailsift.png'
+import draftImage from '~/assets/sitemap/draft.png'
+import sonaImage from '~/assets/sitemap/sona.png'
 
 const categories = [
   { id: 'personal', name: '熱門' },
@@ -252,6 +256,34 @@ const webWorks = [
     path: 'https://awayblur.dorara.app/',
     image: awayblurImage,
     categories: ['utility', 'personal'],
+  },
+  {
+    title: 'MeetRec',
+    description: 'Mac 選單列的會議錄音：開會時自動跳出來錄，轉成逐字稿並分出誰說了什麼，點一個人就看他所有的發言。也能貼 YouTube、Podcast 連結轉錄，再請電腦上的 Claude Code 或 Codex 整理重點。開源。',
+    path: 'https://meetrec.dorara.app/',
+    image: meetrecImage,
+    categories: ['utility', 'personal'],
+  },
+  {
+    title: 'MailSift',
+    description: '在本機讀 Apple Mail 的信，用描述就能找到那封信，不用記關鍵字。信件自動按主題分好類，AI 助理用你自己的 Claude Code 或 Codex，信不會離開這台電腦。開源。',
+    path: 'https://mailsift.dorara.app/',
+    image: mailsiftImage,
+    categories: ['utility', 'personal'],
+  },
+  {
+    title: 'Draft',
+    description: 'Mac 上的 Markdown 寫作 app，打開就能寫。專注模式只亮著正在寫的那一句；右邊的 AI 側欄只提議修改，一張張卡片讓你決定要不要套用。開源，開發中。',
+    path: 'https://github.com/t42ji2ji/draft',
+    image: draftImage,
+    categories: ['create', 'personal'],
+  },
+  {
+    title: 'Sona',
+    description: '在自己電腦上跑的 AI 音樂 app：用文字生成整首歌或純音樂、用自己的聲音翻唱、把歌拆成人聲和伴奏。Mac 和 Windows 都能用。開源。',
+    path: 'https://github.com/t42ji2ji/sona',
+    image: sonaImage,
+    categories: ['create', 'personal'],
   },
   {
     title: 'Desktop Rug 桌面地毯',
