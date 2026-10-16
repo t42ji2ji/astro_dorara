@@ -251,48 +251,6 @@ const webWorks = [
     categories: ['fun', 'personal'],
   },
   {
-    title: 'Away Blur',
-    description: 'Mac 選單列小工具：人離開電腦，螢幕就糊成一片毛玻璃，手一回來立刻清晰。看影片、開會時不會誤糊，毛玻璃中間還坐著一隻像素貓。',
-    path: 'https://awayblur.dorara.app/',
-    image: awayblurImage,
-    categories: ['utility', 'personal'],
-  },
-  {
-    title: 'MeetRec',
-    description: 'Mac 選單列的會議錄音：開會時自動跳出來錄，轉成逐字稿並分出誰說了什麼，點一個人就看他所有的發言。也能貼 YouTube、Podcast 連結轉錄，再請電腦上的 Claude Code 或 Codex 整理重點。開源。',
-    path: 'https://meetrec.dorara.app/',
-    image: meetrecImage,
-    categories: ['utility', 'personal'],
-  },
-  {
-    title: 'MailSift',
-    description: '在本機讀 Apple Mail 的信，用描述就能找到那封信，不用記關鍵字。信件自動按主題分好類，AI 助理用你自己的 Claude Code 或 Codex，信不會離開這台電腦。開源。',
-    path: 'https://mailsift.dorara.app/',
-    image: mailsiftImage,
-    categories: ['utility', 'personal'],
-  },
-  {
-    title: 'Draft',
-    description: 'Mac 上的 Markdown 寫作 app，打開就能寫。專注模式只亮著正在寫的那一句；右邊的 AI 側欄只提議修改，一張張卡片讓你決定要不要套用。開源，開發中。',
-    path: 'https://draft.dorara.app/',
-    image: draftImage,
-    categories: ['create', 'personal'],
-  },
-  {
-    title: 'Sona',
-    description: '在自己電腦上跑的 AI 音樂 app：用文字生成整首歌或純音樂、用自己的聲音翻唱、把歌拆成人聲和伴奏。Mac 和 Windows 都能用。開源。',
-    path: 'https://github.com/t42ji2ji/sona',
-    image: sonaImage,
-    categories: ['create', 'personal'],
-  },
-  {
-    title: 'Desktop Rug 桌面地毯',
-    description: '鋪在 Mac 桌面上的一張厚地毯。抓住邊角能掀起、折起，拖中間整張滑過去，底下的檔案堆會頂出凸起。地毯上還住著貓：會散步、翻肚、抓癢，坐下來抬頭看螢幕。',
-    path: 'https://rug.dorara.app/',
-    image: rugImage,
-    categories: ['fun', 'personal'],
-  },
-  {
     title: '1:1 諮詢預約',
     description: '一對一諮詢的預約頁。開場是夜空裡一把發光的鑰匙，按下「進入他的心」才打開行事曆，挑一個或幾個相鄰的一小時空檔。',
     path: 'https://booking.dorara.app/',
@@ -321,7 +279,68 @@ const webWorks = [
     categories: ['personal'],
   },
 ]
+
+const macApps = [
+  {
+    title: 'Away Blur',
+    description: 'Mac 選單列小工具：人離開電腦，螢幕就糊成一片毛玻璃，手一回來立刻清晰。看影片、開會時不會誤糊，毛玻璃中間還坐著一隻像素貓。',
+    path: 'https://awayblur.dorara.app/',
+    image: awayblurImage,
+  },
+  {
+    title: 'MeetRec',
+    description: 'Mac 選單列的會議錄音：開會時自動跳出來錄，轉成逐字稿並分出誰說了什麼，點一個人就看他所有的發言。也能貼 YouTube、Podcast 連結轉錄，再請電腦上的 Claude Code 或 Codex 整理重點。開源。',
+    path: 'https://meetrec.dorara.app/',
+    image: meetrecImage,
+  },
+  {
+    title: 'MailSift',
+    description: '在本機讀 Apple Mail 的信，用描述就能找到那封信，不用記關鍵字。信件自動按主題分好類，AI 助理用你自己的 Claude Code 或 Codex，信不會離開這台電腦。開源。',
+    path: 'https://mailsift.dorara.app/',
+    image: mailsiftImage,
+  },
+  {
+    title: 'Draft',
+    description: 'Mac 上的 Markdown 寫作 app，打開就能寫。專注模式只亮著正在寫的那一句；右邊的 AI 側欄只提議修改，一張張卡片讓你決定要不要套用。開源，開發中。',
+    path: 'https://draft.dorara.app/',
+    image: draftImage,
+  },
+  {
+    title: 'Sona',
+    description: '在自己電腦上跑的 AI 音樂 app：用文字生成整首歌或純音樂、用自己的聲音翻唱、把歌拆成人聲和伴奏。Mac 和 Windows 都能用。開源。',
+    path: 'https://github.com/t42ji2ji/sona',
+    image: sonaImage,
+  },
+  {
+    title: 'Desktop Rug 桌面地毯',
+    description: '鋪在 Mac 桌面上的一張厚地毯。抓住邊角能掀起、折起，拖中間整張滑過去，底下的檔案堆會頂出凸起。地毯上還住著貓：會散步、翻肚、抓癢，坐下來抬頭看螢幕。',
+    path: 'https://rug.dorara.app/',
+    image: rugImage,
+  },
+]
 ---
+
+<!-- Mac App -->
+<h4 class="font-bold text-lg mb-4 mt-8">💻 Mac App</h4>
+
+<div class="cards-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+  {
+    macApps.map((app) => (
+      <a href={app.path} target="_blank" class="web-work-card group">
+        <div class="web-work-image-container">
+          <img src={app.image.src} alt={app.title} class="web-work-image" />
+          <div class="web-work-overlay">
+            <span class="view-btn">View Project</span>
+          </div>
+        </div>
+        <div class="web-work-info">
+          <h3 class="web-work-title">{app.title}</h3>
+          <p class="web-work-desc">{app.description}</p>
+        </div>
+      </a>
+    ))
+  }
+</div>
 
 <!-- Web 互動作品 -->
 <h4 class="font-bold text-lg mb-4 mt-8">🌐 Web 互動作品</h4>
@@ -367,7 +386,7 @@ const webWorks = [
 <script>
   function initWebWorksFilter() {
     const filterBtns = document.querySelectorAll('.filter-btn')
-    const workCards = document.querySelectorAll('.web-work-card')
+    const workCards = document.querySelectorAll('#web-works-grid .web-work-card')
 
     if (!filterBtns.length || !workCards.length) 
 return
@@ -392,7 +411,7 @@ return
     if (!category) 
 return
 
-    const workCards = document.querySelectorAll('.web-work-card')
+    const workCards = document.querySelectorAll('#web-works-grid .web-work-card')
     workCards.forEach((card) => {
       const categories = JSON.parse(card.getAttribute('data-categories') || '[]')
       const element = card as HTMLElement
