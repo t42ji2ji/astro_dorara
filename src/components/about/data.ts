@@ -1,3 +1,15 @@
+import cardma1 from '~/assets/iosapps/cardma-1.webp'
+import cardma2 from '~/assets/iosapps/cardma-2.webp'
+import cardma3 from '~/assets/iosapps/cardma-3.webp'
+import smri1 from '~/assets/iosapps/smri-1.webp'
+import smri2 from '~/assets/iosapps/smri-2.webp'
+import smri3 from '~/assets/iosapps/smri-3.webp'
+import wuzu1 from '~/assets/iosapps/wuzu-1.webp'
+import wuzu2 from '~/assets/iosapps/wuzu-2.webp'
+import wuzu3 from '~/assets/iosapps/wuzu-3.webp'
+import ziwe1 from '~/assets/iosapps/ziwe-1.webp'
+import ziwe2 from '~/assets/iosapps/ziwe-2.webp'
+import ziwe3 from '~/assets/iosapps/ziwe-3.webp'
 import awayblurIcon from '~/assets/macapps/awayblur-icon.png'
 import awayblurMock from '~/assets/macapps/awayblur-mock.png'
 import draftIcon from '~/assets/macapps/draft-icon.png'
@@ -11,6 +23,7 @@ import rugMock from '~/assets/macapps/rug-mock.png'
 import sonaIcon from '~/assets/macapps/sona-icon.png'
 import sonaMock from '~/assets/macapps/sona-mock.png'
 import cardmaIcon from '~/assets/resume/cardma.webp'
+import bookCover from '~/assets/resume/flutter-book.webp'
 import hanamiLogo from '~/assets/resume/hanami.png'
 import kryptogoLogo from '~/assets/resume/kryptogo.png'
 // About 頁的資料：作品、App、經歷。tint 是從截圖抽出的主色，沒有明顯色彩的留空。
@@ -381,20 +394,44 @@ export const featured = [
 ]
 
 export const iosApps = [
-  { title: 'Wuzu 伍珠', description: '陪你說話的日記夥伴', path: 'https://apps.apple.com/tw/app/wuzu/id6757849464', icon: wuzuIcon },
-  { title: 'SMRI', description: '能幫你完成計劃的日曆', path: 'https://apps.apple.com/tw/app/smri/id6747955368?l=en-GB', icon: rmsiIcon },
-  { title: 'ZIWE', description: 'AI 紫微斗數專家', path: 'https://apps.apple.com/tw/app/ziwe/id6749048766?l=en-GB', icon: ziweIcon },
+  {
+    title: 'Wuzu 伍珠',
+    description: '陪你說話的日記夥伴',
+    path: 'https://apps.apple.com/tw/app/wuzu/id6757849464',
+    icon: wuzuIcon,
+    shots: [wuzu1, wuzu2, wuzu3],
+    tint: '#a7cfed',
+  },
+  {
+    title: 'SMRI',
+    description: '能幫你完成計劃的日曆',
+    path: 'https://apps.apple.com/tw/app/smri/id6747955368?l=en-GB',
+    icon: rmsiIcon,
+    shots: [smri1, smri2, smri3],
+  },
+  {
+    title: 'ZIWE',
+    description: 'AI 紫微斗數專家',
+    path: 'https://apps.apple.com/tw/app/ziwe/id6749048766?l=en-GB',
+    icon: ziweIcon,
+    shots: [ziwe1, ziwe2, ziwe3],
+    tint: '#a986d5',
+  },
   {
     title: 'Cardma',
     description: '社群幫手，總結影片、PDF 產生小卡',
     path: 'https://apps.apple.com/tw/app/cardma/id6747955972?l=en-GB',
     icon: cardmaIcon,
+    shots: [cardma1, cardma2, cardma3],
+    tint: '#f2d336',
   },
   {
     title: '木魚咚咚',
     description: 'Apple Watch 木魚法器 App',
     path: 'https://apps.apple.com/tw/app/%E6%9C%A8%E9%AD%9A%E5%92%9A%E5%92%9A/id6755515199?l=en-GB',
     icon: woodIcon,
+    shots: [] as ImageMetadata[],
+    tint: '#cda283',
   },
 ]
 
@@ -442,11 +479,19 @@ interface JobGroup {
   items: string[]
 }
 
-export const earlierJobs: { company: string, role: string, period: string, logo?: ImageMetadata, groups: JobGroup[] }[] = [
+export const earlierJobs: {
+  company: string
+  role: string
+  period: string
+  logo?: ImageMetadata
+  summary: string
+  groups: JobGroup[]
+}[] = [
   {
     company: '依賴傳媒娛樂有限公司 (花見-高端社群交友)',
     role: '軟體工程師 (Vue | Flutter | Solidity)',
     period: '2020.07 — 2022.05',
+    summary: '交友 App 從零開發、獨立完成管理後台，並負責區塊鏈產品。',
     logo: hanamiLogo,
     groups: [
       {
@@ -478,6 +523,7 @@ export const earlierJobs: { company: string, role: string, period: string, logo?
     company: '國立雲林科技大學',
     role: '網頁設計課程講師',
     period: '2020.06 — 2020.08',
+    summary: '網頁設計課微學分講師。',
     groups: [
       {
         lead: '擔任雲林科技大學網頁設計課微學分講師，帶領學生從零開始製作網頁，從入門到踏入網路設計師的領域。',
@@ -489,6 +535,7 @@ export const earlierJobs: { company: string, role: string, period: string, logo?
     company: '多多設計有限公司',
     role: '負責人',
     period: '2019.10 — 2020.07',
+    summary: '帶四人團隊承接網頁與 App 案。',
     groups: [
       {
         lead: '負責帶領四人團隊，提供網頁、App 的接案服務。在團隊中負責與客戶討論訂定需求、前端網頁及 App 開發、UI/UX 設計。',
@@ -498,8 +545,18 @@ export const earlierJobs: { company: string, role: string, period: string, logo?
   },
 ]
 
+export const book = {
+  title: 'Flutter 勇者之書',
+  subtitle: '跨平台程式開發的新手入坑首選指南',
+  authors: '陳虔逸、謝忠穎（Dorara Hsieh）',
+  publisher: '博碩文化',
+  date: '2024.12',
+  note: 'iThome 鐵人賽系列書 · 2023 鐵人賽優選',
+  cover: bookCover,
+  path: 'https://www.books.com.tw/products/0011008795',
+}
+
 export const writing = [
-  { title: '技術書籍出版', description: '在博客來販售中的技術書籍', host: 'books.com.tw', path: 'https://www.books.com.tw/products/0011008795' },
   {
     title: 'iT 邦幫忙鐵人賽系列文章',
     description: '第 12 屆鐵人賽參賽文章',

@@ -2,6 +2,7 @@
 import { getImage } from 'astro:assets'
 import LayoutAbout from '~/layouts/LayoutAbout.astro'
 import {
+  book,
   earlierJobs,
   featured,
   iosApps,
@@ -14,23 +15,36 @@ import {
 } from '~/components/about/data'
 
 const pad = (n: number) => String(n).padStart(2, '0')
-const categoryName = Object.fromEntries(workCategories.map((c) => [c.id, c.name]))
 
+// 物理場裡的塊：大小、比例刻意不一致，熱門作品大一點
+const SIZES = [1, 0.82, 1.12, 0.9, 1.04, 0.76]
+const ASPECTS = [16 / 10, 1, 4 / 3, 3 / 2, 5 / 4]
 const works = await Promise.all(
   webWorks.map(async (work, i) => ({
     ...work,
-    no: pad(i + 1),
     href: work.path.startsWith('http') ? work.path : `https://dweam.xyz${work.path}`,
     preview: (await getImage({ src: work.image, width: 640, format: 'webp' })).src,
-    thumb: (await getImage({ src: work.image, width: 160, format: 'webp' })).src,
+    size: work.featured ? 1.3 : SIZES[i % SIZES.length],
+    aspect: ASPECTS[i % ASPECTS.length],
   })),
 )
 const hotCount = works.filter((w) => w.categories.includes('personal')).length
+
+const jobs = [
+  {
+    company: kryptogo.company,
+    role: kryptogo.role,
+    period: kryptogo.period,
+    logo: kryptogo.logo,
+    summary: kryptogo.summary,
+  },
+  ...earlierJobs,
+]
 ---
 
 <LayoutAbout>
   <!-- 01 Hero -->
-  <section class="hero shell" data-section>
+  <section class="hero shell">
     <div class="hero-meta mono">
       <span>About</span>
       <a href="mailto:doraralab@gmail.com">doraralab@gmail.com</a>
@@ -54,82 +68,10 @@ const hotCount = works.filter((w) => w.categories.includes('personal')).length
     </div>
   </section>
 
-  <!-- 02 Experience -->
-  <section class="block shell" data-section>
-    <header class="sec-head mono"><span>02</span><span>Experience</span></header>
-
-    <div class="exp">
-      <div class="exp-rail" aria-hidden="true"><span data-rail></span></div>
-
-      <article class="exp-item">
-        <div class="exp-meta">
-          <img src={kryptogo.logo.src} alt="" class="exp-logo" width="28" height="28" />
-          <h3 class="exp-company">{kryptogo.company}</h3>
-          <p class="exp-role">{kryptogo.role}</p>
-          <p class="mono exp-period">{kryptogo.period}</p>
-        </div>
-        <div class="exp-body">
-          <p class="exp-summary" data-reveal>{kryptogo.summary}</p>
-          {
-            kryptogo.blocks.map((b, i) => (
-              <div class="exp-block" data-reveal>
-                <p class="mono exp-no">{pad(i + 1)}</p>
-                <h4 class="exp-title">{b.title}</h4>
-                {b.practice && <p>{b.practice}</p>}
-                {b.outcomes && (
-                  <ul class="exp-outcomes">
-                    {b.outcomes.map((o) => (
-                      <li>{o}</li>
-                    ))}
-                  </ul>
-                )}
-                {b.items && (
-                  <ul class="exp-list">
-                    {b.items.map((o) => (
-                      <li>{o}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            ))
-          }
-        </div>
-      </article>
-
-      {
-        earlierJobs.map((job) => (
-          <article class="exp-item">
-            <div class="exp-meta">
-              {job.logo && <img src={job.logo.src} alt="" class="exp-logo" width="28" height="28" />}
-              <h3 class="exp-company">{job.company}</h3>
-              <p class="exp-role">{job.role}</p>
-              <p class="mono exp-period">{job.period}</p>
-            </div>
-            <div class="exp-body" data-reveal>
-              {job.groups.map((g) => (
-                <div class="exp-group">
-                  {g.title && <h4 class="exp-title">{g.title}</h4>}
-                  <p>{g.lead}</p>
-                  {g.items.length > 0 && (
-                    <ul class="exp-list">
-                      {g.items.map((o) => (
-                        <li>{o}</li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              ))}
-            </div>
-          </article>
-        ))
-      }
-    </div>
-  </section>
-
-  <!-- 03 Builder -->
-  <section class="block shell" data-section>
+  <!-- 02 Builder -->
+  <section class="block shell">
     <header class="sec-head mono">
-      <span>03</span><span>2025 Builder 計畫</span><span>獨立開發者 / Creator</span><span>2025 — Present</span>
+      <span>02</span><span>2025 Builder 計畫</span><span>獨立開發者 / Creator</span><span>2025 — Present</span>
     </header>
 
     <h2 class="statement" data-reveal-lines>
@@ -158,9 +100,9 @@ const hotCount = works.filter((w) => w.categories.includes('personal')).length
     </div>
   </section>
 
-  <!-- 04 Featured -->
-  <section class="block shell" data-section>
-    <header class="sec-head mono"><span>04</span><span>Featured</span></header>
+  <!-- 03 Featured -->
+  <section class="block shell">
+    <header class="sec-head mono"><span>03</span><span>Featured</span></header>
 
     <div class="plates">
       {
@@ -187,30 +129,70 @@ const hotCount = works.filter((w) => w.categories.includes('personal')).length
     </div>
   </section>
 
-  <!-- 05 iOS -->
-  <section class="block shell" data-section>
-    <header class="sec-head mono"><span>05</span><span>Mobile App</span></header>
+  <!-- 04 Mobile：左邊選 app，右邊一手牌 -->
+  <section class="block shell" data-phones>
+    <header class="sec-head mono"><span>04</span><span>Mobile App</span><span>App Store</span></header>
 
-    <ul class="dock">
-      {
-        iosApps.map((app) => (
-          <li data-reveal>
-            <a href={app.path} target="_blank" class="dock-app">
-              <img src={app.icon.src} alt="" width="80" height="80" loading="lazy" />
-              <span class="dock-name">{app.title}</span>
-              <span class="dock-desc">{app.description}</span>
+    <div class="phones">
+      <ol class="phones-list">
+        {
+          iosApps.map((app, i) => (
+            <li>
+              <button
+                type="button"
+                class:list={['phones-tab', { 'is-active': i === 0 }]}
+                data-phone-tab={i}
+                aria-pressed={i === 0 ? 'true' : 'false'}
+              >
+                <img src={app.icon.src} alt="" width="52" height="52" />
+                <span class="phones-tab-text">
+                  <span class="phones-name">{app.title}</span>
+                  <span class="phones-desc">{app.description}</span>
+                </span>
+              </button>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="phones-deck">
+        {
+          iosApps.map((app, i) => (
+            <a
+              href={app.path}
+              target="_blank"
+              class:list={['phones-hand', { 'is-active': i === 0 }]}
+              data-phone-hand
+              data-tint={app.tint}
+              aria-label={`${app.title} on the App Store`}
+            >
+              {app.shots.length > 0 ? (
+                app.shots.map((shot) => (
+                  <img
+                    class="phones-card"
+                    src={shot.src}
+                    alt=""
+                    width={shot.width}
+                    height={shot.height}
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                  />
+                ))
+              ) : (
+                <img class="phones-solo" src={app.icon.src} alt="" width="200" height="200" loading="lazy" />
+              )}
+              <span class="mono phones-store">App Store ↗</span>
             </a>
-          </li>
-        ))
-      }
-    </ul>
+          ))
+        }
+      </div>
+    </div>
   </section>
 
-  <!-- 06 Mac -->
+  <!-- 05 Mac -->
   <section class="stage" data-stage>
     <div class="stage-inner shell">
       <header class="sec-head mono">
-        <span>06</span><span>Mac App</span><span class="stage-count"
+        <span>05</span><span>Mac App</span><span class="stage-count"
           ><span data-stage-current>01</span> / {pad(macApps.length)}</span
         >
       </header>
@@ -266,10 +248,10 @@ const hotCount = works.filter((w) => w.categories.includes('personal')).length
     </div>
   </section>
 
-  <!-- 07 Web -->
-  <section class="block shell" data-section>
+  <!-- 06 Web：作品是會撞牆的塊 -->
+  <section class="block shell">
     <header class="sec-head mono">
-      <span>07</span><span>Web 互動作品</span><span>(<span data-works-count>{pad(hotCount)}</span>)</span>
+      <span>06</span><span>Web 互動作品</span><span>(<span data-works-count>{pad(hotCount)}</span>)</span>
     </header>
 
     <div class="filters" role="tablist">
@@ -289,39 +271,123 @@ const hotCount = works.filter((w) => w.categories.includes('personal')).length
       <span class="filter-bar" aria-hidden="true"></span>
     </div>
 
-    <ul class="index" data-index>
+    <div class="pit" data-pit>
       {
         works.map((w) => (
-          <li
-            class:list={['index-item', { 'is-hidden': !w.categories.includes('personal') }]}
+          <a
+            href={w.href}
+            target="_blank"
+            draggable="false"
+            class:list={['brick', { 'is-hidden': !w.categories.includes('personal') }]}
             data-categories={w.categories.join(' ')}
+            data-tint={w.tint}
+            data-size={w.size}
+            data-aspect={w.aspect}
+            data-desc={w.description}
+            style={`--aspect: ${w.aspect}; --size: ${w.size}`}
           >
-            <a href={w.href} target="_blank" class="index-row" data-preview={w.preview} data-tint={w.tint}>
-              <span class="mono index-no">{w.no}</span>
-              <span class="index-title">{w.title}</span>
-              <span class="index-desc">{w.description}</span>
-              <span class="mono index-cat">{w.categories.map((c) => categoryName[c]).join(' / ')}</span>
-              <img class="index-thumb" src={w.thumb} alt="" width="72" height="45" loading="lazy" />
-              <span class="index-arrow" aria-hidden="true">
-                ↗
-              </span>
-            </a>
-          </li>
+            <img src={w.preview} alt="" draggable="false" loading="lazy" />
+            <span class="brick-title">{w.title}</span>
+          </a>
         ))
       }
-    </ul>
+    </div>
+    <p class="pit-caption" aria-live="polite">
+      <span class="pit-caption-title" data-pit-title></span>
+      <span class="pit-caption-desc" data-pit-desc></span>
+    </p>
   </section>
 
-  <!-- 08 Writing + contact -->
-  <section class="block shell" data-section>
+  <!-- 07 Experience：一行一份工作，細節點開才看 -->
+  <section class="block shell">
+    <header class="sec-head mono"><span>07</span><span>Experience</span></header>
+
+    <div class="jobs">
+      {
+        jobs.map((job, j) => (
+          <details class="job" data-reveal>
+            <summary class="job-row">
+              <span class="mono job-period">{job.period}</span>
+              <span class="job-main">
+                <span class="job-company">
+                  {job.logo && <img src={job.logo.src} alt="" width="22" height="22" />}
+                  {job.company}
+                </span>
+                <span class="job-role">{job.role}</span>
+              </span>
+              <span class="job-summary">{job.summary}</span>
+              <span class="job-toggle" aria-hidden="true" />
+            </summary>
+
+            <div class="job-body">
+              {j === 0 ? (
+                <div class="job-blocks">
+                  {kryptogo.blocks.map((b, i) => (
+                    <div class="job-block">
+                      <p class="mono">{pad(i + 1)}</p>
+                      <h4 class="job-title">{b.title}</h4>
+                      {b.practice && <p>{b.practice}</p>}
+                      {(b.outcomes ?? b.items) && (
+                        <ul class={b.outcomes ? 'job-outcomes' : 'job-list'}>
+                          {(b.outcomes ?? b.items)!.map((o) => (
+                            <li>{o}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div class="job-blocks">
+                  {earlierJobs[j - 1].groups.map((g) => (
+                    <div class="job-block">
+                      {g.title && <h4 class="job-title">{g.title}</h4>}
+                      <p>{g.lead}</p>
+                      {g.items.length > 0 && (
+                        <ul class="job-list">
+                          {g.items.map((o) => (
+                            <li>{o}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 08 Writing -->
+  <section class="block shell">
     <header class="sec-head mono"><span>08</span><span>技術寫作 &amp; 出版</span></header>
 
-    <ul class="index index--static">
+    <a href={book.path} target="_blank" class="book" data-tint="#9db8dd">
+      <div class="book-cover" data-reveal>
+        <img src={book.cover.src} alt={book.title} width={book.cover.width} height={book.cover.height} loading="lazy" />
+      </div>
+      <div class="book-info" data-reveal>
+        <p class="mono">{book.publisher} · {book.date}</p>
+        <h3 class="book-title">{book.title}</h3>
+        <p class="book-sub">{book.subtitle}</p>
+        <p class="book-authors">{book.authors}</p>
+        <p class="mono book-note">{book.note}</p>
+        <span class="book-buy">
+          <span>博客來購買</span>
+          <span aria-hidden="true">↗</span>
+        </span>
+        <span class="mono book-url">books.com.tw/products/0011008795</span>
+      </div>
+    </a>
+
+    <ul class="index">
       {
-        writing.map((w, i) => (
+        writing.map((w) => (
           <li class="index-item" data-reveal>
             <a href={w.path} target="_blank" class="index-row">
-              <span class="mono index-no">{pad(i + 1)}</span>
               <span class="index-title">{w.title}</span>
               <span class="index-desc">{w.description}</span>
               <span class="mono index-cat">{w.host}</span>
@@ -335,7 +401,7 @@ const hotCount = works.filter((w) => w.categories.includes('personal')).length
     </ul>
   </section>
 
-  <footer class="contact shell" data-section>
+  <footer class="contact shell">
     <p class="mono">Say hi</p>
     <a href="mailto:doraralab@gmail.com" class="contact-mail">doraralab@gmail.com</a>
     <div class="contact-foot mono">
@@ -343,8 +409,6 @@ const hotCount = works.filter((w) => w.categories.includes('personal')).length
       <span>© {new Date().getFullYear()} Dorara Hsieh</span>
     </div>
   </footer>
-
-  <div class="peek" aria-hidden="true"><img alt="" /></div>
 
   <script>
     import { initAbout } from '~/components/about/motion'

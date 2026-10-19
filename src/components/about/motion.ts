@@ -1,13 +1,13 @@
 import { gsap } from 'gsap'
-import { Flip } from 'gsap/Flip'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import Lenis from 'lenis'
 import lottie from 'lottie-web'
 import avatarData from '~/assets/resume/avatar.json'
+import { initPit } from './pit'
 import 'lenis/dist/lenis.css'
 
-gsap.registerPlugin(ScrollTrigger, SplitText, Flip)
+gsap.registerPlugin(ScrollTrigger, SplitText)
 
 const EXPO = 'expo.out'
 const DESKTOP_PIN = '(min-width: 1024px) and (prefers-reduced-motion: no-preference)'
@@ -147,18 +147,9 @@ function reveals() {
     tl.from(frame, { clipPath: 'inset(100% 0 0 0)', duration: 1.2, ease: EXPO })
     tl.from(qs('img', frame), { scale: 1.15, duration: 1.4, ease: EXPO }, 0)
   })
-
-  const rail = qs('[data-rail]')
-  if (rail) {
-    gsap.to(rail, {
-      scaleY: 1,
-      ease: 'none',
-      scrollTrigger: { trigger: '.exp', start: 'top 70%', end: 'bottom 70%', scrub: true },
-    })
-  }
 }
 
-// ---------- 06 Mac app 舞台 ----------
+// ---------- 05 Mac app 舞台 ----------
 
 function stage(lenis: Lenis | null) {
   const section = qs('[data-stage]')
@@ -233,17 +224,140 @@ function stage(lenis: Lenis | null) {
   })
 }
 
-// ---------- 07 作品目錄：游標預覽 + 篩選 ----------
+// ---------- 04 Mobile app：一手牌 ----------
 
-function worksIndex() {
-  const list = qs('[data-index]')
-  if (!list)
+function phones() {
+  const section = qs('[data-phones]')
+  if (!section)
     return
-  const items = qsa('.index-item', list)
+  const tabs = qsa('[data-phone-tab]', section)
+  const hands = qsa('[data-phone-hand]', section)
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+  const cardsOf = (hand: HTMLElement) => qsa('.phones-card, .phones-solo', hand)
+  let current = 0
+  let inView = false
+
+  const updateZone = () => {
+    const tint = hands[current].dataset.tint
+    if (inView && tint)
+      setZone(section, tint, 0.4)
+    else clearZone(section)
+  }
+
+  ScrollTrigger.create({
+    trigger: section,
+    start: 'top 60%',
+    end: 'bottom 40%',
+    onToggle: (self) => {
+      inView = self.isActive
+      updateZone()
+    },
+  })
+
+  const show = (i: number) => {
+    if (i === current)
+      return
+    const prev = hands[current]
+    const next = hands[i]
+    current = i
+    tabs.forEach((t, k) => {
+      t.classList.toggle('is-active', k === i)
+      t.setAttribute('aria-pressed', String(k === i))
+    })
+    updateZone()
+    hands.forEach((h) => {
+      if (h !== prev && h !== next) {
+        gsap.killTweensOf(cardsOf(h))
+        gsap.set(cardsOf(h), { clearProps: 'transform,opacity' })
+        h.classList.remove('is-active')
+      }
+    })
+    next.classList.add('is-active')
+    if (reduced) {
+      prev.classList.remove('is-active')
+      return
+    }
+
+    const out = cardsOf(prev)
+    const incoming = cardsOf(next)
+    gsap.killTweensOf([...out, ...incoming])
+    gsap.set(incoming, { clearProps: 'transform,opacity' })
+    gsap.to(out, {
+      y: -60,
+      rotation: '+=10',
+      opacity: 0,
+      duration: 0.35,
+      stagger: 0.04,
+      ease: 'power2.in',
+      onComplete: () => {
+        prev.classList.remove('is-active')
+        gsap.set(out, { clearProps: 'transform,opacity' })
+      },
+    })
+    gsap.from(incoming, {
+      y: 140,
+      rotation: 0,
+      opacity: 0,
+      duration: 0.9,
+      stagger: 0.08,
+      delay: 0.12,
+      ease: EXPO,
+      clearProps: 'transform,opacity',
+    })
+  }
+
+  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => show(i))
+    if (fine)
+      t.addEventListener('pointerenter', () => show(i))
+  })
+
+  // 第一手牌在捲到時發牌
+  if (!reduced) {
+    gsap.from(cardsOf(hands[0]), {
+      y: 140,
+      rotation: 0,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.1,
+      ease: EXPO,
+      clearProps: 'transform,opacity',
+      scrollTrigger: { trigger: section.querySelector('.phones-deck'), start: 'top 75%', once: true },
+    })
+  }
+}
+
+// ---------- 06 Web 作品：物理場 + 篩選 ----------
+
+function works() {
+  const pit = qs('[data-pit]')
+  if (!pit)
+    return
   const filters = qsa('[data-filter]')
+  const bricks = qsa('.brick', pit)
   const bar = qs('.filter-bar')
   const count = qs('[data-works-count]')
+  const title = qs('[data-pit-title]')
+  const desc = qs('[data-pit-desc]')
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  const onHover = (el: HTMLElement | null) => {
+    if (title)
+      title.textContent = el?.querySelector('.brick-title')?.textContent ?? ''
+    if (desc)
+      desc.textContent = el?.dataset.desc ?? ''
+    hoverTint = el?.dataset.tint ? { color: el.dataset.tint, amt: 0.3 } : null
+    applyTint()
+  }
+
+  const physics = reduced ? null : initPit(pit, { onHover })
+  if (!physics) {
+    bricks.forEach((el) => {
+      el.addEventListener('pointerenter', () => onHover(el))
+      el.addEventListener('pointerleave', () => onHover(null))
+    })
+  }
 
   const moveBar = (btn: HTMLElement, animate: boolean) => {
     if (!bar)
@@ -261,110 +375,25 @@ function worksIndex() {
 
   filters.forEach((btn) => {
     btn.addEventListener('click', () => {
+      if (btn.classList.contains('is-active'))
+        return
       const cat = btn.dataset.filter!
       filters.forEach((b) => {
         b.classList.toggle('is-active', b === btn)
         b.setAttribute('aria-selected', String(b === btn))
       })
       moveBar(btn, true)
-
-      const state = Flip.getState(items)
-      let shown = 0
-      items.forEach((li) => {
-        const show = cat === 'all' || li.dataset.categories!.split(' ').includes(cat)
-        li.classList.toggle('is-hidden', !show)
-        if (show)
-          shown++
-      })
+      const shown = bricks.filter(el => cat === 'all' || el.dataset.categories!.split(' ').includes(cat))
       if (count)
-        count.textContent = String(shown).padStart(2, '0')
-
-      if (reduced) {
-        ScrollTrigger.refresh()
-        return
-      }
-      Flip.from(state, {
-        duration: 0.6,
-        ease: EXPO,
-        absolute: true,
-        stagger: 0.015,
-        onEnter: els => gsap.fromTo(els, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.1 }),
-        onLeave: els => gsap.to(els, { opacity: 0, duration: 0.25 }),
-        onComplete: () => ScrollTrigger.refresh(),
-      })
-    })
-  })
-
-  gsap.matchMedia().add('(min-width: 1024px) and (hover: hover) and (pointer: fine)', () => {
-    const peek = qs('.peek')
-    const img = peek && qs<HTMLImageElement>('img', peek)
-    if (!peek || !img)
-      return
-    const rows = qsa('.index-row', list)
-
-    // 進到目錄時先把預覽圖載好，滑過去才不會閃空白
-    ScrollTrigger.create({
-      trigger: list,
-      start: 'top bottom',
-      once: true,
-      onEnter: () =>
-        rows.forEach((r) => {
-          new Image().src = r.dataset.preview!
-        }),
-    })
-
-    const xTo = gsap.quickTo(peek, 'x', { duration: 0.5, ease: 'power3' })
-    const yTo = gsap.quickTo(peek, 'y', { duration: 0.5, ease: 'power3' })
-    const rTo = gsap.quickTo(peek, 'rotation', { duration: 0.6, ease: 'power3' })
-    let visible = false
-    let lastX = 0
-
-    const place = (e: PointerEvent) => {
-      const w = peek.offsetWidth
-      const x = e.clientX + 28 + w > window.innerWidth ? e.clientX - w - 28 : e.clientX + 28
-      const y = e.clientY - peek.offsetHeight / 2
-      if (visible) {
-        xTo(x)
-        yTo(y)
+        count.textContent = String(shown.length).padStart(2, '0')
+      if (physics) {
+        physics.setCategory(cat)
       }
       else {
-        xTo(x, x)
-        yTo(y, y)
+        bricks.forEach(el => el.classList.toggle('is-hidden', !shown.includes(el)))
+        ScrollTrigger.refresh()
       }
-      rTo(gsap.utils.clamp(-4, 4, (e.clientX - lastX) * 0.4))
-      lastX = e.clientX
-    }
-
-    const onEnter = (e: PointerEvent) => {
-      const row = e.currentTarget as HTMLElement
-      img.src = row.dataset.preview!
-      place(e)
-      if (!visible)
-        gsap.fromTo(peek, { scale: 0.94 }, { autoAlpha: 1, scale: 1, duration: 0.35, ease: 'power3.out' })
-      visible = true
-      hoverTint = row.dataset.tint ? { color: row.dataset.tint, amt: 0.3 } : null
-      applyTint()
-    }
-    const onLeave = () => {
-      visible = false
-      gsap.to(peek, { autoAlpha: 0, scale: 0.96, duration: 0.25, ease: 'power2.out' })
-      hoverTint = null
-      applyTint()
-    }
-
-    rows.forEach((r) => {
-      r.addEventListener('pointerenter', onEnter)
-      r.addEventListener('pointerleave', onLeave)
     })
-    list.addEventListener('pointermove', place)
-
-    return () => {
-      rows.forEach((r) => {
-        r.removeEventListener('pointerenter', onEnter)
-        r.removeEventListener('pointerleave', onLeave)
-      })
-      list.removeEventListener('pointermove', place)
-    }
   })
 }
 
@@ -382,9 +411,10 @@ export function initAbout() {
   }
 
   initAvatar()
-  qsa('.plate').forEach(p => tintZone(p, 0.35))
+  qsa('.plate, .book').forEach(p => tintZone(p, 0.35))
   stage(lenis)
-  worksIndex()
+  phones()
+  works()
 
   if (!reduced) {
     // 字型慢的時候最多等 1.2 秒，不讓首屏空白
