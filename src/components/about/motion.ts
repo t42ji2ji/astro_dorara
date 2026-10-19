@@ -91,7 +91,7 @@ function heroIntro() {
   const lines = qs('[data-hero-lines]')
   if (!name || !lines)
     return
-  gsap.set(['[data-hero-name]', '[data-hero-lines]', '[data-hero-fade]', '.hero-avatar'], { visibility: 'visible' })
+  gsap.set(['[data-hero-name]', '[data-hero-lines]', '[data-hero-fade]', '.hero-avatar', '.hero-meta'], { visibility: 'visible' })
 
   const chars = SplitText.create(name, { type: 'chars', mask: 'chars' }).chars
   const tl = gsap.timeline({ defaults: { ease: EXPO } })
@@ -387,7 +387,8 @@ export function initAbout() {
   worksIndex()
 
   if (!reduced) {
-    document.fonts.ready.then(() => {
+    // 字型慢的時候最多等 1.2 秒，不讓首屏空白
+    Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1200))]).then(() => {
       heroIntro()
       reveals()
       ScrollTrigger.refresh()

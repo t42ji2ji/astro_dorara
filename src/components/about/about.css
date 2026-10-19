@@ -139,7 +139,8 @@ html:not(.dark) .about.on-dark {
 
 .sec-head {
   display: flex;
-  gap: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
   padding-top: 0.75rem;
   border-top: 1px solid var(--line);
   margin-bottom: clamp(40px, 7vh, 80px);
@@ -855,7 +856,8 @@ a.ledger-cell:hover .ledger-label {
 html.about-motion [data-hero-name],
 html.about-motion [data-hero-lines],
 html.about-motion [data-hero-fade],
-html.about-motion .hero-avatar {
+html.about-motion .hero-avatar,
+html.about-motion .hero-meta {
   visibility: hidden;
 }
 
