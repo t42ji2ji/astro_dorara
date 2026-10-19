@@ -668,6 +668,74 @@ a.ledger-cell:hover .ledger-label {
   }
 }
 
+/* 手機：上排 app 名稱，下面左右滑的卡片 */
+@media (max-width: 1023px) {
+  .stage .sec-head {
+    margin-bottom: 1.25rem;
+  }
+
+  .stage-list {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-bottom: 1rem;
+  }
+
+  .stage-row {
+    all: unset;
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    white-space: nowrap;
+    cursor: pointer;
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 1.4;
+    color: var(--ink-3);
+    transition: color 0.4s ease;
+  }
+
+  .stage-row.is-active {
+    color: var(--ink);
+  }
+
+  .stage-row .mono {
+    color: inherit;
+  }
+
+  .stage-frames {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-inline: calc(-1 * clamp(16px, 4vw, 56px));
+    padding-inline: clamp(16px, 4vw, 56px);
+  }
+
+  .stage-frames::-webkit-scrollbar {
+    display: none;
+  }
+
+  .stage-frame {
+    flex: 0 0 86%;
+    scroll-snap-align: center;
+  }
+
+  .stage-mock {
+    aspect-ratio: 4 / 3;
+    padding: 18px;
+    background: var(--frame-bg);
+    outline: 1px solid var(--line);
+  }
+
+  .stage-mock img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
 /* ---------- 06 web：撞牆的塊 ---------- */
 
 .filters {

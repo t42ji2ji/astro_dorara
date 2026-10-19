@@ -218,7 +218,66 @@ function stage(lenis: Lenis | null) {
     }
   })
 
-  mm.add('(max-width: 1023px), (prefers-reduced-motion: reduce)', () => {
+  // 手機：左右滑的卡片，一次一個 app，整區只佔約一個螢幕
+  mm.add('(max-width: 1023px)', () => {
+    const track = qs('.stage-frames', section)!
+    let current = -1
+    let inView = false
+
+    const setActive = (i: number) => {
+      if (i === current)
+        return
+      current = i
+      frames.forEach((f, k) => f.classList.toggle('is-active', k === i))
+      rows.forEach((r, k) => r.classList.toggle('is-active', k === i))
+      if (counter)
+        counter.textContent = String(i + 1).padStart(2, '0')
+      rows[i]?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' })
+      if (inView)
+        setZone(section, frames[i].dataset.tint, 1)
+    }
+
+    const onScroll = () => {
+      const center = track.scrollLeft + track.clientWidth / 2
+      let best = 0
+      frames.forEach((f, k) => {
+        const d = Math.abs(f.offsetLeft + f.offsetWidth / 2 - center)
+        if (d < Math.abs(frames[best].offsetLeft + frames[best].offsetWidth / 2 - center))
+          best = k
+      })
+      setActive(best)
+    }
+
+    const onRow = (e: Event) => {
+      const f = frames[Number((e.currentTarget as HTMLElement).dataset.stageRow)]
+      track.scrollTo({ left: f.offsetLeft - (track.clientWidth - f.offsetWidth) / 2, behavior: 'smooth' })
+    }
+
+    track.addEventListener('scroll', onScroll, { passive: true })
+    rows.forEach(r => r.addEventListener('click', onRow))
+    const zone = ScrollTrigger.create({
+      trigger: section,
+      start: 'top 60%',
+      end: 'bottom 40%',
+      onToggle: (self) => {
+        inView = self.isActive
+        if (inView)
+          setZone(section, frames[current].dataset.tint, 1)
+        else clearZone(section)
+      },
+    })
+    setActive(0)
+
+    return () => {
+      track.removeEventListener('scroll', onScroll)
+      rows.forEach(r => r.removeEventListener('click', onRow))
+      zone.kill()
+      clearZone(section)
+    }
+  })
+
+  // 桌機但關閉動態：直排，各自換底色
+  mm.add('(min-width: 1024px) and (prefers-reduced-motion: reduce)', () => {
     frames.forEach(f => tintZone(f, 1))
     return () => frames.forEach(clearZone)
   })
