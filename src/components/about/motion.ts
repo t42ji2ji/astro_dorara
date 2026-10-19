@@ -5,6 +5,7 @@ import { SplitText } from 'gsap/SplitText'
 import Lenis from 'lenis'
 import lottie from 'lottie-web'
 import avatarData from '~/assets/resume/avatar.json'
+import { packBento } from './bento'
 import 'lenis/dist/lenis.css'
 
 gsap.registerPlugin(ScrollTrigger, SplitText, Flip)
@@ -400,9 +401,6 @@ function phones() {
 
 // ---------- 06 Web 作品：bento + 篩選 ----------
 
-// 跟 about.astro 的 SHAPES 同一組規則
-const SHAPES = ['wide', '', 'tall', '', '', 'wide', '', 'tall', '', 'wide', '', '']
-
 function works() {
   const bento = qs('[data-bento]')
   if (!bento)
@@ -413,8 +411,35 @@ function works() {
   const count = qs('[data-works-count]')
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
 
+  // 依目前欄數把顯示中的塊重新排成不留洞的便當
+  const cols = () => getComputedStyle(bento).gridTemplateColumns.split(' ').length
+  const layout = () => {
+    const shown = tiles.filter(el => !el.classList.contains('is-hidden'))
+    const shapes = packBento(shown.map(el => el.dataset.featured !== undefined), cols())
+    tiles.forEach(el => el.classList.remove('is-wide', 'is-tall', 'is-big'))
+    shown.forEach((el, i) => shapes[i] && el.classList.add(`is-${shapes[i]}`))
+    return shown.length
+  }
+  layout()
+  let lastCols = cols()
+  window.addEventListener('resize', () => {
+    if (cols() === lastCols)
+      return
+    lastCols = cols()
+    layout()
+  })
+
+  // 浮起的說明卡往塊旁邊空間比較大的那側長；兩側都太窄就上下
+  const POP = 280
   tiles.forEach((el) => {
     el.addEventListener('pointerenter', () => {
+      const b = bento.getBoundingClientRect()
+      const t = el.getBoundingClientRect()
+      const right = b.right - t.right
+      const left = t.left - b.left
+      el.dataset.pop = Math.max(right, left) >= POP
+        ? (right >= left ? 'right' : 'left')
+        : (innerHeight - t.bottom >= t.top ? 'down' : 'up')
       hoverTint = el.dataset.tint ? { color: el.dataset.tint, amt: 0.3 } : null
       applyTint()
     })
@@ -463,18 +488,11 @@ function works() {
       moveBar(btn, true)
 
       const state = reduced ? null : Flip.getState(tiles)
-      let n = 0
       tiles.forEach((el) => {
         const show = cat === 'all' || el.dataset.categories!.split(' ').includes(cat)
         el.classList.toggle('is-hidden', !show)
-        el.classList.remove('is-wide', 'is-tall', 'is-big')
-        if (show) {
-          const shape = el.dataset.featured !== undefined ? 'big' : SHAPES[n % SHAPES.length]
-          if (shape)
-            el.classList.add(`is-${shape}`)
-          n++
-        }
       })
+      const n = layout()
       if (count)
         count.textContent = String(n).padStart(2, '0')
 

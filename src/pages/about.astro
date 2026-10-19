@@ -1,6 +1,7 @@
 ---
 import { getImage } from 'astro:assets'
 import LayoutAbout from '~/layouts/LayoutAbout.astro'
+import { packBento } from '~/components/about/bento'
 import {
   book,
   earlierJobs,
@@ -25,13 +26,12 @@ const works = await Promise.all(
   })),
 )
 const hot = works.filter((w) => w.categories.includes('personal'))
-// bento 格子形狀；motion.ts 換分類時用同一組規則重排
-const SHAPES = ['wide', '', 'tall', '', '', 'wide', '', 'tall', '', 'wide', '', '']
-const shapeOf = (w: (typeof works)[number]) => {
-  const i = hot.indexOf(w)
-  if (i < 0) return ''
-  return w.featured ? 'big' : SHAPES[i % SHAPES.length]
-}
+// bento 格子形狀先照桌機 6 欄排；motion.ts 依實際欄數與分類重排
+const hotShapes = packBento(
+  hot.map((w) => !!w.featured),
+  6,
+)
+const shapeOf = (w: (typeof works)[number]) => hotShapes[hot.indexOf(w)] ?? ''
 
 const jobs = [
   {
@@ -286,15 +286,17 @@ const jobs = [
             data-featured={w.featured ? '' : undefined}
             data-tint={w.tint}
           >
-            <img src={w.preview} alt="" loading="lazy" />
+            <span class="tile-media">
+              <img src={w.preview} alt="" loading="lazy" />
+            </span>
             <span class="tile-info">
               <span class="tile-title">{w.title}</span>
-              <span class="tile-more">
-                <span class="tile-desc">{w.description}</span>
-                <span class="mono tile-cat">
-                  {w.categories.map((c) => categoryName[c]).join(' / ')}
-                  <span aria-hidden="true">↗</span>
-                </span>
+            </span>
+            <span class="tile-more">
+              <span class="tile-desc">{w.description}</span>
+              <span class="mono tile-cat">
+                {w.categories.map((c) => categoryName[c]).join(' / ')}
+                <span aria-hidden="true">↗</span>
               </span>
             </span>
           </a>
