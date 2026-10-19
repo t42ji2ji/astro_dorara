@@ -16,19 +16,22 @@ import {
 
 const pad = (n: number) => String(n).padStart(2, '0')
 
-// 物理場裡的塊：大小、比例刻意不一致，熱門作品大一點
-const SIZES = [1, 0.82, 1.12, 0.9, 1.04, 0.76]
-const ASPECTS = [16 / 10, 1, 4 / 3, 3 / 2, 5 / 4]
+const categoryName = Object.fromEntries(workCategories.map((c) => [c.id, c.name]))
 const works = await Promise.all(
-  webWorks.map(async (work, i) => ({
+  webWorks.map(async (work) => ({
     ...work,
     href: work.path.startsWith('http') ? work.path : `https://dweam.xyz${work.path}`,
-    preview: (await getImage({ src: work.image, width: 640, format: 'webp' })).src,
-    size: work.featured ? 1.3 : SIZES[i % SIZES.length],
-    aspect: ASPECTS[i % ASPECTS.length],
+    preview: (await getImage({ src: work.image, width: 800, format: 'webp' })).src,
   })),
 )
-const hotCount = works.filter((w) => w.categories.includes('personal')).length
+const hot = works.filter((w) => w.categories.includes('personal'))
+// bento 格子形狀；motion.ts 換分類時用同一組規則重排
+const SHAPES = ['wide', '', 'tall', '', '', 'wide', '', 'tall', '', 'wide', '', '']
+const shapeOf = (w: (typeof works)[number]) => {
+  const i = hot.indexOf(w)
+  if (i < 0) return ''
+  return w.featured ? 'big' : SHAPES[i % SHAPES.length]
+}
 
 const jobs = [
   {
@@ -251,7 +254,7 @@ const jobs = [
   <!-- 06 Web：作品是會撞牆的塊 -->
   <section class="block shell">
     <header class="sec-head mono">
-      <span>06</span><span>Web 互動作品</span><span>(<span data-works-count>{pad(hotCount)}</span>)</span>
+      <span>06</span><span>Web 互動作品</span><span>(<span data-works-count>{pad(hot.length)}</span>)</span>
     </header>
 
     <div class="filters" role="tablist">
@@ -271,31 +274,32 @@ const jobs = [
       <span class="filter-bar" aria-hidden="true"></span>
     </div>
 
-    <div class="pit" data-pit>
+    <div class="bento" data-bento>
       {
         works.map((w) => (
           <a
             href={w.href}
             target="_blank"
-            draggable="false"
-            class:list={['brick', { 'is-hidden': !w.categories.includes('personal') }]}
+            class:list={['tile', shapeOf(w) && `is-${shapeOf(w)}`, { 'is-hidden': !w.categories.includes('personal') }]}
             data-categories={w.categories.join(' ')}
+            data-featured={w.featured ? '' : undefined}
             data-tint={w.tint}
-            data-size={w.size}
-            data-aspect={w.aspect}
-            data-desc={w.description}
-            style={`--aspect: ${w.aspect}; --size: ${w.size}`}
           >
-            <img src={w.preview} alt="" draggable="false" loading="lazy" />
-            <span class="brick-title">{w.title}</span>
+            <img src={w.preview} alt="" loading="lazy" />
+            <span class="tile-info">
+              <span class="tile-title">{w.title}</span>
+              <span class="tile-more">
+                <span class="tile-desc">{w.description}</span>
+                <span class="mono tile-cat">
+                  {w.categories.map((c) => categoryName[c]).join(' / ')}
+                  <span aria-hidden="true">↗</span>
+                </span>
+              </span>
+            </span>
           </a>
         ))
       }
     </div>
-    <p class="pit-caption" aria-live="polite">
-      <span class="pit-caption-title" data-pit-title></span>
-      <span class="pit-caption-desc" data-pit-desc></span>
-    </p>
   </section>
 
   <!-- 07 Experience：一行一份工作，細節點開才看 -->

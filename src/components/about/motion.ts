@@ -1,13 +1,13 @@
 import { gsap } from 'gsap'
+import { Flip } from 'gsap/Flip'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import Lenis from 'lenis'
 import lottie from 'lottie-web'
 import avatarData from '~/assets/resume/avatar.json'
-import { initPit } from './pit'
 import 'lenis/dist/lenis.css'
 
-gsap.registerPlugin(ScrollTrigger, SplitText)
+gsap.registerPlugin(ScrollTrigger, SplitText, Flip)
 
 const EXPO = 'expo.out'
 const DESKTOP_PIN = '(min-width: 1024px) and (prefers-reduced-motion: no-preference)'
@@ -254,6 +254,23 @@ function phones() {
     },
   })
 
+  // 收成一疊再攤開成扇形；動畫期間關掉 CSS transition，免得兩邊搶 transform 造成閃爍
+  const deal = (hand: HTMLElement, delay = 0) => {
+    const cards = cardsOf(hand)
+    hand.classList.add('is-dealing')
+    return gsap.from(cards, {
+      x: 0,
+      rotation: 0,
+      y: 16,
+      duration: 0.8,
+      stagger: 0.05,
+      delay,
+      ease: EXPO,
+      clearProps: 'transform',
+      onComplete: () => hand.classList.remove('is-dealing'),
+    })
+  }
+
   const show = (i: number) => {
     if (i === current)
       return
@@ -265,10 +282,13 @@ function phones() {
       t.setAttribute('aria-pressed', String(k === i))
     })
     updateZone()
+
     hands.forEach((h) => {
+      gsap.killTweensOf([h, ...cardsOf(h)])
+      gsap.set(cardsOf(h), { clearProps: 'transform' })
+      h.classList.remove('is-dealing')
       if (h !== prev && h !== next) {
-        gsap.killTweensOf(cardsOf(h))
-        gsap.set(cardsOf(h), { clearProps: 'transform,opacity' })
+        gsap.set(h, { clearProps: 'opacity' })
         h.classList.remove('is-active')
       }
     })
@@ -278,84 +298,83 @@ function phones() {
       return
     }
 
-    const out = cardsOf(prev)
-    const incoming = cardsOf(next)
-    gsap.killTweensOf([...out, ...incoming])
-    gsap.set(incoming, { clearProps: 'transform,opacity' })
-    gsap.to(out, {
-      y: -60,
-      rotation: '+=10',
+    gsap.to(prev, {
       opacity: 0,
-      duration: 0.35,
-      stagger: 0.04,
-      ease: 'power2.in',
+      duration: 0.25,
+      ease: 'power1.out',
       onComplete: () => {
         prev.classList.remove('is-active')
-        gsap.set(out, { clearProps: 'transform,opacity' })
+        gsap.set(prev, { clearProps: 'opacity' })
       },
     })
-    gsap.from(incoming, {
-      y: 140,
-      rotation: 0,
-      opacity: 0,
-      duration: 0.9,
-      stagger: 0.08,
-      delay: 0.12,
-      ease: EXPO,
-      clearProps: 'transform,opacity',
-    })
+    gsap.fromTo(next, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power1.out', clearProps: 'opacity' })
+    deal(next, 0.05)
   }
 
   const fine = matchMedia('(hover: hover) and (pointer: fine)').matches
+  let intent = 0
   tabs.forEach((t, i) => {
     t.addEventListener('click', () => show(i))
-    if (fine)
-      t.addEventListener('pointerenter', () => show(i))
+    if (fine) {
+      // 停一下才切，滑鼠掃過清單不會連換好幾手
+      t.addEventListener('pointerenter', () => {
+        clearTimeout(intent)
+        intent = window.setTimeout(() => show(i), 140)
+      })
+      t.addEventListener('pointerleave', () => clearTimeout(intent))
+    }
   })
 
-  // 第一手牌在捲到時發牌
+  // 第一手牌在捲到時攤開
   if (!reduced) {
-    gsap.from(cardsOf(hands[0]), {
-      y: 140,
-      rotation: 0,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.1,
-      ease: EXPO,
-      clearProps: 'transform,opacity',
-      scrollTrigger: { trigger: section.querySelector('.phones-deck'), start: 'top 75%', once: true },
+    ScrollTrigger.create({
+      trigger: section.querySelector('.phones-deck'),
+      start: 'top 75%',
+      once: true,
+      onEnter: () => {
+        if (current === 0)
+          deal(hands[0])
+      },
     })
   }
 }
 
-// ---------- 06 Web 作品：物理場 + 篩選 ----------
+// ---------- 06 Web 作品：bento + 篩選 ----------
+
+// 跟 about.astro 的 SHAPES 同一組規則
+const SHAPES = ['wide', '', 'tall', '', '', 'wide', '', 'tall', '', 'wide', '', '']
 
 function works() {
-  const pit = qs('[data-pit]')
-  if (!pit)
+  const bento = qs('[data-bento]')
+  if (!bento)
     return
   const filters = qsa('[data-filter]')
-  const bricks = qsa('.brick', pit)
+  const tiles = qsa('.tile', bento)
   const bar = qs('.filter-bar')
   const count = qs('[data-works-count]')
-  const title = qs('[data-pit-title]')
-  const desc = qs('[data-pit-desc]')
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  const onHover = (el: HTMLElement | null) => {
-    if (title)
-      title.textContent = el?.querySelector('.brick-title')?.textContent ?? ''
-    if (desc)
-      desc.textContent = el?.dataset.desc ?? ''
-    hoverTint = el?.dataset.tint ? { color: el.dataset.tint, amt: 0.3 } : null
-    applyTint()
-  }
+  tiles.forEach((el) => {
+    el.addEventListener('pointerenter', () => {
+      hoverTint = el.dataset.tint ? { color: el.dataset.tint, amt: 0.3 } : null
+      applyTint()
+    })
+    el.addEventListener('pointerleave', () => {
+      hoverTint = null
+      applyTint()
+    })
+  })
 
-  const physics = reduced ? null : initPit(pit, { onHover })
-  if (!physics) {
-    bricks.forEach((el) => {
-      el.addEventListener('pointerenter', () => onHover(el))
-      el.addEventListener('pointerleave', () => onHover(null))
+  if (!reduced) {
+    gsap.from(tiles.filter(el => !el.classList.contains('is-hidden')), {
+      y: 40,
+      opacity: 0,
+      scale: 0.96,
+      duration: 0.9,
+      stagger: 0.05,
+      ease: EXPO,
+      clearProps: 'transform,opacity',
+      scrollTrigger: { trigger: bento, start: 'top 80%', once: true },
     })
   }
 
@@ -383,16 +402,36 @@ function works() {
         b.setAttribute('aria-selected', String(b === btn))
       })
       moveBar(btn, true)
-      const shown = bricks.filter(el => cat === 'all' || el.dataset.categories!.split(' ').includes(cat))
+
+      const state = reduced ? null : Flip.getState(tiles)
+      let n = 0
+      tiles.forEach((el) => {
+        const show = cat === 'all' || el.dataset.categories!.split(' ').includes(cat)
+        el.classList.toggle('is-hidden', !show)
+        el.classList.remove('is-wide', 'is-tall', 'is-big')
+        if (show) {
+          const shape = el.dataset.featured !== undefined ? 'big' : SHAPES[n % SHAPES.length]
+          if (shape)
+            el.classList.add(`is-${shape}`)
+          n++
+        }
+      })
       if (count)
-        count.textContent = String(shown.length).padStart(2, '0')
-      if (physics) {
-        physics.setCategory(cat)
-      }
-      else {
-        bricks.forEach(el => el.classList.toggle('is-hidden', !shown.includes(el)))
+        count.textContent = String(n).padStart(2, '0')
+
+      if (!state) {
         ScrollTrigger.refresh()
+        return
       }
+      Flip.from(state, {
+        duration: 0.8,
+        ease: EXPO,
+        absolute: true,
+        stagger: 0.012,
+        onEnter: els => gsap.fromTo(els, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.6, delay: 0.15, ease: EXPO }),
+        onLeave: els => gsap.to(els, { opacity: 0, scale: 0.9, duration: 0.3 }),
+        onComplete: () => ScrollTrigger.refresh(),
+      })
     })
   })
 }
