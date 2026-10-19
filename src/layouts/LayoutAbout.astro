@@ -1,0 +1,56 @@
+---
+// About 頁專用：視窗本身捲動（GSAP pin / Lenis 需要），不走 Swup，整頁滿版
+import { themeConfig } from '~/.config'
+import SiteSeo from '~/components/SiteSeo.astro'
+import Analytics from '~/components/Analytics.astro'
+import ThemeScript from '~/components/ThemeScript.astro'
+import ThemeToggle from '~/components/ThemeToggle.astro'
+import '~/components/about/about.css'
+
+const lang = themeConfig.appearance.locale ?? 'en-us'
+const dark = themeConfig.appearance.theme === 'dark'
+const { navLinks } = themeConfig.site
+const { translate: t } = Astro.locals
+---
+
+<html lang={lang} class:list={[{ dark }]}>
+  <head>
+    <SiteSeo />
+    <Analytics />
+    <ThemeScript />
+    <script is:inline>
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches)
+        document.documentElement.classList.add('about-motion')
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&family=Noto+Serif+TC:wght@600&display=swap"
+    />
+  </head>
+
+  <body class="about" data-no-swup>
+    <div class="wall" style="--stage: #fafaf9; --amt: 0"></div>
+
+    <nav class="topbar shell">
+      <a href="/" class="topbar-mark">Dorara</a>
+      <ul class="topbar-links">
+        {
+          navLinks.map((nav) => (
+            <li>
+              <a href={nav.href} aria-current={nav.href === '/about' ? 'page' : undefined}>
+                {t(nav.name)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <ThemeToggle />
+    </nav>
+
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>

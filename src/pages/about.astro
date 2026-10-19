@@ -1,1137 +1,352 @@
 ---
-import LayoutDefault from '~/layouts/LayoutDefault.astro'
-import rmsiIcon from '~/assets/resume/rmsi.webp'
-import ziweIcon from '~/assets/resume/ziwe.webp'
-import cardmaIcon from '~/assets/resume/cardma.webp'
-import woodIcon from '~/assets/resume/wood.webp'
-import wuzuIcon from '~/assets/resume/wuzu.png'
-import kryptogoLogo from '~/assets/resume/kryptogo.png'
-import hanamiLogo from '~/assets/resume/hanami.png'
-import keyfarmImage from '~/assets/sitemap/keyfarm.png'
-import bumptogetherImage from '~/assets/sitemap/bumptogether.png'
-import WebInteractiveWorks from '~/components/resume/WebInteractiveWorks.astro'
-import MacApps from '~/components/resume/MacApps.astro'
+import { getImage } from 'astro:assets'
+import LayoutAbout from '~/layouts/LayoutAbout.astro'
+import {
+  earlierJobs,
+  featured,
+  iosApps,
+  kryptogo,
+  macApps,
+  stats,
+  webWorks,
+  workCategories,
+  writing,
+} from '~/components/about/data'
 
-// Web works moved to src/components/resume/WebInteractiveWorks.astro
+const pad = (n: number) => String(n).padStart(2, '0')
+const categoryName = Object.fromEntries(workCategories.map((c) => [c.id, c.name]))
+
+const works = await Promise.all(
+  webWorks.map(async (work, i) => ({
+    ...work,
+    no: pad(i + 1),
+    href: work.path.startsWith('http') ? work.path : `https://dweam.xyz${work.path}`,
+    preview: (await getImage({ src: work.image, width: 640, format: 'webp' })).src,
+    thumb: (await getImage({ src: work.image, width: 160, format: 'webp' })).src,
+  })),
+)
+const hotCount = works.filter((w) => w.categories.includes('personal')).length
 ---
 
-<LayoutDefault>
-  <!-- Hero 個人介紹區塊 -->
-  <section class="hero-section mb-12">
-    <div class="hero-content">
-      <div class="hero-avatar" id="avatarContainer"></div>
-      <div class="hero-info">
-        <h1 class="text-4xl font-bold mb-2">Hi, I'm Dorara 👋</h1>
-        <p class="text-xl text-gray-500 dark:text-gray-400 mb-2">Flutter Lead & Full Stack Developer</p>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-          <a href="mailto:doraralab@gmail.com" class="hover:text-[#667eea] transition-colors">doraralab@gmail.com</a>
-          <span class="mx-2">·</span>
-          <a href="https://www.threads.net/@dorara_hsieh" target="_blank" class="hover:text-[#667eea] transition-colors"
-            >@dorara_hsieh</a
-          >
-        </p>
+<LayoutAbout>
+  <!-- 01 Hero -->
+  <section class="hero shell" data-section>
+    <div class="hero-meta mono">
+      <span>About</span>
+      <a href="mailto:doraralab@gmail.com">doraralab@gmail.com</a>
+      <a href="https://www.threads.net/@dorara_hsieh" target="_blank">@dorara_hsieh</a>
+    </div>
 
-        <div class="value-intro">
-          <p class="mb-3">
-            我相信 <strong>好的產品來自於對細節的執著</strong>。從架構設計到使用者體驗，每一個環節都值得被認真對待。
-          </p>
-          <p class="mb-3">
-            作為一個 <strong>Builder</strong
-            >，我不只是寫程式，更喜歡從零到一打造完整的產品。在工作之餘，我持續經營個人專案，將有趣的想法分享給大家。
-          </p>
+    <div class="hero-main">
+      <h1 class="hero-name" data-hero-name>Dorara</h1>
+      <div class="hero-avatar" id="avatarContainer" aria-hidden="true"></div>
+    </div>
+
+    <div class="hero-foot">
+      <p class="mono hero-role" data-hero-fade>Flutter Lead &amp; Full Stack Developer</p>
+      <div class="hero-intro" data-hero-lines>
+        <p>我相信<em>好的產品來自於對細節的執著</em>。從架構設計到使用者體驗，每一個環節都值得被認真對待。</p>
+        <p>
+          作為一個 <em>Builder</em
+          >，我不只是寫程式，更喜歡從零到一打造完整的產品。在工作之餘，我持續經營個人專案，將有趣的想法分享給大家。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Experience -->
+  <section class="block shell" data-section>
+    <header class="sec-head mono"><span>02</span><span>Experience</span></header>
+
+    <div class="exp">
+      <div class="exp-rail" aria-hidden="true"><span data-rail></span></div>
+
+      <article class="exp-item">
+        <div class="exp-meta">
+          <img src={kryptogo.logo.src} alt="" class="exp-logo" width="28" height="28" />
+          <h3 class="exp-company">{kryptogo.company}</h3>
+          <p class="exp-role">{kryptogo.role}</p>
+          <p class="mono exp-period">{kryptogo.period}</p>
+        </div>
+        <div class="exp-body">
+          <p class="exp-summary" data-reveal>{kryptogo.summary}</p>
+          {
+            kryptogo.blocks.map((b, i) => (
+              <div class="exp-block" data-reveal>
+                <p class="mono exp-no">{pad(i + 1)}</p>
+                <h4 class="exp-title">{b.title}</h4>
+                {b.practice && <p>{b.practice}</p>}
+                {b.outcomes && (
+                  <ul class="exp-outcomes">
+                    {b.outcomes.map((o) => (
+                      <li>{o}</li>
+                    ))}
+                  </ul>
+                )}
+                {b.items && (
+                  <ul class="exp-list">
+                    {b.items.map((o) => (
+                      <li>{o}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ))
+          }
+        </div>
+      </article>
+
+      {
+        earlierJobs.map((job) => (
+          <article class="exp-item">
+            <div class="exp-meta">
+              {job.logo && <img src={job.logo.src} alt="" class="exp-logo" width="28" height="28" />}
+              <h3 class="exp-company">{job.company}</h3>
+              <p class="exp-role">{job.role}</p>
+              <p class="mono exp-period">{job.period}</p>
+            </div>
+            <div class="exp-body" data-reveal>
+              {job.groups.map((g) => (
+                <div class="exp-group">
+                  {g.title && <h4 class="exp-title">{g.title}</h4>}
+                  <p>{g.lead}</p>
+                  {g.items.length > 0 && (
+                    <ul class="exp-list">
+                      {g.items.map((o) => (
+                        <li>{o}</li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 03 Builder -->
+  <section class="block shell" data-section>
+    <header class="sec-head mono"><span>03</span><span>2025 Builder 計畫</span><span>2025 — Present</span></header>
+
+    <h2 class="statement" data-reveal-lines>
+      <span class="ln"><span>一個人，</span></span><span class="ln"><span>打造完整的產品。</span></span>
+    </h2>
+    <p class="statement-sub" data-reveal>
+      在 Threads 經營個人的 Builder 社群，「一個人」打造網頁和 APP 製作實驗性的產品，精進產品能力。
+    </p>
+
+    <div class="ledger">
+      {
+        stats.map((s) => {
+          const Tag = s.href ? 'a' : 'div'
+          return (
+            <Tag class="ledger-cell" href={s.href} target={s.href ? '_blank' : undefined} data-ledger>
+              <span class="ledger-value">{s.value}</span>
+              <span class="mono ledger-label">
+                {s.label}
+                {s.note && <span> · {s.note}</span>}
+                {s.href && <span aria-hidden="true"> ↗</span>}
+              </span>
+            </Tag>
+          )
+        })
+      }
+    </div>
+  </section>
+
+  <!-- 04 Featured -->
+  <section class="block shell" data-section>
+    <header class="sec-head mono"><span>04</span><span>Featured</span></header>
+
+    <div class="plates">
+      {
+        featured.map((f) => (
+          <a href={f.path} target="_blank" class="plate" data-tint={f.tint}>
+            <div class="plate-frame" data-plate>
+              <img src={f.image.src} alt={f.title} width={f.image.width} height={f.image.height} loading="lazy" />
+            </div>
+            <div class="plate-caption">
+              <div class="plate-head">
+                <h3 class="plate-name">{f.title}</h3>
+                <span class="mono plate-type">{f.type}</span>
+                <span class="plate-arrow" aria-hidden="true">
+                  ↗
+                </span>
+              </div>
+              <p class="plate-tagline">{f.tagline}</p>
+              <p class="plate-desc">{f.description}</p>
+              <p class="mono plate-tags">{f.tags.join(' · ')}</p>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 05 iOS -->
+  <section class="block shell" data-section>
+    <header class="sec-head mono"><span>05</span><span>Mobile App</span></header>
+
+    <ul class="dock">
+      {
+        iosApps.map((app) => (
+          <li data-reveal>
+            <a href={app.path} target="_blank" class="dock-app">
+              <img src={app.icon.src} alt="" width="80" height="80" loading="lazy" />
+              <span class="dock-name">{app.title}</span>
+              <span class="dock-desc">{app.description}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- 06 Mac -->
+  <section class="stage" data-stage>
+    <div class="stage-inner shell">
+      <header class="sec-head mono">
+        <span>06</span><span>Mac App</span><span class="stage-count"
+          ><span data-stage-current>01</span> / {pad(macApps.length)}</span
+        >
+      </header>
+
+      <div class="stage-grid">
+        <ol class="stage-list">
+          {
+            macApps.map((app, i) => (
+              <li>
+                <button type="button" class:list={['stage-row', { 'is-active': i === 0 }]} data-stage-row={i}>
+                  <span class="mono">{pad(i + 1)}</span>
+                  {app.title}
+                </button>
+              </li>
+            ))
+          }
+        </ol>
+
+        <div class="stage-frames">
+          {
+            macApps.map((app, i) => (
+              <a
+                href={app.path}
+                target="_blank"
+                class:list={['stage-frame', { 'is-active': i === 0 }]}
+                data-stage-frame
+                data-tint={app.stage}
+              >
+                <div class="stage-mock">
+                  <img
+                    src={app.mock.src}
+                    alt=""
+                    width={app.mock.width}
+                    height={app.mock.height}
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                  />
+                </div>
+                <div class="stage-caption">
+                  <img src={app.icon.src} alt="" class="stage-icon" width="56" height="56" loading="lazy" />
+                  <div>
+                    <h3 class="stage-name">{app.title}</h3>
+                    <p class="stage-tagline">{app.tagline}</p>
+                  </div>
+                  <span class="plate-arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                </div>
+              </a>
+            ))
+          }
         </div>
       </div>
     </div>
   </section>
 
-  <hr class="my-8 bg-gray-200 dark:bg-gray-700 h-[1px]" />
+  <!-- 07 Web -->
+  <section class="block shell" data-section>
+    <header class="sec-head mono">
+      <span>07</span><span>Web 互動作品</span><span>(<span data-works-count>{pad(hotCount)}</span>)</span>
+    </header>
 
-  <style>
-    .hero-section {
-      padding: 2rem 0;
-    }
-
-    .hero-content {
-      display: flex;
-      align-items: center;
-      gap: 2.5rem;
-    }
-
-    .hero-avatar {
-      width: 180px;
-      height: 180px;
-      flex-shrink: 0;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .hero-avatar:hover {
-      transform: scale(1.05);
-    }
-
-    .hero-info {
-      flex: 1;
-    }
-
-    .value-intro {
-      font-size: 1rem;
-      line-height: 1.7;
-      color: #555;
-    }
-
-    :global(.dark) .value-intro {
-      color: #bbb;
-    }
-
-    .value-intro strong {
-      color: #667eea;
-      font-weight: 600;
-    }
-
-    @media (max-width: 640px) {
-      .hero-content {
-        flex-direction: column;
-        text-align: center;
+    <div class="filters" role="tablist">
+      {
+        workCategories.map((c) => (
+          <button
+            type="button"
+            role="tab"
+            class:list={['filter', { 'is-active': c.id === 'personal' }]}
+            aria-selected={c.id === 'personal' ? 'true' : 'false'}
+            data-filter={c.id}
+          >
+            {c.name}
+          </button>
+        ))
       }
+      <span class="filter-bar" aria-hidden="true"></span>
+    </div>
 
-      .hero-avatar {
-        width: 140px;
-        height: 140px;
+    <ul class="index" data-index>
+      {
+        works.map((w) => (
+          <li
+            class:list={['index-item', { 'is-hidden': !w.categories.includes('personal') }]}
+            data-categories={w.categories.join(' ')}
+          >
+            <a href={w.href} target="_blank" class="index-row" data-preview={w.preview} data-tint={w.tint}>
+              <span class="mono index-no">{w.no}</span>
+              <span class="index-title">{w.title}</span>
+              <span class="index-desc">{w.description}</span>
+              <span class="mono index-cat">{w.categories.map((c) => categoryName[c]).join(' / ')}</span>
+              <img class="index-thumb" src={w.thumb} alt="" width="72" height="45" loading="lazy" />
+              <span class="index-arrow" aria-hidden="true">
+                ↗
+              </span>
+            </a>
+          </li>
+        ))
       }
-    }
+    </ul>
+  </section>
 
-    @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
+  <!-- 08 Writing + contact -->
+  <section class="block shell" data-section>
+    <header class="sec-head mono"><span>08</span><span>技術寫作 &amp; 出版</span></header>
+
+    <ul class="index index--static">
+      {
+        writing.map((w, i) => (
+          <li class="index-item" data-reveal>
+            <a href={w.path} target="_blank" class="index-row">
+              <span class="mono index-no">{pad(i + 1)}</span>
+              <span class="index-title">{w.title}</span>
+              <span class="index-desc">{w.description}</span>
+              <span class="mono index-cat">{w.host}</span>
+              <span class="index-arrow" aria-hidden="true">
+                ↗
+              </span>
+            </a>
+          </li>
+        ))
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-  </style>
+    </ul>
+  </section>
+
+  <footer class="contact shell" data-section>
+    <p class="mono">Say hi</p>
+    <a href="mailto:doraralab@gmail.com" class="contact-mail">doraralab@gmail.com</a>
+    <div class="contact-foot mono">
+      <a href="https://www.threads.net/@dorara_hsieh" target="_blank">Threads ↗</a>
+      <span>© {new Date().getFullYear()} Dorara Hsieh</span>
+    </div>
+  </footer>
+
+  <div class="peek" aria-hidden="true"><img alt="" /></div>
 
   <script>
-    import lottie from 'lottie-web'
-    import avatarData from '~/assets/resume/avatar.json'
+    import { initAbout } from '~/components/about/motion'
 
-    let lottieInstance: ReturnType<typeof lottie.loadAnimation> | null = null
-    let isHovering = false
-
-    function destroyLottie() {
-      if (lottieInstance) {
-        lottieInstance.destroy()
-        lottieInstance = null
-        isHovering = false
-      }
-    }
-
-    function initLottie() {
-      const container = document.getElementById('avatarContainer')
-      if (!container) return
-
-      // 如果已存在實例，先銷毀
-      destroyLottie()
-
-      lottieInstance = lottie.loadAnimation({
-        container,
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        animationData: avatarData,
-      })
-
-      // 預設播放待機動畫
-      lottieInstance.playSegments([17, 32], true)
-
-      // Hover 互動
-      container.addEventListener('mouseenter', () => {
-        if (!isHovering && lottieInstance) {
-          isHovering = true
-          lottieInstance.playSegments([34, 56], true)
-        }
-      })
-
-      container.addEventListener('mouseleave', () => {
-        if (isHovering && lottieInstance) {
-          isHovering = false
-          lottieInstance.playSegments([17, 32], true)
-        }
-      })
-    }
-
-    // 初始化 - 多種事件確保覆蓋各種導航情況
-    initLottie()
-    document.addEventListener('DOMContentLoaded', initLottie)
-    document.addEventListener('astro:page-load', initLottie)
-    document.addEventListener('swup:contentReplaced', initLottie)
-
-    // 頁面離開時清理
-    document.addEventListener('astro:before-swap', destroyLottie)
-    document.addEventListener('swup:willReplaceContent', destroyLottie)
+    initAbout()
   </script>
-
-  <article class="prose max-w-none">
-    <section class="mb-12">
-      <h2 class="text-2xl font-bold mb-4">Experience</h2>
-
-      <details class="">
-        <summary class="cursor-pointer list-none">
-          <div class="flex flex-col justify-between items-center mb-2">
-            <div class="flex items-center gap-3">
-              <img src={kryptogoLogo.src} alt="KryptoGO" class="w-10 h-10 rounded-lg object-contain mb-0" />
-              <div>
-                <h3 class="text-xl font-semibold m-0">KryptoGO Co., Ltd.</h3>
-                <div class="flex flex-row">
-                  <div class="text-gray-600 mr-2">Flutter Lead</div>
-                  <div class="flex items-center gap-3">
-                    <span class="text-sm text-gray-500">2022.05 - <span class="underline">至今</span></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </summary>
-        <div class="experience-content mt-4">
-          <p class="mb-4">帶領 App 團隊，負責加密貨幣錢包產品的技術架構設計與開發。</p>
-
-          <div class="space-y-4">
-            <div>
-              <h4 class="font-bold text-lg mb-2">🏗️ 架構升級：Clean Architecture + Riverpod</h4>
-              <ul class="list-disc pl-5 space-y-1">
-                <li>
-                  <strong>技術實踐：</strong>導入 Clean Architecture 分層架構，分離 Presentation / Domain / Data
-                  層。採用 Riverpod 作為狀態管理方案，取代原有混亂的狀態邏輯。重構核心模組，統一 Controller
-                  設計模式，建立單元測試基礎設施，針對錢包核心邏輯撰寫測試案例。
-                </li>
-                <li><strong>成效：</strong>提升程式碼可讀性，降低 Bug 發生率，新人 onboarding 時間縮短。</li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 class="font-bold text-lg mb-2">📦 Monorepo 架構</h4>
-              <ul class="list-disc pl-5 space-y-1">
-                <li>
-                  <strong>技術實踐：</strong>導入 Melos 建立 Monorepo 架構，將單體應用拆分為多個獨立 Package。核心邏輯與
-                  UI 分離，同一套 Business Logic 可服務 App / Web / SDK。開發 Remote Config
-                  機制，不只是功能開關，而是完整的動態配置系統。依據客戶需求配置功能模組，無需發版即可更新配置。
-                </li>
-                <li>
-                  <strong>成效：</strong>
-                  <ul class="list-circle pl-5 mt-1">
-                    <li>支援快速產出 Web 版本 (PWA)</li>
-                    <li>企業 SDK 可獨立打包交付</li>
-                    <li>支援多產品變體，企業客戶可在同一套程式碼基礎上客製化</li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 class="font-bold text-lg mb-2">⚙️ Multi-Brand Build System</h4>
-              <ul class="list-disc pl-5 space-y-1">
-                <li>
-                  <strong>技術實踐：</strong>設計配置驅動的多品牌建置系統，透過宣告式配置檔定義各產品變體的品牌元素（App
-                  名稱、Icon、配色、啟動畫面）、功能模組開關、後端 API Endpoint 及簽名憑證。建立 GitHub Actions
-                  自動化流程，自動讀取配置產生對應建置參數，整合 iOS / Android 雙平台代碼簽名，支援一鍵送審上架。
-                </li>
-                <li>
-                  <strong>成效：</strong>
-                  <ul class="list-circle pl-5 mt-1">
-                    <li>新客戶部署從數週縮短至數小時</li>
-                    <li>單一程式碼庫同時維護多個產品變體，降低維護成本</li>
-                    <li>Bug 修復與功能更新可同步推送至所有產品線</li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 class="font-bold text-lg mb-2">🔗 區塊鏈技術積累</h4>
-              <ul class="list-disc pl-5 space-y-1">
-                <li>
-                  自主研發多鏈錢包核心：開發錢包建立、私鑰保管、助記詞備份等核心功能，支援 EVM / Solana / Tron 多鏈
-                </li>
-                <li>實作 Shamir Secret Sharing (SSS) 私鑰分片備份，提升資產安全性</li>
-                <li>串接 AAVE V3 借貸協議 (Supply / Withdraw / Borrow)</li>
-                <li>整合多個 DEX 聚合器 (Jupiter / OKX / Raydium)，實現最佳價格路由</li>
-                <li>開發 Gasless Send、USDC Permit 等進階轉帳功能</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </details>
-      <details class="">
-        <summary class="cursor-pointer list-none">
-          <div class="flex flex-col justify-between items-center mb-2">
-            <div class="flex items-center gap-3">
-              <img src={hanamiLogo.src} alt="花見" class="w-10 h-10 rounded-lg object-contain mb-0" />
-              <div>
-                <h3 class="text-xl font-semibold m-0">依賴傳媒娛樂有限公司 (花見-高端社群交友)</h3>
-                <div class="flex flex-row">
-                  <div class="text-gray-600 mr-2">軟體工程師 (Vue | Flutter | Solidity)</div>
-                  <div class="flex items-center gap-3">
-                    <span class="text-sm text-gray-500">2020.07 - <span class="underline">2022.05</span></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </summary>
-        <div class="experience-content mt-4">
-          <div class="space-y-4">
-            <div>
-              <h4 class="font-bold text-lg mb-2">App Developer</h4>
-              <p class="mb-2">高品質交友軟體，提供高端社交服務</p>
-              <ul class="list-disc pl-5 space-y-1">
-                <li>Flutter 6 人團隊，從零開始到完成整個系統開發</li>
-                <li>利用 Canvas 實作禮物特效、娃娃換裝系統、彈幕飄屏，達到更好的畫面效果與效能</li>
-                <li>系統實作包含 IM 聊天室、語音房、送禮物等常用互動功能</li>
-                <li>運用 socket IO 達成實時競拍、離線更新等功能</li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 class="font-bold text-lg mb-2">Web Developer (管理後台)</h4>
-              <p class="mb-2">會員管理系統及各項後台需求工具</p>
-              <ul class="list-disc pl-5 space-y-1">
-                <li>獨立開發完整後台系統</li>
-                <li>採用 Vue (NuxtJs) 和 Golang server 結合 Casbin 權限用戶管理</li>
-                <li>Element UI 實現後台操作系統 UI</li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 class="font-bold text-lg mb-2">區塊鏈產品負責人</h4>
-              <p class="mb-2">虛擬幣金流代收服務、NFT 交易市場</p>
-              <ul class="list-disc pl-5 space-y-1">
-                <li>
-                  <strong>金流代收平台：</strong>負責領導產品需求與設計，撰寫智能合約 (Solidity, Tron network,
-                  TRC20)，開發前端頁面 (NuxtJs)。
-                </li>
-                <li>
-                  <strong>NFT 交易市場：</strong>負責領導產品需求與設計，撰寫智能合約 (Solidity, Ethereum, ERC721,
-                  ERC1155, Market Contract)，開發前端頁面 (Vue3, TypeScript)。
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </details>
-
-      <details class="">
-        <summary class="cursor-pointer list-none">
-          <div class="flex flex-col justify-between items-center mb-2">
-            <div class="flex items-center gap-3">
-              <div>
-                <h3 class="text-xl font-semibold m-0">國立雲林科技大學</h3>
-                <div class="flex flex-row">
-                  <div class="text-gray-600 mr-2">網頁設計課程講師</div>
-                  <div class="flex items-center gap-3">
-                    <span class="text-sm text-gray-500">2020.06 - 2020.08</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </summary>
-        <div class="experience-content mt-4">
-          <p>擔任雲林科技大學網頁設計課微學分講師，帶領學生從零開始製作網頁，從入門到踏入網路設計師的領域。</p>
-        </div>
-      </details>
-
-      <details class="">
-        <summary class="cursor-pointer list-none">
-          <div class="flex flex-col justify-between items-center mb-2">
-            <div class="flex items-center gap-3">
-              <div>
-                <h3 class="text-xl font-semibold m-0">多多設計有限公司</h3>
-                <div class="flex flex-row">
-                  <div class="text-gray-600 mr-2">負責人</div>
-                  <div class="flex items-center gap-3">
-                    <span class="text-sm text-gray-500">2019.10 - 2020.07</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </summary>
-        <div class="experience-content mt-4">
-          <p class="mb-2">
-            負責帶領四人團隊，提供網頁、App 的接案服務。在團隊中負責與客戶討論訂定需求、前端網頁及 App 開發、UI/UX
-            設計。
-          </p>
-          <ul class="list-disc pl-5 space-y-1">
-            <li>Figma、Sketch UI/UX 設計</li>
-            <li>Vue 網頁設計</li>
-            <li>Flutter 程式設計</li>
-          </ul>
-        </div>
-      </details>
-    </section>
-
-    <section class="mb-12 special-experience not-prose">
-      <!-- SVG Symbol 定義，只需定義一次 -->
-      <svg class="hidden">
-        <symbol id="apple-icon" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"
-          ></path>
-        </symbol>
-      </svg>
-
-      <hr class="mb-12 bg-gray-200 dark:bg-gray-700 h-[1px]" />
-
-      <h2 class="text-2xl font-bold mb-6">特殊經歷</h2>
-
-      <!-- 2025 Builder 計畫 -->
-      <div class="mb-10">
-        <div class="flex justify-between items-baseline mb-2">
-          <h3 class="text-xl font-semibold m-0">🚀 2025 Builder 計畫</h3>
-          <span class="text-sm text-gray-500">2025 - Present</span>
-        </div>
-        <div class="text-gray-600 mb-4">獨立開發者 / Creator</div>
-        <p class="mb-6">
-          在 Threads 經營個人的 Builder 社群，「一個人」打造網頁和 APP 製作實驗性的產品，精進產品能力。
-        </p>
-
-        <!-- 成果數據卡片 -->
-        <div class="grid grid-cols-3 gap-4 mb-8">
-          <a href="https://www.threads.com/@dorara_hsieh" target="_blank" class="stat-card stat-card-link">
-            <svg class="external-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-              <polyline points="15 3 21 3 21 9"></polyline>
-              <line x1="10" y1="14" x2="21" y2="3"></line>
-            </svg>
-            <div class="stat-number">5,800+</div>
-            <div class="stat-label">Threads 追蹤</div>
-          </a>
-          <a href="https://dweam.xyz/sitemap" target="_blank" class="stat-card stat-card-link">
-            <svg class="external-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-              <polyline points="15 3 21 3 21 9"></polyline>
-              <line x1="10" y1="14" x2="21" y2="3"></line>
-            </svg>
-            <div class="stat-number">15+</div>
-            <div class="stat-label">網站工具</div>
-            <div class="stat-sublabel">77 萬+ 瀏覽量</div>
-          </a>
-          <div class="stat-card">
-            <div class="stat-number">3,000+</div>
-            <div class="stat-label">APP 總下載</div>
-          </div>
-        </div>
-
-        <!-- 精選作品 -->
-        <h4 class="font-bold text-lg mb-4 mt-4">🌟 精選作品</h4>
-        <div class="cards-grid grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-          <!-- KeyFarm -->
-          <a href="https://keyfarm.dorara.app/" target="_blank" class="featured-card">
-            <div class="featured-image-container">
-              <img src={keyfarmImage.src} alt="KeyFarm" class="featured-image" />
-            </div>
-            <div class="featured-info">
-              <div class="featured-header">
-                <span class="featured-name">KeyFarm</span>
-                <span class="featured-type">桌面 App</span>
-              </div>
-              <div class="featured-tagline">Your keyboard is a farm</div>
-              <p class="featured-desc">
-                把日常打字變成種田。每顆按鍵都是一塊田，敲越多長越茂盛，從澆水、發芽到結果收成，還有熱力圖模式和 100
-                種作物可以收集，鴨子跟小狗會在農場裡跑來跑去。免費開源。
-              </p>
-              <div class="featured-tags">
-                <span class="featured-tag">macOS</span>
-                <span class="featured-tag">Windows</span>
-                <span class="featured-tag">開源免費</span>
-              </div>
-            </div>
-          </a>
-
-          <!-- BumpTogether -->
-          <a href="https://bumptogether.dorara.app/" target="_blank" class="featured-card">
-            <div class="featured-image-container">
-              <img src={bumptogetherImage.src} alt="BumpTogether" class="featured-image" />
-            </div>
-            <div class="featured-info">
-              <div class="featured-header">
-                <span class="featured-name">BumpTogether</span>
-                <span class="featured-type">線上遊戲</span>
-              </div>
-              <div class="featured-tagline">charge. dash. bump!</div>
-              <p class="featured-desc">
-                復古 CRT
-                電視風格的多人連線派對遊戲。挑一隻動物角色，長按蓄力、放開衝刺，把對手撞下擂台。開個房間把連結丟給朋友就能開打。
-              </p>
-              <div class="featured-tags">
-                <span class="featured-tag">2–6 人連線</span>
-                <span class="featured-tag">免安裝</span>
-                <span class="featured-tag">經典 / 淘汰模式</span>
-              </div>
-            </div>
-          </a>
-        </div>
-
-        <!-- APP 作品展示 -->
-        <h4 class="font-bold text-lg mb-4 mt-4">📱 Mobile App</h4>
-        <div class="cards-grid grid grid-cols-2 gap-4 mb-6">
-          <!-- Wuzu -->
-          <a href="https://apps.apple.com/tw/app/wuzu/id6757849464" target="_blank" class="app-card">
-            <img src={wuzuIcon.src} alt="Wuzu" class="app-icon" />
-            <div class="app-info">
-              <div class="app-name">Wuzu 伍珠</div>
-              <div class="app-desc">陪你說話的日記夥伴</div>
-              <div class="app-store-badge">
-                <svg class="apple-icon"><use href="#apple-icon"></use></svg>
-                App Store
-              </div>
-            </div>
-          </a>
-
-          <!-- SMRI -->
-          <a href="https://apps.apple.com/tw/app/smri/id6747955368?l=en-GB" target="_blank" class="app-card">
-            <img src={rmsiIcon.src} alt="SMRI" class="app-icon" />
-            <div class="app-info">
-              <div class="app-name">SMRI</div>
-              <div class="app-desc">能幫你完成計劃的日曆</div>
-              <div class="app-store-badge">
-                <svg class="apple-icon"><use href="#apple-icon"></use></svg>
-                App Store
-              </div>
-            </div>
-          </a>
-
-          <!-- ZIWE -->
-          <a href="https://apps.apple.com/tw/app/ziwe/id6749048766?l=en-GB" target="_blank" class="app-card">
-            <img src={ziweIcon.src} alt="ZIWE" class="app-icon" />
-            <div class="app-info">
-              <div class="app-name">ZIWE</div>
-              <div class="app-desc">AI 紫微斗數專家</div>
-              <div class="app-store-badge">
-                <svg class="apple-icon"><use href="#apple-icon"></use></svg>
-                App Store
-              </div>
-            </div>
-          </a>
-
-          <!-- Cardma -->
-          <a href="https://apps.apple.com/tw/app/cardma/id6747955972?l=en-GB" target="_blank" class="app-card">
-            <img src={cardmaIcon.src} alt="Cardma" class="app-icon" />
-            <div class="app-info">
-              <div class="app-name">Cardma</div>
-              <div class="app-desc">社群幫手，總結影片、PDF 產生小卡</div>
-              <div class="app-store-badge">
-                <svg class="apple-icon"><use href="#apple-icon"></use></svg>
-                App Store
-              </div>
-            </div>
-          </a>
-
-          <!-- 木魚咚咚 -->
-          <a
-            href="https://apps.apple.com/tw/app/%E6%9C%A8%E9%AD%9A%E5%92%9A%E5%92%9A/id6755515199?l=en-GB"
-            target="_blank"
-            class="app-card"
-          >
-            <img src={woodIcon.src} alt="木魚咚咚" class="app-icon" />
-            <div class="app-info">
-              <div class="app-name">木魚咚咚</div>
-              <div class="app-desc">Apple Watch 木魚法器 App</div>
-              <div class="app-store-badge">
-                <svg class="apple-icon"><use href="#apple-icon"></use></svg>
-                App Store
-              </div>
-            </div>
-          </a>
-        </div>
-
-        <MacApps />
-
-        <WebInteractiveWorks />
-      </div>
-
-      <hr class="my-8 border-gray-200 dark:border-gray-700" />
-
-      <!-- 技術寫作 & 出版 -->
-      <div class="mb-8">
-        <h3 class="text-xl font-semibold mb-4">✍️ 技術寫作 & 出版</h3>
-
-        <div class="grid grid-cols-1 gap-4">
-          <!-- 技術書籍 -->
-          <a href="https://www.books.com.tw/products/0011008795" target="_blank" class="link-card">
-            <div class="link-card-icon">📚</div>
-            <div class="link-card-content">
-              <div class="link-card-title">技術書籍出版</div>
-              <div class="link-card-desc">在博客來販售中的技術書籍</div>
-              <div class="link-card-url">books.com.tw</div>
-            </div>
-            <div class="link-card-arrow">→</div>
-          </a>
-
-          <!-- iT 邦幫忙鐵人賽 -->
-          <a href="https://ithelp.ithome.com.tw/2020-12th-ironman/articles/6208" target="_blank" class="link-card">
-            <div class="link-card-icon">📝</div>
-            <div class="link-card-content">
-              <div class="link-card-title">iT 邦幫忙鐵人賽系列文章</div>
-              <div class="link-card-desc">第 12 屆鐵人賽參賽文章</div>
-              <div class="link-card-url">ithelp.ithome.com.tw</div>
-            </div>
-            <div class="link-card-arrow">→</div>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <style>
-      .special-experience {
-        --card-bg: rgba(255, 255, 255, 0.8);
-        --card-border: rgba(0, 0, 0, 0.08);
-        --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-        --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
-        --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        overflow: visible;
-      }
-
-      /* 卡片網格容器 */
-      .cards-grid {
-        margin-bottom: 1.5rem;
-      }
-
-      :global(.dark) .special-experience {
-        --card-bg: rgba(30, 30, 35, 0.8);
-        --card-border: rgba(255, 255, 255, 0.1);
-        --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.4);
-      }
-
-      /* 統計卡片 */
-      .stat-card {
-        background: var(--card-bg);
-        border: 1px solid var(--card-border);
-        border-radius: 12px;
-        padding: 1.25rem;
-        text-align: center;
-        box-shadow: var(--card-shadow);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .stat-card-link {
-        cursor: pointer;
-        text-decoration: none;
-        color: inherit;
-        position: relative;
-      }
-
-      .external-link-icon {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        width: 14px;
-        height: 14px;
-        color: #999;
-        transition: color 0.2s ease;
-      }
-
-      .stat-card-link:hover .external-link-icon {
-        color: #667eea;
-      }
-
-      .stat-card-link:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--card-shadow-hover);
-        border-color: #667eea;
-      }
-
-      .stat-number {
-        font-size: 1.75rem;
-        font-weight: 700;
-        background: var(--accent-gradient);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        line-height: 1.2;
-      }
-
-      .stat-label {
-        font-size: 0.875rem;
-        color: #666;
-        margin-top: 0.25rem;
-      }
-
-      :global(.dark) .stat-label {
-        color: #aaa;
-      }
-
-      .stat-sublabel {
-        font-size: 0.75rem;
-        color: #999;
-        margin-top: 0.25rem;
-      }
-
-      /* 精選作品卡片 */
-      .featured-card {
-        display: flex;
-        flex-direction: column;
-        background: var(--card-bg);
-        border: 1px solid var(--card-border);
-        border-radius: 16px;
-        overflow: hidden;
-        text-decoration: none;
-        color: inherit;
-        box-shadow: var(--card-shadow);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .featured-card:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--card-shadow-hover);
-        border-color: rgba(102, 126, 234, 0.3);
-      }
-
-      .featured-image-container {
-        width: 100%;
-        aspect-ratio: 16/10;
-        overflow: hidden;
-        background: #111;
-        border-bottom: 1px solid var(--card-border);
-      }
-
-      .featured-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-      }
-
-      .featured-card:hover .featured-image {
-        transform: scale(1.05);
-      }
-
-      .featured-info {
-        padding: 1.25rem;
-      }
-
-      .featured-header {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.25rem;
-      }
-
-      .featured-name {
-        font-weight: 700;
-        font-size: 1.125rem;
-      }
-
-      .featured-type {
-        font-size: 0.688rem;
-        color: #667eea;
-        border: 1px solid rgba(102, 126, 234, 0.4);
-        border-radius: 6px;
-        padding: 0.125rem 0.375rem;
-      }
-
-      .featured-tagline {
-        font-size: 0.813rem;
-        color: #667eea;
-        margin-bottom: 0.5rem;
-      }
-
-      .featured-desc {
-        font-size: 0.875rem;
-        color: #666;
-        line-height: 1.6;
-        margin: 0;
-      }
-
-      :global(.dark) .featured-desc {
-        color: #aaa;
-      }
-
-      .featured-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.375rem;
-        margin-top: 0.75rem;
-      }
-
-      .featured-tag {
-        font-size: 0.688rem;
-        color: #666;
-        background: rgba(0, 0, 0, 0.04);
-        border-radius: 6px;
-        padding: 0.125rem 0.5rem;
-      }
-
-      :global(.dark) .featured-tag {
-        color: #aaa;
-        background: rgba(255, 255, 255, 0.08);
-      }
-
-      /* APP 卡片 */
-      .app-card {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        background: var(--card-bg);
-        border: 1px solid var(--card-border);
-        border-radius: 16px;
-        padding: 1rem;
-        text-decoration: none;
-        color: inherit;
-        box-shadow: var(--card-shadow);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        overflow: hidden;
-        position: relative;
-      }
-
-      .app-card::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: var(--accent-gradient);
-        opacity: 0;
-        transition: opacity 0.3s;
-      }
-
-      .app-card:hover {
-        transform: translateY(-4px) scale(1.02);
-        box-shadow: var(--card-shadow-hover);
-      }
-
-      .app-card:hover::before {
-        opacity: 0.05;
-      }
-
-      .app-icon {
-        width: 64px;
-        height: 64px;
-        border-radius: 14px;
-        object-fit: cover;
-        flex-shrink: 0;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        transition: transform 0.3s;
-      }
-
-      .app-card:hover .app-icon {
-        transform: scale(1.05);
-      }
-
-      .app-info {
-        flex: 1;
-        min-width: 0;
-        position: relative;
-        z-index: 1;
-      }
-
-      .app-name {
-        font-weight: 600;
-        font-size: 1rem;
-        margin-bottom: 0.25rem;
-      }
-
-      .app-desc {
-        font-size: 0.813rem;
-        color: #666;
-        line-height: 1.4;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-
-      :global(.dark) .app-desc {
-        color: #aaa;
-      }
-
-      .app-store-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.375rem;
-        margin-top: 0.5rem;
-        padding: 0.25rem 0.625rem;
-        background: #000;
-        color: #fff;
-        font-size: 0.688rem;
-        font-weight: 500;
-        border-radius: 6px;
-        transition: background 0.2s;
-      }
-
-      :global(.dark) .app-store-badge {
-        background: #333;
-      }
-
-      .app-card:hover .app-store-badge {
-        background: #333;
-      }
-
-      :global(.dark) .app-card:hover .app-store-badge {
-        background: #555;
-      }
-
-      .apple-icon {
-        width: 12px;
-        height: 12px;
-      }
-
-      /* 連結卡片 */
-      .link-card {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        background: var(--card-bg);
-        border: 1px solid var(--card-border);
-        border-radius: 12px;
-        padding: 1rem 1.25rem;
-        text-decoration: none;
-        color: inherit;
-        box-shadow: var(--card-shadow);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-
-      .link-card:hover {
-        transform: translateX(4px);
-        box-shadow: var(--card-shadow-hover);
-        border-color: #667eea;
-      }
-
-      .link-card-icon {
-        font-size: 2rem;
-        flex-shrink: 0;
-      }
-
-      .link-card-content {
-        flex: 1;
-        min-width: 0;
-      }
-
-      .link-card-title {
-        font-weight: 600;
-        font-size: 1rem;
-        margin-bottom: 0.25rem;
-      }
-
-      .link-card-desc {
-        font-size: 0.875rem;
-        color: #666;
-      }
-
-      :global(.dark) .link-card-desc {
-        color: #aaa;
-      }
-
-      .link-card-url {
-        font-size: 0.75rem;
-        color: #667eea;
-        margin-top: 0.25rem;
-      }
-
-      .link-card-arrow {
-        font-size: 1.25rem;
-        color: #ccc;
-        transition: all 0.3s;
-      }
-
-      .link-card:hover .link-card-arrow {
-        color: #667eea;
-        transform: translateX(4px);
-      }
-
-      /* 響應式 */
-      @media (max-width: 640px) {
-        .grid-cols-3 {
-          grid-template-columns: repeat(1, 1fr);
-        }
-
-        .grid-cols-2 {
-          grid-template-columns: repeat(1, 1fr);
-        }
-
-        .stat-number {
-          font-size: 1.5rem;
-        }
-
-        .grid-cols-3 {
-          grid-template-columns: repeat(1, 1fr);
-        }
-      }
-
-      /* Web Work Styles */
-      .filter-btn {
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        background: var(--card-bg);
-        border: 1px solid var(--card-border);
-        color: #666;
-        font-size: 0.875rem;
-        cursor: pointer;
-        transition: all 0.3s;
-        white-space: nowrap;
-      }
-
-      :global(.dark) .filter-btn {
-        color: #aaa;
-      }
-
-      .filter-btn:hover {
-        border-color: #667eea;
-        color: #667eea;
-      }
-
-      .filter-btn.active {
-        background: #667eea;
-        color: white;
-        border-color: #667eea;
-      }
-
-      .web-work-card {
-        display: flex;
-        flex-direction: column;
-        background: var(--card-bg);
-        border: 1px solid var(--card-border);
-        border-radius: 16px;
-        overflow: hidden;
-        text-decoration: none;
-        color: inherit;
-        box-shadow: var(--card-shadow);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        height: 100%;
-      }
-
-      .web-work-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
-        border-color: rgba(102, 126, 234, 0.3);
-      }
-
-      :global(.dark) .web-work-card:hover {
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
-      }
-
-      .web-work-image-container {
-        width: 100%;
-        aspect-ratio: 16/10;
-        overflow: hidden;
-        position: relative;
-        background: #f5f5f5;
-        border-bottom: 1px solid var(--card-border);
-      }
-
-      :global(.dark) .web-work-image-container {
-        background: #2a2a2a;
-      }
-
-      .web-work-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-      }
-
-      .web-work-card:hover .web-work-image {
-        transform: scale(1.05);
-      }
-
-      .web-work-overlay {
-        position: absolute;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      .web-work-card:hover .web-work-overlay {
-        opacity: 1;
-      }
-
-      .view-btn {
-        background: rgba(255, 255, 255, 0.9);
-        color: #333;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-size: 0.875rem;
-        font-weight: 600;
-        transform: translateY(10px);
-        transition: transform 0.3s ease;
-      }
-
-      .web-work-card:hover .view-btn {
-        transform: translateY(0);
-      }
-
-      .web-work-info {
-        padding: 1.25rem;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-      }
-
-      .web-work-title {
-        font-weight: 700;
-        font-size: 1.1rem;
-        margin-bottom: 0.5rem;
-        line-height: 1.3;
-      }
-
-      .web-work-desc {
-        font-size: 0.875rem;
-        color: #666;
-        line-height: 1.5;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-
-      :global(.dark) .web-work-desc {
-        color: #aaa;
-      }
-    </style>
-
-    <script>
-      function initWebWorksFilter() {
-        const filterBtns = document.querySelectorAll('.filter-btn')
-        const workCards = document.querySelectorAll('.web-work-card')
-
-        if (!filterBtns.length || !workCards.length) return
-
-        filterBtns.forEach((btn) => {
-          btn.addEventListener('click', () => {
-            // Remove active class from all buttons
-            filterBtns.forEach((b) => b.classList.remove('active'))
-            // Add active class to clicked button
-            btn.classList.add('active')
-
-            const category = btn.getAttribute('data-category')
-
-            workCards.forEach((card) => {
-              const categories = JSON.parse(card.getAttribute('data-categories') || '[]')
-              const element = card as HTMLElement
-
-              if (category === 'all' || categories.includes(category)) {
-                element.style.display = 'flex'
-                // Simple fade in effect could be added here
-                element.style.opacity = '1'
-              } else {
-                element.style.display = 'none'
-                element.style.opacity = '0'
-              }
-            })
-          })
-        })
-      }
-
-      // Initialize on load and page transitions
-      document.addEventListener('DOMContentLoaded', initWebWorksFilter)
-      document.addEventListener('astro:page-load', initWebWorksFilter)
-      document.addEventListener('swup:contentReplaced', initWebWorksFilter)
-
-</script>
-  </article>
-</LayoutDefault>
+</LayoutAbout>

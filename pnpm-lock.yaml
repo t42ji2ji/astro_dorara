@@ -47,12 +47,18 @@ importers:
       giscus:
         specifier: ^1.6.0
         version: 1.6.0
+      gsap:
+        specifier: ^3.15.0
+        version: 3.15.0
       js-yaml:
         specifier: ^4.1.1
         version: 4.1.1
       keen-slider:
         specifier: ^6.8.6
         version: 6.8.6
+      lenis:
+        specifier: ^1.3.27
+        version: 1.3.27(vue@3.5.17(typescript@5.8.3))
       lottie-web:
         specifier: ^5.13.0
         version: 5.13.0
@@ -3969,6 +3975,9 @@ packages:
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
 
+  gsap@3.15.0:
+    resolution: {integrity: sha512-dMW4CWBTUK1AEEDeZc1g4xpPGIrSf9fJF960qbTZmN/QwZIWY5wgliS6JWl9/25fpTGJrMRtSjGtOmPnfjZB+A==}
+
   gzip-size@3.0.0:
     resolution: {integrity: sha512-6s8trQiK+OMzSaCSVXX+iqIcLV9tC+E73jrJrJTyS4h/AJhlxHvzFKqM1YLDJWRGgHX8uLkBeXkA0njNj39L4w==}
     engines: {node: '>=0.12.0'}
@@ -4426,6 +4435,20 @@ packages:
 
   layout-base@2.0.1:
     resolution: {integrity: sha512-dp3s92+uNI1hWIpPGH3jK2kxE2lMjdXdr+DH8ynZHpd6PUlH6x6cbuXnoMmiNumznqaNO31xu9e79F0uuZ0JFg==}
+
+  lenis@1.3.27:
+    resolution: {integrity: sha512-QIHNH4LIfWyLfgH/5K0aTGZgyFJJ7GfHNcaH/AIgyKjb8gstLh5siNGvrVqz1w5ClLXzOvllBVk7vby8JzUVPQ==}
+    peerDependencies:
+      '@nuxt/kit': '>=3.0.0'
+      react: '>=17.0.0'
+      vue: '>=3.0.0'
+    peerDependenciesMeta:
+      '@nuxt/kit':
+        optional: true
+      react:
+        optional: true
+      vue:
+        optional: true
 
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
@@ -11297,6 +11320,8 @@ snapshots:
 
   graphemer@1.4.0: {}
 
+  gsap@3.15.0: {}
+
   gzip-size@3.0.0:
     dependencies:
       duplexer: 0.1.2
@@ -11801,6 +11826,10 @@ snapshots:
   layout-base@1.0.2: {}
 
   layout-base@2.0.1: {}
+
+  lenis@1.3.27(vue@3.5.17(typescript@5.8.3)):
+    optionalDependencies:
+      vue: 3.5.17(typescript@5.8.3)
 
   levn@0.4.1:
     dependencies:

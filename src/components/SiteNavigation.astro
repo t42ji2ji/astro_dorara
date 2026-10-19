@@ -11,7 +11,7 @@ const { translate: t } = Astro.locals
     {
       navLinks.map((nav) => (
         <li>
-          <a class="" href={nav.href}>
+          <a class="" href={nav.href} data-no-swup={nav.href === '/about' ? '' : undefined}>
             {t(nav.name)}
           </a>
         </li>
