@@ -215,6 +215,7 @@ const jobs = [
               <li>
                 <button type="button" class:list={['stage-row', { 'is-active': i === 0 }]} data-stage-row={i}>
                   <span class="mono">{pad(i + 1)}</span>
+                  <img src={app.icon.src} alt="" class="stage-icon" width="56" height="56" decoding="async" />
                   {app.title}
                 </button>
               </li>
@@ -244,15 +245,6 @@ const jobs = [
                   />
                 </div>
                 <div class="stage-caption">
-                  <img
-                    src={app.icon.src}
-                    alt=""
-                    class="stage-icon"
-                    width="56"
-                    height="56"
-                    loading="lazy"
-                    decoding="async"
-                  />
                   <div>
                     <h3 class="stage-name">
                       {app.title}

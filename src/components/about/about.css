@@ -719,9 +719,12 @@ a.ledger-cell:hover .ledger-label {
 }
 
 .stage-icon {
-  width: 56px;
-  height: 56px;
+  width: 1.1em;
+  height: 1.1em;
   flex-shrink: 0;
+  align-self: center;
+  opacity: 0.45;
+  transition: opacity 0.4s ease;
   filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.12)) drop-shadow(0 4px 10px rgb(0 0 0 / 0.18));
 }
 
@@ -730,6 +733,11 @@ a.ledger-cell:hover .ledger-label {
   font-weight: 400;
   font-size: clamp(30px, 3vw, 44px);
   line-height: 1.05;
+}
+
+.stage-row:hover .stage-icon,
+.stage-row.is-active .stage-icon {
+  opacity: 1;
 }
 
 .stage-tagline {
