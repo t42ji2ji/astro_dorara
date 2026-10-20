@@ -536,20 +536,23 @@ a.ledger-cell:hover .ledger-label {
   display: block;
 }
 
+/* 每個 app 一樣大的桌面：固定比例，視窗照同一個比例縮放（同樣寬度）放在正中間。
+   寬度要讓最高的示意圖（MeetRec 800×623）也放得下。
+   牆會染成 app 的主色，桌布就比牆深一點（深色的 Sona 是亮一點），加一圈細線，框才看得出來。 */
 .stage-mock {
   aspect-ratio: 16 / 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(16px, 4vw, 48px);
+  background: color-mix(in oklch, var(--frame-bg), currentColor 6%);
+  outline: 1px solid color-mix(in srgb, currentColor 8%, transparent);
   border-radius: 6px;
   box-sizing: border-box;
 }
 
 .stage-mock img {
-  max-height: 100%;
-  width: auto;
-  object-fit: contain;
+  width: 62%;
+  height: auto;
   border-radius: 10px;
   box-shadow:
     0 2px 6px rgb(0 0 0 / 0.08),
@@ -669,16 +672,9 @@ a.ledger-cell:hover .ledger-label {
     opacity: 0;
   }
 
+  /* 整個桌面要放得進 78svh 的欄，扣掉下面的名稱列 */
   .stage-mock {
-    flex: 1;
-    min-height: 0;
-    aspect-ratio: auto;
-    padding: 0;
-  }
-
-  .stage-mock img {
-    max-height: 100%;
-    max-width: 100%;
+    width: min(100%, calc((78svh - 120px) * 1.6));
   }
 }
 
@@ -739,14 +735,10 @@ a.ledger-cell:hover .ledger-label {
 
   .stage-mock {
     aspect-ratio: 4 / 3;
-    padding: 18px;
-    background: var(--frame-bg);
-    outline: 1px solid var(--line);
   }
 
   .stage-mock img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 78%;
   }
 }
 
