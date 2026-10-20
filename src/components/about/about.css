@@ -578,6 +578,16 @@ a.ledger-cell:hover .ledger-label {
   color: var(--ink-2);
 }
 
+/* 有公開原始碼的作品 */
+.oss {
+  flex-shrink: 0;
+  padding: 0 0.4em;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-size: 11px;
+  vertical-align: middle;
+}
+
 /* 桌機：釘住，左邊目錄、右邊舞台，一次一個 app */
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
   .stage {
@@ -843,10 +853,14 @@ a.ledger-cell:hover .ledger-label {
   border-radius: 5px;
   background: var(--base);
   color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
 }
 
 .tile-title {
   display: block;
+  min-width: 0;
   font-family: var(--serif-tc);
   font-weight: 600;
   font-size: 14px;

@@ -237,7 +237,10 @@ const jobs = [
                 <div class="stage-caption">
                   <img src={app.icon.src} alt="" class="stage-icon" width="56" height="56" loading="lazy" />
                   <div>
-                    <h3 class="stage-name">{app.title}</h3>
+                    <h3 class="stage-name">
+                      {app.title}
+                      {app.openSource && <span class="mono oss">開源</span>}
+                    </h3>
                     <p class="stage-tagline">{app.tagline}</p>
                   </div>
                   <span class="plate-arrow" aria-hidden="true">
@@ -291,6 +294,7 @@ const jobs = [
             </span>
             <span class="tile-info">
               <span class="tile-title">{w.title}</span>
+              {w.openSource && <span class="mono oss">開源</span>}
             </span>
             <span class="tile-more">
               <span class="tile-desc">{w.description}</span>

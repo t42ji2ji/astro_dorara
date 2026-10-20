@@ -72,6 +72,7 @@ export const macApps = [
     icon: meetrecIcon,
     mock: meetrecMock,
     stage: '#f3f2ee',
+    openSource: true,
   },
   {
     title: 'MailSift',
@@ -80,6 +81,7 @@ export const macApps = [
     icon: mailsiftIcon,
     mock: mailsiftMock,
     stage: '#ececec',
+    openSource: true,
   },
   {
     title: 'Draft',
@@ -88,6 +90,7 @@ export const macApps = [
     icon: draftIcon,
     mock: draftMock,
     stage: '#f6efdf',
+    openSource: true,
   },
   {
     title: 'Sona',
@@ -96,6 +99,7 @@ export const macApps = [
     icon: sonaIcon,
     mock: sonaMock,
     stage: '#140d1c',
+    openSource: true,
   },
   {
     title: 'Away Blur',
@@ -104,6 +108,7 @@ export const macApps = [
     icon: awayblurIcon,
     mock: awayblurMock,
     stage: '#f4f4f4',
+    openSource: true,
   },
   {
     title: 'Desktop Rug',
@@ -112,6 +117,7 @@ export const macApps = [
     icon: rugIcon,
     mock: rugMock,
     stage: '#f3e9dc',
+    openSource: true,
   },
 ]
 
@@ -247,6 +253,7 @@ export const webWorks = [
     title: 'GPX 路徑動畫',
     description: '能根據 GPX 幫你生成路徑動畫的網站',
     path: 'https://gpx.dorara.app/',
+    openSource: true,
     tint: '#8cb2cd',
     image: gpxImage,
     categories: ['utility', 'create'],
