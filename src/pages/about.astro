@@ -112,7 +112,14 @@ const jobs = [
         featured.map((f) => (
           <a href={f.path} target="_blank" class="plate" data-tint={f.tint}>
             <div class="plate-frame" data-plate>
-              <img src={f.image.src} alt={f.title} width={f.image.width} height={f.image.height} loading="lazy" />
+              <img
+                src={f.image.src}
+                alt={f.title}
+                width={f.image.width}
+                height={f.image.height}
+                loading="lazy"
+                decoding="async"
+              />
             </div>
             <div class="plate-caption">
               <div class="plate-head">
@@ -178,10 +185,19 @@ const jobs = [
                     width={shot.width}
                     height={shot.height}
                     loading={i === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
                   />
                 ))
               ) : (
-                <img class="phones-solo" src={app.icon.src} alt="" width="200" height="200" loading="lazy" />
+                <img
+                  class="phones-solo"
+                  src={app.icon.src}
+                  alt=""
+                  width="200"
+                  height="200"
+                  loading="lazy"
+                  decoding="async"
+                />
               )}
               <span class="mono phones-store">App Store ↗</span>
             </a>
@@ -232,10 +248,19 @@ const jobs = [
                     width={app.mock.width}
                     height={app.mock.height}
                     loading={i === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
                   />
                 </div>
                 <div class="stage-caption">
-                  <img src={app.icon.src} alt="" class="stage-icon" width="56" height="56" loading="lazy" />
+                  <img
+                    src={app.icon.src}
+                    alt=""
+                    class="stage-icon"
+                    width="56"
+                    height="56"
+                    loading="lazy"
+                    decoding="async"
+                  />
                   <div>
                     <h3 class="stage-name">
                       {app.title}
@@ -288,15 +313,13 @@ const jobs = [
             data-categories={w.categories.join(' ')}
             data-featured={w.featured ? '' : undefined}
             data-tint={w.tint}
+            aria-label={w.title}
           >
             <span class="tile-media">
-              <img src={w.preview} alt="" loading="lazy" />
-            </span>
-            <span class="tile-info">
-              <span class="tile-title">{w.title}</span>
-              {w.openSource && <span class="mono oss">開源</span>}
+              <img src={w.preview} alt="" loading="lazy" decoding="async" />
             </span>
             <span class="tile-more">
+              <span class="tile-title">{w.title}</span>
               <span class="tile-desc">{w.description}</span>
               <span class="mono tile-cat">
                 {w.categories.map((c) => categoryName[c]).join(' / ')}
@@ -378,7 +401,14 @@ const jobs = [
 
     <a href={book.path} target="_blank" class="book" data-tint="#9db8dd">
       <div class="book-cover" data-reveal>
-        <img src={book.cover.src} alt={book.title} width={book.cover.width} height={book.cover.height} loading="lazy" />
+        <img
+          src={book.cover.src}
+          alt={book.title}
+          width={book.cover.width}
+          height={book.cover.height}
+          loading="lazy"
+          decoding="async"
+        />
       </div>
       <div class="book-info" data-reveal>
         <p class="mono">{book.publisher} · {book.date}</p>

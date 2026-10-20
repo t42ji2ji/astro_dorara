@@ -3,8 +3,6 @@ import { Flip } from 'gsap/Flip'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import Lenis from 'lenis'
-import lottie from 'lottie-web'
-import avatarData from '~/assets/resume/avatar.json'
 import { packBento } from './bento'
 import 'lenis/dist/lenis.css'
 
@@ -75,14 +73,20 @@ function tintZone(el: HTMLElement, amt: number, start = 'top 60%', end = 'bottom
 
 // ---------- 頭像 ----------
 
-function initAvatar() {
+// lottie 與動畫檔另外載入，不拖慢首屏腳本；捲出畫面就暫停，不在背景每幀計算
+async function initAvatar() {
   const container = document.getElementById('avatarContainer')
   if (!container)
     return
-  const anim = lottie.loadAnimation({ container, renderer: 'svg', loop: true, autoplay: true, animationData: avatarData })
+  const [{ default: lottie }, { default: animationData }] = await Promise.all([
+    import('lottie-web'),
+    import('~/assets/resume/avatar.json'),
+  ])
+  const anim = lottie.loadAnimation({ container, renderer: 'svg', loop: true, autoplay: true, animationData })
   anim.playSegments([17, 32], true)
   container.addEventListener('mouseenter', () => anim.playSegments([34, 56], true))
   container.addEventListener('mouseleave', () => anim.playSegments([17, 32], true))
+  new IntersectionObserver(([e]) => e.isIntersecting ? anim.play() : anim.pause()).observe(container)
 }
 
 // ---------- 進場與捲動揭示 ----------
@@ -488,6 +492,7 @@ function works() {
       moveBar(btn, true)
 
       const state = reduced ? null : Flip.getState(tiles)
+      const h0 = bento.offsetHeight
       tiles.forEach((el) => {
         const show = cat === 'all' || el.dataset.categories!.split(' ').includes(cat)
         el.classList.toggle('is-hidden', !show)
@@ -500,6 +505,11 @@ function works() {
         ScrollTrigger.refresh()
         return
       }
+      // 換位期間關掉 .tile 的 CSS transition，免得跟 Flip 搶 transform
+      bento.classList.add('is-flipping')
+      // absolute 換位時格子不撐高度，先鎖住舊高度再補間到新高度，下面的內容才不會蓋上來
+      const h1 = bento.offsetHeight
+      gsap.fromTo(bento, { height: h0 }, { height: h1, duration: 0.8, delay: h1 < h0 ? 0.2 : 0, ease: EXPO, clearProps: 'height' })
       Flip.from(state, {
         duration: 0.8,
         ease: EXPO,
@@ -507,7 +517,11 @@ function works() {
         stagger: 0.012,
         onEnter: els => gsap.fromTo(els, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.6, delay: 0.15, ease: EXPO }),
         onLeave: els => gsap.to(els, { opacity: 0, scale: 0.9, duration: 0.3 }),
-        onComplete: () => ScrollTrigger.refresh(),
+        onComplete: () => {
+          // Flip 清掉 inline transform 後隔一幀再開回 transition，不然 CSS 會從舊位置再播一次
+          requestAnimationFrame(() => requestAnimationFrame(() => bento.classList.remove('is-flipping')))
+          ScrollTrigger.refresh()
+        },
       })
     })
   })
