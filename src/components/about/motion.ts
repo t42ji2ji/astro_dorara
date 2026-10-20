@@ -177,8 +177,9 @@ function stage(lenis: Lenis | null) {
       const prev = frames[current]
       const next = frames[i]
       current = i
-      gsap.to(prev, { y: -24, opacity: 0, duration: 0.45, ease: 'power2.in', overwrite: true })
-      gsap.fromTo(next, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: EXPO, delay: 0.15, overwrite: true })
+      // 原地交叉淡入淡出，不位移
+      gsap.to(prev, { opacity: 0, duration: 0.35, ease: 'power1.out', overwrite: true })
+      gsap.fromTo(next, { opacity: 0 }, { opacity: 1, duration: 0.45, ease: 'power1.out', delay: 0.1, overwrite: true })
       frames.forEach((f, k) => f.classList.toggle('is-active', k === i))
       rows.forEach((r, k) => r.classList.toggle('is-active', k === i))
       if (counter)
@@ -288,26 +289,69 @@ function stage(lenis: Lenis | null) {
   })
 }
 
-// ---------- 04 Mobile app：一手牌 ----------
+// ---------- 04 Mobile app：直式手風琴 ----------
 
-function phones() {
+function phones(lenis: Lenis | null) {
   const section = qs('[data-phones]')
-  if (!section)
+  const acc = qs('[data-acc]', section ?? document)
+  if (!section || !acc)
     return
-  const tabs = qsa('[data-phone-tab]', section)
-  const hands = qsa('[data-phone-hand]', section)
+  const cards = qsa('[data-acc-card]', acc)
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
-  const cardsOf = (hand: HTMLElement) => qsa('.phones-card, .phones-solo', hand)
+  const shotsOf = (card: HTMLElement) => qsa('.acc-shot', card).filter(el => el.offsetParent)
   let current = 0
   let inView = false
+  let cycle = 0
 
   const updateZone = () => {
-    const tint = hands[current].dataset.tint
+    const tint = cards[current].dataset.tint
     if (inView && tint)
       setZone(section, tint, 0.4)
     else clearZone(section)
   }
 
+  // 三張截圖疊放：最前面一張完整，後面的往右錯開、縮小、變淡
+  const SLOTS = [{ x: 0, scale: 1, opacity: 1 }, { x: 14, scale: 0.94, opacity: 0.5 }, { x: 28, scale: 0.88, opacity: 0.25 }]
+  const order = new Map<HTMLElement, HTMLElement[]>()
+  const lay = (card: HTMLElement, animate: boolean) => {
+    const shots = order.get(card) ?? shotsOf(card)
+    order.set(card, shots)
+    shots.forEach((el, k) => {
+      const slot = SLOTS[k] ?? SLOTS.at(-1)!
+      gsap.to(el, { ...slot, zIndex: shots.length - k, duration: animate ? 0.4 : 0, ease: 'power2.out', overwrite: 'auto' })
+    })
+  }
+  cards.forEach(c => lay(c, false))
+
+  const stopCycle = () => clearInterval(cycle)
+  const startCycle = (card: HTMLElement) => {
+    stopCycle()
+    if (reduced || (order.get(card)?.length ?? 0) < 2)
+      return
+    cycle = window.setInterval(() => {
+      const shots = order.get(card)!
+      shots.push(shots.shift()!)
+      lay(card, true)
+    }, 2400)
+  }
+
+  const open = (i: number) => {
+    if (i === current)
+      return
+    current = i
+    cards.forEach((c, k) => {
+      c.classList.toggle('is-open', k === i)
+      c.setAttribute('aria-expanded', String(k === i))
+    })
+    updateZone()
+    startCycle(cards[i])
+    const front = order.get(cards[i])?.[0]
+    // 截圖往上捲到底，角色從卡片下緣冒上來
+    if (front && !reduced)
+      gsap.fromTo(front, { objectPosition: '50% 60%' }, { objectPosition: '50% 100%', duration: 1.2, ease: EXPO })
+  }
+
+  // 進到這區才染色、才自動換截圖
   ScrollTrigger.create({
     trigger: section,
     start: 'top 60%',
@@ -315,92 +359,87 @@ function phones() {
     onToggle: (self) => {
       inView = self.isActive
       updateZone()
+      if (inView)
+        startCycle(cards[current])
+      else stopCycle()
     },
   })
 
-  // 收成一疊再攤開成扇形；動畫期間關掉 CSS transition，免得兩邊搶 transform 造成閃爍
-  const deal = (hand: HTMLElement, delay = 0) => {
-    const cards = cardsOf(hand)
-    hand.classList.add('is-dealing')
-    return gsap.from(cards, {
-      x: 0,
-      rotation: 0,
-      y: 16,
-      duration: 0.8,
-      stagger: 0.05,
-      delay,
-      ease: EXPO,
-      clearProps: 'transform',
-      onComplete: () => hand.classList.remove('is-dealing'),
-    })
-  }
+  // 桌機釘住時，點卡片是捲到那一格，讓捲動位置和展開的卡一致
+  let jump: ((i: number) => void) | null = null
+  const pick = (i: number) => (jump ? jump(i) : open(i))
 
-  const show = (i: number) => {
-    if (i === current)
-      return
-    const prev = hands[current]
-    const next = hands[i]
-    current = i
-    tabs.forEach((t, k) => {
-      t.classList.toggle('is-active', k === i)
-      t.setAttribute('aria-pressed', String(k === i))
-    })
-    updateZone()
-
-    hands.forEach((h) => {
-      gsap.killTweensOf([h, ...cardsOf(h)])
-      gsap.set(cardsOf(h), { clearProps: 'transform' })
-      h.classList.remove('is-dealing')
-      if (h !== prev && h !== next) {
-        gsap.set(h, { clearProps: 'opacity' })
-        h.classList.remove('is-active')
+  // 點擊（或 Enter／空白鍵）展開；App Store 連結只在展開卡的那行字上
+  cards.forEach((card, i) => {
+    card.addEventListener('click', () => pick(i))
+    card.addEventListener('keydown', (e) => {
+      if (e.target === card && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault()
+        pick(i)
       }
     })
-    next.classList.add('is-active')
-    if (reduced) {
-      prev.classList.remove('is-active')
-      return
-    }
+  })
 
-    gsap.to(prev, {
-      opacity: 0,
-      duration: 0.25,
-      ease: 'power1.out',
-      onComplete: () => {
-        prev.classList.remove('is-active')
-        gsap.set(prev, { clearProps: 'opacity' })
-      },
+  // 桌機：釘住整區，往下捲一格就展開下一張
+  const mm = gsap.matchMedia()
+  mm.add(DESKTOP_PIN, () => {
+    const n = cards.length
+    const step = () => window.innerHeight * 0.8
+    const pin = ScrollTrigger.create({
+      trigger: section,
+      start: 'top top',
+      end: () => `+=${step() * (n - 1)}`,
+      pin: true,
+      snap: { snapTo: 1 / (n - 1), duration: { min: 0.2, max: 0.6 }, delay: 0.08, ease: 'power1.inOut' },
+      onUpdate: self => open(Math.round(self.progress * (n - 1))),
     })
-    gsap.fromTo(next, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: 'power1.out', clearProps: 'opacity' })
-    deal(next, 0.05)
-  }
-
-  const fine = matchMedia('(hover: hover) and (pointer: fine)').matches
-  let intent = 0
-  tabs.forEach((t, i) => {
-    t.addEventListener('click', () => show(i))
-    if (fine) {
-      // 停一下才切，滑鼠掃過清單不會連換好幾手
-      t.addEventListener('pointerenter', () => {
-        clearTimeout(intent)
-        intent = window.setTimeout(() => show(i), 140)
-      })
-      t.addEventListener('pointerleave', () => clearTimeout(intent))
+    jump = (i) => {
+      const y = pin.start + i * step()
+      if (lenis)
+        lenis.scrollTo(y, { duration: 1.2 })
+      else window.scrollTo({ top: y, behavior: 'smooth' })
+    }
+    return () => {
+      jump = null
     }
   })
 
-  // 第一手牌在捲到時攤開
-  if (!reduced) {
-    ScrollTrigger.create({
-      trigger: section.querySelector('.phones-deck'),
-      start: 'top 75%',
-      once: true,
-      onEnter: () => {
-        if (current === 0)
-          deal(hands[0])
-      },
+  if (reduced)
+    return
+
+  // 進場：每張由上往下揭開，錯開一點
+  gsap.from(cards, {
+    clipPath: 'inset(0 0 100% 0)',
+    duration: 0.9,
+    stagger: 0.07,
+    ease: EXPO,
+    clearProps: 'clipPath',
+    scrollTrigger: { trigger: acc, start: 'top 80%', once: true },
+  })
+
+  // 平板（沒有釘住）：捲動時像琴鍵，奇偶反向、幅度不等，區段中心為零位
+  mm.add('(min-width: 768px) and (max-width: 1023px)', () => {
+    const AMP = [-28, 18, -10, 22, -32]
+    const ROT = [-0.6, 0.4, 0, 0.5, -0.7]
+    cards.forEach((card, i) => {
+      gsap.fromTo(card, { y: -AMP[i % 5], rotation: -ROT[i % 5] }, {
+        y: AMP[i % 5],
+        rotation: ROT[i % 5],
+        ease: 'none',
+        scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true },
+      })
     })
-  }
+  })
+  mm.add('(max-width: 767px)', () => {
+    cards.forEach((card, i) => {
+      const r = i % 2 ? 0.4 : -0.4
+      gsap.fromTo(card, { rotation: -r }, {
+        rotation: r,
+        ease: 'none',
+        scrollTrigger: { trigger: section, start: 'top bottom', end: 'bottom top', scrub: true },
+      })
+    })
+  })
 }
 
 // ---------- 06 Web 作品：bento + 篩選 ----------
@@ -433,17 +472,30 @@ function works() {
     layout()
   })
 
-  // 浮起的說明卡往塊旁邊空間比較大的那側長；兩側都太窄就上下
+  // hover 時圖框照封面比例展開，整張截圖看得到；以塊中心為準，超出 bento 就推回來
+  // 浮起的說明卡往圖框旁邊空間比較大的那側長；兩側都太窄就上下
   const POP = 280
+  const MIN_W = 340
   tiles.forEach((el) => {
     el.addEventListener('pointerenter', () => {
-      const b = bento.getBoundingClientRect()
+      const tw = el.offsetWidth
+      const th = el.offsetHeight
+      const ar = Number(el.dataset.ar) || tw / th
+      const w = Math.min(Math.max(tw, Math.sqrt(tw * th * ar), MIN_W), bento.offsetWidth)
+      const h = w / ar
+      const x = Math.min(Math.max((tw - w) / 2, -el.offsetLeft), bento.offsetWidth - el.offsetLeft - w)
+      const y = Math.min(Math.max((th - h) / 2, -el.offsetTop), bento.offsetHeight - el.offsetTop - h)
+      el.style.setProperty('--hx', `${x}px`)
+      el.style.setProperty('--hy', `${y}px`)
+      el.style.setProperty('--hw', `${w}px`)
+      el.style.setProperty('--hh', `${h}px`)
+
       const t = el.getBoundingClientRect()
-      const right = b.right - t.right
-      const left = t.left - b.left
+      const right = bento.offsetWidth - el.offsetLeft - x - w
+      const left = el.offsetLeft + x
       el.dataset.pop = Math.max(right, left) >= POP
         ? (right >= left ? 'right' : 'left')
-        : (innerHeight - t.bottom >= t.top ? 'down' : 'up')
+        : (innerHeight - t.top - y - h >= t.top + y ? 'down' : 'up')
       hoverTint = el.dataset.tint ? { color: el.dataset.tint, amt: 0.3 } : null
       applyTint()
     })
@@ -542,8 +594,9 @@ export function initAbout() {
 
   initAvatar()
   qsa('.plate, .book').forEach(p => tintZone(p, 0.35))
+  // 釘住的區塊要照頁面順序建立，後面的才算得到前面多出來的捲動距離
+  phones(lenis)
   stage(lenis)
-  phones()
   works()
 
   if (!reduced) {

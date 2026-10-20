@@ -369,148 +369,298 @@ a.ledger-cell:hover .ledger-label {
   margin-top: 0.75rem !important;
 }
 
-/* ---------- 04 mobile：一手牌 ---------- */
+/* ---------- 04 mobile：直式手風琴 ---------- */
 
-.phones {
-  display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
-  gap: 3rem;
-  align-items: start;
+/* 收合的卡只有顏色、icon 和直排名稱；展開的卡是截圖＋說明。
+   展開內容固定寬（容器寬扣掉收合卡），卡片長大時內容不會重排 */
+.acc {
+  --closed: 84px;
+  --gap: 8px;
+  container-type: inline-size;
+  display: flex;
+  gap: var(--gap);
+  height: clamp(480px, 68vh, 580px);
 }
 
-.phones-list {
-  border-top: 1px solid var(--line);
+.acc-card {
+  position: relative;
+  flex: 0 1 var(--closed);
+  min-width: var(--closed);
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--tint);
+  color: #292524;
+  contain: layout paint;
+  transition: flex-grow 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.phones-tab {
-  all: unset;
-  box-sizing: border-box;
+.acc-card.no-tint {
+  background: #e7e5e4;
+}
+
+.acc-card.is-open {
+  flex-grow: 1;
+}
+
+.acc-card:focus-visible {
+  outline: 1px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* 底紋：放大的 icon，極淡 */
+.acc-bg {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.acc-bg img {
+  width: 100px;
+  opacity: 0.14;
+  transform: scale(3);
+  filter: grayscale(1);
+  mix-blend-mode: multiply;
+  mask-image: radial-gradient(circle, #000 30%, transparent 62%);
+  transition: transform 0.8s var(--ease);
+}
+
+.acc:hover .acc-card:not(.is-open) .acc-bg img {
+  transform: scale(3.09);
+}
+
+.acc-closed {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding-top: 20px;
+  transition: opacity 0.3s ease 0.3s;
+}
+
+.acc-closed img {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+}
+
+.acc-vname {
+  writing-mode: vertical-rl;
+  white-space: nowrap;
+  color: #44403c;
+}
+
+.acc-card.is-open .acc-closed {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.acc-open {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(100cqw - 4 * (var(--closed) + var(--gap)));
+  display: flex;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  padding: 28px;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.acc-shots {
+  position: relative;
+  height: 100%;
+  aspect-ratio: 0.62;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.acc-shot {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  padding: 0.9rem 0;
-  border-bottom: 1px solid var(--line);
-  cursor: pointer;
-  opacity: 0.42;
-  transition: opacity 0.4s ease;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 100%;
+  border-radius: 14px;
+  box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.35);
 }
 
-.phones-tab:hover,
-.phones-tab.is-active {
-  opacity: 1;
+.acc-solo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  height: 100%;
+  color: #44403c;
 }
 
-.phones-tab:focus-visible {
-  outline: 1px solid var(--ink);
-  outline-offset: 2px;
+.acc-solo img {
+  width: 160px;
+  height: 160px;
+  border-radius: 22%;
+  box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.35);
 }
 
-.phones-tab img {
+.acc-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  min-width: 0;
+  padding-bottom: 4px;
+  opacity: 0;
+  clip-path: inset(0 0 0 8%);
+  transition:
+    opacity 0.15s ease,
+    clip-path 0.15s ease;
+}
+
+.acc-info img {
   width: 52px;
   height: 52px;
   border-radius: 12px;
-  flex-shrink: 0;
+  margin-bottom: 0.4rem;
 }
 
-.phones-tab-text {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-
-.phones-name {
+.acc-name {
   font-family: var(--serif);
-  font-size: clamp(22px, 2.1vw, 30px);
-  line-height: 1.2;
+  font-size: clamp(30px, 3vw, 44px);
+  line-height: 1.05;
 }
 
-.phones-desc {
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--ink-2);
+.acc-desc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #44403c;
 }
 
-.phones-deck {
-  display: grid;
-  height: clamp(440px, 66vh, 640px);
-}
-
-.phones-hand {
-  grid-area: 1 / 1;
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  padding-top: 3%;
-  box-sizing: border-box;
-  justify-content: center;
-  visibility: hidden;
-}
-
-.phones-hand.is-active {
-  visibility: visible;
-}
-
-.phones-hand.is-dealing .phones-card,
-.phones-hand.is-dealing .phones-solo {
-  transition: none;
-}
-
-.phones-card {
-  position: absolute;
-  height: 86%;
-  width: auto;
-  max-width: none;
-  border-radius: 22px;
-  outline: 1px solid var(--line);
-  transition: transform 0.6s var(--ease);
-}
-
-.phones-card:nth-child(1) {
-  transform: translateX(-64%) rotate(-7deg);
-}
-
-.phones-card:nth-child(2) {
-  z-index: 2;
-  transform: translateY(-3%);
-}
-
-.phones-card:nth-child(3) {
-  transform: translateX(64%) rotate(7deg);
-}
-
-.phones-hand:hover .phones-card:nth-child(1) {
-  transform: translateX(-76%) rotate(-10deg);
-}
-
-.phones-hand:hover .phones-card:nth-child(2) {
-  transform: translateY(-6%);
-}
-
-.phones-hand:hover .phones-card:nth-child(3) {
-  transform: translateX(76%) rotate(10deg);
-}
-
-.phones-solo {
-  width: min(46%, 240px);
-  height: auto;
-  border-radius: 22%;
-  transition: transform 0.6s var(--ease);
-}
-
-.phones-hand:hover .phones-solo {
-  transform: rotate(-6deg) scale(1.04);
-}
-
-.phones-store {
-  position: absolute;
-  right: 0;
-  bottom: 0;
+.acc-store {
+  margin-top: 0.6rem;
+  color: #44403c;
   transition: color 0.3s;
 }
 
-.phones-hand:hover .phones-store {
-  color: var(--ink);
+.acc-store:hover {
+  color: #0c0a09;
+}
+
+.acc-card:not(.is-open) {
+  cursor: pointer;
+}
+
+.acc-card.is-open .acc-open {
+  pointer-events: auto;
+}
+
+.acc-card.is-open .acc-shots {
+  opacity: 1;
+  transition: opacity 0.35s ease 0.1s;
+}
+
+.acc-card.is-open .acc-info {
+  opacity: 1;
+  clip-path: inset(0);
+  transition:
+    opacity 0.4s ease 0.22s,
+    clip-path 0.4s var(--ease) 0.22s;
+}
+
+/* 桌機釘住時整區剛好一個畫面高，手風琴吃掉標題以外的高度 */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .block[data-phones] {
+    height: 100svh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding-block: clamp(32px, 6vh, 64px);
+  }
+
+  [data-phones] .acc {
+    flex: 1;
+    min-height: 0;
+    height: auto;
+    max-height: 640px;
+  }
+}
+
+/* 平板：收合窄一點，疊圖只留兩張 */
+@media (max-width: 1023px) {
+  .acc {
+    --closed: 64px;
+  }
+
+  .acc-shot:nth-child(3) {
+    display: none;
+  }
+}
+
+/* 手機：橫向滑的卡，每張都是展開版型 */
+@media (max-width: 767px) {
+  .acc {
+    height: auto;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-inline: calc(-1 * clamp(16px, 4vw, 56px));
+    padding-inline: clamp(16px, 4vw, 56px);
+    container-type: normal;
+  }
+
+  .acc::-webkit-scrollbar {
+    display: none;
+  }
+
+  .acc-card,
+  .acc-card.is-open {
+    flex: 0 0 78vw;
+    scroll-snap-align: center;
+  }
+
+  .acc-closed {
+    display: none;
+  }
+
+  .acc-open {
+    position: relative;
+    width: auto;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 20px;
+    pointer-events: auto;
+  }
+
+  .acc-shots {
+    height: 340px;
+    align-self: center;
+    opacity: 1;
+  }
+
+  .acc-info {
+    opacity: 1;
+    clip-path: none;
+  }
+
+  .acc-name {
+    font-size: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .acc-card,
+  .acc-closed,
+  .acc-shots,
+  .acc-info,
+  .acc-bg img {
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+  }
 }
 
 /* ---------- 06 mac stage ---------- */
@@ -537,10 +687,10 @@ a.ledger-cell:hover .ledger-label {
 }
 
 /* 每個 app 一樣大的桌面：固定比例，視窗照同一個比例縮放（同樣寬度）放在正中間。
-   寬度要讓最高的示意圖（MeetRec 800×623）也放得下。
+   最高的示意圖（MeetRec 800×623）改由高度上限收住。
    牆會染成 app 的主色，桌布就比牆深一點（深色的 Sona 是亮一點），加一圈細線，框才看得出來。 */
 .stage-mock {
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 3 / 2;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -551,7 +701,9 @@ a.ledger-cell:hover .ledger-label {
 }
 
 .stage-mock img {
-  width: 62%;
+  width: auto;
+  max-width: 86%;
+  max-height: 90%;
   height: auto;
   border-radius: 10px;
   box-shadow:
@@ -674,7 +826,7 @@ a.ledger-cell:hover .ledger-label {
 
   /* 整個桌面要放得進 78svh 的欄，扣掉下面的名稱列 */
   .stage-mock {
-    width: min(100%, calc((78svh - 120px) * 1.6));
+    width: min(100%, calc((78svh - 120px) * 1.5));
   }
 }
 
@@ -738,7 +890,7 @@ a.ledger-cell:hover .ledger-label {
   }
 
   .stage-mock img {
-    width: 78%;
+    max-width: 90%;
   }
 }
 
@@ -812,11 +964,19 @@ a.ledger-cell:hover .ledger-label {
 
 .tile-media {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
   border-radius: inherit;
   background: var(--line);
-  transition: box-shadow 0.5s var(--ease);
+  transition:
+    box-shadow 0.5s var(--ease),
+    top 0.5s var(--ease),
+    left 0.5s var(--ease),
+    width 0.5s var(--ease),
+    height 0.5s var(--ease);
 }
 
 .tile.is-hidden {
@@ -841,7 +1001,6 @@ a.ledger-cell:hover .ledger-label {
   height: 100%;
   object-fit: cover;
   object-position: top;
-  transition: transform 0.9s var(--ease);
 }
 
 .tile-title {
@@ -897,35 +1056,37 @@ a.ledger-cell:hover .ledger-label {
       transform 0.5s var(--ease);
   }
 
-  /* 還沒 hover 過的塊，卡片留在塊裡面，免得撐出橫向捲軸 */
+  /* 還沒 hover 過的塊，卡片留在塊裡面，免得撐出橫向捲軸；
+     hover 後圖框照封面比例展開（--hx/--hy/--hw/--hh 由 motion.ts 算），卡片貼著圖框 */
   .tile[data-pop='right'] .tile-more,
   .tile[data-pop='left'] .tile-more {
+    top: var(--hy);
     width: 260px;
   }
 
   .tile[data-pop='right'] .tile-more {
-    left: calc(100% + 10px);
+    left: calc(var(--hx) + var(--hw) + 10px);
   }
 
   .tile[data-pop='left'] .tile-more {
-    left: auto;
-    right: calc(100% + 10px);
+    left: calc(var(--hx) - 270px);
     transform: translateX(10px);
   }
 
   .tile[data-pop='down'] .tile-more,
   .tile[data-pop='up'] .tile-more {
-    left: 0;
+    left: var(--hx);
+    width: var(--hw);
   }
 
   .tile[data-pop='down'] .tile-more {
-    top: calc(100% + 10px);
+    top: calc(var(--hy) + var(--hh) + 10px);
     transform: translateY(-10px);
   }
 
   .tile[data-pop='up'] .tile-more {
     top: auto;
-    bottom: calc(100% + 10px);
+    bottom: calc(100% - var(--hy) + 10px);
     transform: translateY(10px);
   }
 
@@ -935,13 +1096,13 @@ a.ledger-cell:hover .ledger-label {
   }
 
   .tile:hover .tile-media {
+    top: var(--hy, 0px);
+    left: var(--hx, 0px);
+    width: var(--hw, 100%);
+    height: var(--hh, 100%);
     box-shadow:
       0 24px 48px -16px rgb(0 0 0 / 0.4),
       0 4px 12px rgb(0 0 0 / 0.1);
-  }
-
-  .tile:hover img {
-    transform: scale(1.06);
   }
 
   .tile:hover .tile-more {
@@ -1307,35 +1468,6 @@ html.about-motion .hero-meta {
     display: none;
   }
 
-  .phones {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .phones-list {
-    display: flex;
-    gap: 1.25rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-    border-top: 0;
-  }
-
-  .phones-tab {
-    flex-direction: column;
-    gap: 0.4rem;
-    width: auto;
-    border-bottom: 0;
-    padding: 0;
-  }
-
-  .phones-desc {
-    display: none;
-  }
-
-  .phones-name {
-    font-size: 15px;
-    white-space: nowrap;
-  }
 
   .job-row {
     grid-template-columns: minmax(0, 1fr) 1.25rem;
@@ -1409,23 +1541,6 @@ html.about-motion .hero-meta {
     border-bottom: 1px solid var(--line);
   }
 
-  .phones-deck {
-    height: 440px;
-  }
-
-  .phones-card {
-    height: 80%;
-  }
-
-  .phones-card:nth-child(1),
-  .phones-hand:hover .phones-card:nth-child(1) {
-    transform: translateX(-48%) rotate(-6deg);
-  }
-
-  .phones-card:nth-child(3),
-  .phones-hand:hover .phones-card:nth-child(3) {
-    transform: translateX(48%) rotate(6deg);
-  }
 
   .bento {
     grid-template-columns: repeat(2, minmax(0, 1fr));

@@ -139,71 +139,63 @@ const jobs = [
     </div>
   </section>
 
-  <!-- 04 Mobile：左邊選 app，右邊一手牌 -->
+  <!-- 04 Mobile：直式手風琴，一次展開一個 app -->
   <section class="block shell" data-phones>
     <header class="sec-head mono"><span>04</span><span>Mobile App</span><span>App Store</span></header>
 
-    <div class="phones">
-      <ol class="phones-list">
-        {
-          iosApps.map((app, i) => (
-            <li>
-              <button
-                type="button"
-                class:list={['phones-tab', { 'is-active': i === 0 }]}
-                data-phone-tab={i}
-                aria-pressed={i === 0 ? 'true' : 'false'}
-              >
-                <img src={app.icon.src} alt="" width="52" height="52" />
-                <span class="phones-tab-text">
-                  <span class="phones-name">{app.title}</span>
-                  <span class="phones-desc">{app.description}</span>
-                </span>
-              </button>
-            </li>
-          ))
-        }
-      </ol>
-
-      <div class="phones-deck">
-        {
-          iosApps.map((app, i) => (
-            <a
-              href={app.path}
-              target="_blank"
-              class:list={['phones-hand', { 'is-active': i === 0 }]}
-              data-phone-hand
-              data-tint={app.tint}
-              aria-label={`${app.title} on the App Store`}
-            >
-              {app.shots.length > 0 ? (
-                app.shots.map((shot) => (
-                  <img
-                    class="phones-card"
-                    src={shot.src}
-                    alt=""
-                    width={shot.width}
-                    height={shot.height}
-                    loading={i === 0 ? 'eager' : 'lazy'}
-                    decoding="async"
-                  />
-                ))
-              ) : (
-                <img
-                  class="phones-solo"
-                  src={app.icon.src}
-                  alt=""
-                  width="200"
-                  height="200"
-                  loading="lazy"
-                  decoding="async"
-                />
-              )}
-              <span class="mono phones-store">App Store ↗</span>
-            </a>
-          ))
-        }
-      </div>
+    <div class="acc" data-acc>
+      {
+        iosApps.map((app, i) => (
+          <div
+            class:list={['acc-card', { 'is-open': i === 0, 'no-tint': !app.tint }]}
+            style={app.tint ? `--tint: ${app.tint}` : undefined}
+            role="button"
+            tabindex="0"
+            aria-expanded={i === 0 ? 'true' : 'false'}
+            aria-label={app.title}
+            data-acc-card
+            data-tint={app.tint}
+          >
+            <span class="acc-bg" aria-hidden="true">
+              <img src={app.icon.src} alt="" loading="lazy" decoding="async" />
+            </span>
+            <span class="acc-closed" aria-hidden="true">
+              <img src={app.icon.src} alt="" width="44" height="44" loading="lazy" decoding="async" />
+              <span class="mono acc-vname">{app.title}</span>
+            </span>
+            <span class="acc-open">
+              <span class="acc-shots">
+                {app.shots.length > 0 ? (
+                  app.shots.map((shot, k) => (
+                    <img
+                      class="acc-shot"
+                      src={shot.src}
+                      alt=""
+                      width={shot.width}
+                      height={shot.height}
+                      loading={i === 0 && k === 0 ? 'eager' : 'lazy'}
+                      decoding="async"
+                    />
+                  ))
+                ) : (
+                  <span class="acc-solo">
+                    <img src={app.icon.src} alt="" width="160" height="160" loading="lazy" decoding="async" />
+                    <span class="mono">Apple Watch</span>
+                  </span>
+                )}
+              </span>
+              <span class="acc-info">
+                <img src={app.icon.src} alt="" width="52" height="52" loading="lazy" decoding="async" />
+                <span class="acc-name">{app.title}</span>
+                <span class="acc-desc">{app.description}</span>
+                <a class="mono acc-store" href={app.path} target="_blank">
+                  App Store ↗
+                </a>
+              </span>
+            </span>
+          </div>
+        ))
+      }
     </div>
   </section>
 
@@ -313,6 +305,7 @@ const jobs = [
             data-categories={w.categories.join(' ')}
             data-featured={w.featured ? '' : undefined}
             data-tint={w.tint}
+            data-ar={(w.image.width / w.image.height).toFixed(3)}
             aria-label={w.title}
           >
             <span class="tile-media">

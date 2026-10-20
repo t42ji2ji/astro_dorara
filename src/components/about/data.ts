@@ -402,7 +402,7 @@ export const featured = [
 
 export const iosApps = [
   {
-    title: 'Wuzu 伍珠',
+    title: 'WUZU',
     description: '陪你說話的日記夥伴',
     path: 'https://apps.apple.com/tw/app/wuzu/id6757849464',
     icon: wuzuIcon,
